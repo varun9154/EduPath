@@ -1,0 +1,35 @@
+[
+  {
+    "id": "sch-nsp-post-matric",
+    "name": "Central Sector Scheme of Scholarships for College & University Students",
+    "provider": "Ministry of Education, Govt of India",
+    "category": "National",
+    "course": "Undergraduate Degrees (B.Tech, B.Pharm, MBBS, B.Sc)",
+    "eligibility": "Above 80th percentile in 10+2 board exams with annual family income below ₹4.5 Lakhs.",
+    "officialUrl": "https://scholarships.gov.in/",
+    "isOfficial": true,
+    "lastVerifiedAt": "2026-08-01"
+  },
+  {
+    "id": "sch-karnataka-ssp",
+    "name": "State Scholarship Portal (SSP) Karnataka Post-Matric Scholarship",
+    "provider": "Government of Karnataka",
+    "category": "State",
+    "course": "Engineering, Pharmacy, Medical, Nursing, General Degrees",
+    "eligibility": "Karnataka domicile students pursuing post-matric courses. Income criteria per category.",
+    "officialUrl": "https://ssp.postmatric.karnataka.gov.in/",
+    "isOfficial": true,
+    "lastVerifiedAt": "2026-08-01"
+  },
+  {
+    "id": "sch-mahadbt",
+    "name": "MahaDBT Rajarshi Chhatrapati Shahu Maharaj Fee Reimbursement",
+    "provider": "Government of Maharashtra",
+    "category": "State",
+    "course": "Engineering, Pharmacy, Agriculture, Medical",
+    "eligibility": "Maharashtra domicile EBC students with annual family income up to ₹8 Lakhs.",
+    "officialUrl": "https://mahadbt.maharashtra.gov.in/",
+    "isOfficial": true,
+    "lastVerifiedAt": "2026-08-01"
+  }
+]

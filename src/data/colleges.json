@@ -1,0 +1,62 @@
+[
+  {
+    "id": "rvce-bengaluru",
+    "name": "R.V. College of Engineering (RVCE)",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Private Autonomous",
+    "courses": ["B.Tech CSE", "B.Tech ECE", "B.Tech AI/ML", "B.Tech Mechanical"],
+    "acceptedExams": ["KCET", "COMEDK"],
+    "accreditation": "NAAC A+ / NBA",
+    "website": "https://rvce.edu.in/",
+    "tier": "Dream"
+  },
+  {
+    "id": "ict-mumbai",
+    "name": "Institute of Chemical Technology (ICT)",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Deemed Government",
+    "courses": ["B.Pharm", "B.Tech Chemical", "M.Pharm"],
+    "acceptedExams": ["MHT-CET", "JEE Main", "GPAT"],
+    "accreditation": "NAAC A++",
+    "website": "https://www.ictmumbai.edu.in/",
+    "tier": "Dream"
+  },
+  {
+    "id": "bmsce-bengaluru",
+    "name": "B.M.S. College of Engineering",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Private Autonomous",
+    "courses": ["B.Tech CSE", "B.Tech ECE", "B.Tech Civil", "B.Tech Biotechnology"],
+    "acceptedExams": ["KCET", "COMEDK"],
+    "accreditation": "NAAC A++",
+    "website": "https://bmsce.ac.in/",
+    "tier": "Target"
+  },
+  {
+    "id": "coep-pune",
+    "name": "COEP Technological University",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "type": "Government Autonomous",
+    "courses": ["B.Tech Mechanical", "B.Tech CSE", "B.Tech Electrical", "B.Tech Civil"],
+    "acceptedExams": ["MHT-CET", "JEE Main"],
+    "accreditation": "NAAC A+",
+    "website": "https://www.coep.org.in/",
+    "tier": "Dream"
+  },
+  {
+    "id": "nlsui-bengaluru",
+    "name": "National Law School of India University (NLSIU)",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "National Law University",
+    "courses": ["BA LL.B (Hons)", "LLM"],
+    "acceptedExams": ["CLAT"],
+    "accreditation": "NIRF Rank #1 Law",
+    "website": "https://www.nls.ac.in/",
+    "tier": "Dream"
+  }
+]

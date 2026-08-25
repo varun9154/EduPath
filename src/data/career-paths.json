@@ -1,0 +1,67 @@
+[
+  {
+    "id": "engineering",
+    "name": "Engineering",
+    "streams": ["Science", "PCM"],
+    "courses": [
+      "Computer Science Engineering",
+      "Information Science Engineering",
+      "Electronics & Communication Engineering",
+      "Electrical Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Artificial Intelligence & Machine Learning",
+      "Data Science"
+    ]
+  },
+  {
+    "id": "medical",
+    "name": "Medical & Healthcare",
+    "streams": ["Science", "PCB"],
+    "courses": [
+      "MBBS",
+      "BDS",
+      "B.Pharm",
+      "Nursing",
+      "Allied Health Sciences"
+    ]
+  },
+  {
+    "id": "commerce",
+    "name": "Commerce & Finance",
+    "streams": ["Commerce"],
+    "courses": [
+      "B.Com",
+      "BBA",
+      "CA",
+      "CMA",
+      "CS",
+      "Finance"
+    ]
+  },
+  {
+    "id": "arts",
+    "name": "Arts & Humanities",
+    "streams": ["Arts"],
+    "courses": [
+      "BA",
+      "Journalism",
+      "Psychology",
+      "Economics",
+      "Political Science",
+      "Design"
+    ]
+  },
+  {
+    "id": "diploma",
+    "name": "Diploma & Technical",
+    "streams": ["Any"],
+    "courses": [
+      "Computer Engineering",
+      "Mechanical Engineering",
+      "Civil Engineering",
+      "Electronics",
+      "Electrical Engineering"
+    ]
+  }
+]

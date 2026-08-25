@@ -1,0 +1,35 @@
+[
+  {
+    "id": "job-sde-grad",
+    "title": "Graduate Software Development Engineer (SDE-1)",
+    "type": "Full-Time Job",
+    "domain": "Engineering / Tech",
+    "eligibility": "B.Tech CSE/IT/ECE (2025/2026 Batch)",
+    "skills": ["Data Structures & Algorithms", "Java/C++", "System Design Basics", "SQL"],
+    "officialUrl": "https://careers.google.com/",
+    "isOfficial": true,
+    "lastVerifiedAt": "2026-08-01"
+  },
+  {
+    "id": "job-pharma-qa",
+    "title": "Quality Assurance & Regulatory Trainee",
+    "type": "Full-Time Job",
+    "domain": "Pharmacy",
+    "eligibility": "B.Pharm / M.Pharm / Pharm.D Graduates",
+    "skills": ["GMP Guidelines", "HPLC / Dissolution Testing", "Pharmacovigilance Basics", "Regulatory Documentation"],
+    "officialUrl": "https://www.sunpharma.com/careers",
+    "isOfficial": true,
+    "lastVerifiedAt": "2026-08-01"
+  },
+  {
+    "id": "intern-devops",
+    "title": "Cloud Computing & DevOps Summer Intern",
+    "type": "Internship",
+    "domain": "Engineering / Tech",
+    "eligibility": "3rd / 4th Year B.Tech Students",
+    "skills": ["Linux Shell", "Docker", "AWS / Azure Basics", "Git"],
+    "officialUrl": "https://aws.amazon.com/careers/",
+    "isOfficial": true,
+    "lastVerifiedAt": "2026-08-01"
+  }
+]

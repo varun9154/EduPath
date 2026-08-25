@@ -1,0 +1,114 @@
+[
+  {
+    "step": 1,
+    "stage": "12th Standard",
+    "title": "12th Grade Completion & Stream Alignment",
+    "description": "Consolidate core fundamentals in PCM, PCB, Commerce, or Arts. Identify personal strengths, interest areas, and long-term career goals.",
+    "actionables": ["Track board exam marks", "Evaluate subject affinities", "Consult EduPath guidance Counsellor"]
+  },
+  {
+    "step": 2,
+    "stage": "Option Discovery",
+    "title": "Discovering Courses & Future Industries",
+    "description": "Explore all viable undergraduate degrees including Engineering (CSE, AI/ML), Medical, Pharmacy (B.Pharm, Pharm.D), Law, Management, Architecture, Agriculture, Design.",
+    "actionables": ["Review EduPath course guides", "Compare degree durations & career scopes", "Check eligibility rules"]
+  },
+  {
+    "step": 3,
+    "stage": "Entrance Exams",
+    "title": "State & National Entrance Exam Selection",
+    "description": "Map all applicable entrance exams across 36 Indian States/UTs (KCET, MHT-CET, WBJEE, TS EAMCET, AP EAPCET, JEE Main, NEET, CUET, CLAT).",
+    "actionables": ["Check exam dates & syllabus", "Verify official board authority", "Register before deadlines"]
+  },
+  {
+    "step": 4,
+    "stage": "Exam Preparation",
+    "title": "Targeted Preparation & Mock Tests",
+    "description": "Follow topic-wise study plans, solve previous 10 years papers, practice mock CBT tests, and optimize speed & accuracy.",
+    "actionables": ["Solve subject mocks", "Analyze weak chapters", "Review exam patterns"]
+  },
+  {
+    "step": 5,
+    "stage": "Taking Entrance Exams",
+    "title": "Exam Execution & Stress Management",
+    "description": "Appear for scheduled state and national entrance examinations with confidence and strategy.",
+    "actionables": ["Download admit card", "Verify exam center guidelines", "Execute time-management plan"]
+  },
+  {
+    "step": 6,
+    "stage": "Score & Rank Analysis",
+    "title": "Score Evaluation & Rank Predictor",
+    "description": "Analyze board percentage and entrance exam percentile/rank against previous year official normalization metrics.",
+    "actionables": ["Calculate aggregate cutoff score", "Compare state vs all-India rank", "Prepare document checklist"]
+  },
+  {
+    "step": 7,
+    "stage": "Eligibility Checks",
+    "title": "Eligibility Verification & Quota Analysis",
+    "description": "Verify eligibility criteria, state domicile reservation categories, management quotas, and fee waivers.",
+    "actionables": ["Verify state domicile certificates", "Review quota policies", "Prepare income/category certificates"]
+  },
+  {
+    "step": 8,
+    "stage": "College Shortlisting",
+    "title": "Target College Shortlist",
+    "description": "Build a tier-ranked list of top colleges based on NIRF rank, NBA accreditation, lab infrastructure, placement records, and fee structures.",
+    "actionables": ["Shortlist Top 10 dream colleges", "Shortlist Top 10 realistic options", "Check campus placement reports"]
+  },
+  {
+    "step": 9,
+    "stage": "Counselling & Option Filling",
+    "title": "Centralized Counselling & Seat Allocation",
+    "description": "Participate in state single-window counselling (KEA, DTE, JAC, CENTAC, UPTAC) and strategically order choice filling.",
+    "actionables": ["Fill maximum viable options", "Lock choice preferences", "Accept & report to allotted college"]
+  },
+  {
+    "step": 10,
+    "stage": "Degree Roadmap",
+    "title": "College Admission & Academic Excellence",
+    "description": "Enroll in the selected degree program and build strong fundamental domain knowledge across semesters while maintaining high CGPA.",
+    "actionables": ["Maintain CGPA > 8.0", "Participate in technical clubs", "Build academic foundation"]
+  },
+  {
+    "step": 11,
+    "stage": "Skill Building",
+    "title": "Industry-Relevant Skill & Tools Acquisition",
+    "description": "Master modern practical skills: Full-Stack Dev, Data Science, AWS/DevOps, QA/QC testing, CAD/FEA, Pharmacovigilance, Legal drafting, or Financial modeling.",
+    "actionables": ["Complete specialized skill tracks", "Obtain recognized certifications", "Master core developer/industry tools"]
+  },
+  {
+    "step": 12,
+    "stage": "Industry Projects",
+    "title": "Real-World Projects & Portfolio Development",
+    "description": "Develop 3-5 real-world industry capstone projects. Host code on GitHub, deploy live web applications, or publish research papers.",
+    "actionables": ["Build capstone application", "Publish live demo URL & GitHub repo", "Write project documentation"]
+  },
+  {
+    "step": 13,
+    "stage": "Internships",
+    "title": "Summer Internships & Industry Exposure",
+    "description": "Secure 2-3 months summer internships or industrial training in reputed companies, pharma labs, tech startups, or law firms.",
+    "actionables": ["Apply on LinkedIn & Internship portals", "Gain hands-on work experience", "Secure Pre-Placement Offer (PPO)"]
+  },
+  {
+    "step": 14,
+    "stage": "Profile Optimization",
+    "title": "Resume, GitHub & LinkedIn Brand Building",
+    "description": "Craft ATS-friendly professional resume, optimize LinkedIn profile for recruiters, and showcase project portfolio.",
+    "actionables": ["Format single-page ATS resume", "Optimize LinkedIn headline & summary", "Get recommendations & endorsements"]
+  },
+  {
+    "step": 15,
+    "stage": "Interview Prep",
+    "title": "Aptitude, Coding, Technical & HR Interview Prep",
+    "description": "Practice quantitative aptitude, logical reasoning, data structures & algorithms (DSA), system design, and mock HR interviews.",
+    "actionables": ["Solve 150+ coding/technical problems", "Practice mock interviews with EduPath AI", "Refine communication skills"]
+  },
+  {
+    "step": 16,
+    "stage": "First Job",
+    "title": "Placement Drive & Securing Your First Job",
+    "description": "Participate in campus placement drives and off-campus recruitment to land your dream job offer as a graduate engineer, scientist, or associate.",
+    "actionables": ["Attend campus placement drives", "Negotiate offer letter", "Start your professional career!"]
+  }
+]

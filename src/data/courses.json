@@ -1,0 +1,656 @@
+[
+  {
+    "id": "pharm-d",
+    "category": "Pharmacy",
+    "name": "Pharm.D",
+    "duration": "6 Years",
+    "eligibility": "10+2 with PCB/PCM and required entrance qualification",
+    "overview": "Doctor of Pharmacy program focused on clinical pharmacy, patient care, pharmacotherapy and hospital practice.",
+    "careerPathways": [
+      "Pharm.D → Clinical Pharmacist",
+      "Pharm.D → Hospital Pharmacist",
+      "Pharm.D → Clinical Research Associate",
+      "Pharm.D → Drug Safety Associate",
+      "Pharm.D → Pharmacovigilance"
+    ],
+    "topExams": ["NEET", "State Entrance Exams"]
+  },
+  {
+    "id": "bpharm",
+    "category": "Pharmacy",
+    "name": "B.Pharm",
+    "duration": "4 Years",
+    "eligibility": "10+2 with Physics, Chemistry and Biology/Mathematics",
+    "overview": "Undergraduate pharmacy program covering pharmaceutical sciences, drug formulation, pharmacology and industrial pharmacy.",
+    "careerPathways": [
+      "B.Pharm → Pharmacist",
+      "B.Pharm → Production Executive",
+      "B.Pharm → Quality Control Analyst",
+      "B.Pharm → Medical Representative",
+      "B.Pharm → Clinical Research Associate"
+    ],
+    "topExams": ["NEET", "MHT CET", "KCET", "AP EAMCET", "TS EAMCET"]
+  },
+  {
+    "id": "dpharm",
+    "category": "Pharmacy",
+    "name": "D.Pharm",
+    "duration": "2 Years",
+    "eligibility": "10+2 with Science subjects",
+    "overview": "Diploma-level pharmacy program designed for students interested in pharmaceutical dispensing and pharmacy practice.",
+    "careerPathways": [
+      "D.Pharm → Registered Pharmacist",
+      "D.Pharm → Hospital Pharmacy",
+      "D.Pharm → Retail Pharmacy",
+      "D.Pharm → Medical Store Management"
+    ],
+    "topExams": ["State Pharmacy Admissions"]
+  },
+  {
+    "id": "mpharm",
+    "category": "Pharmacy",
+    "name": "M.Pharm",
+    "duration": "2 Years",
+    "eligibility": "B.Pharm",
+    "overview": "Postgraduate pharmacy program offering specialization in areas such as pharmaceutics, pharmacology, pharmaceutical chemistry and pharmacognosy.",
+    "careerPathways": [
+      "M.Pharm → Research Scientist",
+      "M.Pharm → Formulation Scientist",
+      "M.Pharm → Pharmacologist",
+      "M.Pharm → Quality Assurance Manager",
+      "M.Pharm → Academic Faculty"
+    ],
+    "topExams": ["GPAT", "State PG Entrance Exams"]
+  },
+
+  {
+    "id": "mbbs",
+    "category": "Medical",
+    "name": "MBBS",
+    "duration": "5.5 Years",
+    "eligibility": "10+2 with PCB and qualifying medical entrance examination",
+    "overview": "Professional medical degree covering basic sciences, clinical medicine, surgery and patient care.",
+    "careerPathways": [
+      "MBBS → Medical Intern",
+      "MBBS → General Physician",
+      "MBBS → Medical Officer",
+      "MBBS → MD/MS Specialist",
+      "MBBS → Hospital Administration"
+    ],
+    "topExams": ["NEET UG"]
+  },
+  {
+    "id": "bds",
+    "category": "Medical",
+    "name": "BDS",
+    "duration": "5 Years",
+    "eligibility": "10+2 with PCB and qualifying entrance examination",
+    "overview": "Professional dentistry program covering oral health, dental surgery, diagnosis and treatment.",
+    "careerPathways": [
+      "BDS → Dentist",
+      "BDS → Dental Surgeon",
+      "BDS → Dental Consultant",
+      "BDS → MDS Specialist",
+      "BDS → Dental Clinic Owner"
+    ],
+    "topExams": ["NEET UG"]
+  },
+  {
+    "id": "bsc-nursing",
+    "category": "Medical",
+    "name": "B.Sc Nursing",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCB",
+    "overview": "Professional nursing degree focused on patient care, clinical practice, community health and healthcare management.",
+    "careerPathways": [
+      "B.Sc Nursing → Staff Nurse",
+      "B.Sc Nursing → Clinical Nurse",
+      "B.Sc Nursing → Nursing Officer",
+      "B.Sc Nursing → ICU Nurse",
+      "B.Sc Nursing → Nursing Administrator"
+    ],
+    "topExams": ["NEET", "AIIMS Nursing", "State Nursing Exams"]
+  },
+  {
+    "id": "bpt",
+    "category": "Medical",
+    "name": "Bachelor of Physiotherapy",
+    "duration": "4.5 Years",
+    "eligibility": "10+2 with PCB",
+    "overview": "Healthcare program focused on rehabilitation, movement disorders, physical therapy and recovery.",
+    "careerPathways": [
+      "BPT → Physiotherapist",
+      "BPT → Sports Physiotherapist",
+      "BPT → Rehabilitation Specialist",
+      "BPT → Hospital Physiotherapist",
+      "BPT → Private Practice"
+    ],
+    "topExams": ["NEET", "State Entrance Exams"]
+  },
+  {
+    "id": "bams",
+    "category": "Medical",
+    "name": "BAMS",
+    "duration": "5.5 Years",
+    "eligibility": "10+2 with PCB",
+    "overview": "Ayurvedic medical degree combining traditional Ayurvedic medicine with modern medical education.",
+    "careerPathways": [
+      "BAMS → Ayurvedic Doctor",
+      "BAMS → Clinical Practitioner",
+      "BAMS → Wellness Consultant",
+      "BAMS → Ayurvedic Researcher",
+      "BAMS → Private Practice"
+    ],
+    "topExams": ["NEET UG"]
+  },
+  {
+    "id": "bhms",
+    "category": "Medical",
+    "name": "BHMS",
+    "duration": "5.5 Years",
+    "eligibility": "10+2 with PCB",
+    "overview": "Professional program in homeopathic medicine, diagnosis and patient management.",
+    "careerPathways": [
+      "BHMS → Homeopathic Doctor",
+      "BHMS → Clinical Practitioner",
+      "BHMS → Researcher",
+      "BHMS → Wellness Consultant",
+      "BHMS → Private Practice"
+    ],
+    "topExams": ["NEET UG"]
+  },
+  {
+    "id": "bsc-mlt",
+    "category": "Medical",
+    "name": "B.Sc Medical Laboratory Technology",
+    "duration": "3–4 Years",
+    "eligibility": "10+2 with Science",
+    "overview": "Healthcare laboratory program covering diagnostic testing, pathology, microbiology and laboratory procedures.",
+    "careerPathways": [
+      "B.Sc MLT → Lab Technician",
+      "B.Sc MLT → Medical Laboratory Technologist",
+      "B.Sc MLT → Pathology Lab Executive",
+      "B.Sc MLT → Diagnostic Centre Specialist"
+    ],
+    "topExams": ["State Entrance Exams", "University Admissions"]
+  },
+
+  {
+    "id": "cse",
+    "category": "Engineering",
+    "name": "B.Tech Computer Science & Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Computer science engineering program covering programming, algorithms, databases, operating systems and software development.",
+    "careerPathways": [
+      "B.Tech CSE → Software Engineer",
+      "B.Tech CSE → Full Stack Developer",
+      "B.Tech CSE → Backend Developer",
+      "B.Tech CSE → Cloud Engineer",
+      "B.Tech CSE → DevOps Engineer"
+    ],
+    "topExams": ["JEE Main", "JEE Advanced", "KCET", "MHT CET", "AP EAMCET", "TS EAMCET"]
+  },
+  {
+    "id": "ai-ml",
+    "category": "Engineering",
+    "name": "B.Tech Artificial Intelligence & Machine Learning",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Engineering specialization focused on artificial intelligence, machine learning, data science and intelligent systems.",
+    "careerPathways": [
+      "B.Tech AI/ML → AI Engineer",
+      "B.Tech AI/ML → Machine Learning Engineer",
+      "B.Tech AI/ML → Data Scientist",
+      "B.Tech AI/ML → NLP Engineer",
+      "B.Tech AI/ML → Computer Vision Engineer"
+    ],
+    "topExams": ["JEE Main", "JEE Advanced", "KCET", "MHT CET"]
+  },
+  {
+    "id": "data-science",
+    "category": "Engineering",
+    "name": "B.Tech Data Science",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Technology degree focused on statistics, programming, data analytics, machine learning and big data.",
+    "careerPathways": [
+      "B.Tech Data Science → Data Scientist",
+      "B.Tech Data Science → Data Analyst",
+      "B.Tech Data Science → ML Engineer",
+      "B.Tech Data Science → Business Intelligence Analyst"
+    ],
+    "topExams": ["JEE Main", "KCET", "MHT CET", "AP EAMCET", "TS EAMCET"]
+  },
+  {
+    "id": "cyber-security",
+    "category": "Engineering",
+    "name": "B.Tech Cyber Security",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Engineering program covering network security, ethical hacking, cryptography, digital forensics and cyber defence.",
+    "careerPathways": [
+      "B.Tech Cyber Security → Cyber Security Analyst",
+      "B.Tech Cyber Security → Security Engineer",
+      "B.Tech Cyber Security → SOC Analyst",
+      "B.Tech Cyber Security → Penetration Tester",
+      "B.Tech Cyber Security → Security Consultant"
+    ],
+    "topExams": ["JEE Main", "KCET", "MHT CET"]
+  },
+  {
+    "id": "ece",
+    "category": "Engineering",
+    "name": "B.Tech Electronics & Communication Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Engineering program covering electronics, communication systems, embedded systems, signal processing and hardware.",
+    "careerPathways": [
+      "B.Tech ECE → Electronics Engineer",
+      "B.Tech ECE → Embedded Engineer",
+      "B.Tech ECE → VLSI Engineer",
+      "B.Tech ECE → Communication Engineer",
+      "B.Tech ECE → Hardware Engineer"
+    ],
+    "topExams": ["JEE Main", "JEE Advanced", "KCET", "MHT CET"]
+  },
+  {
+    "id": "eee",
+    "category": "Engineering",
+    "name": "B.Tech Electrical & Electronics Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Engineering degree focused on electrical systems, power electronics, machines and control systems.",
+    "careerPathways": [
+      "B.Tech EEE → Electrical Engineer",
+      "B.Tech EEE → Power Engineer",
+      "B.Tech EEE → Control Engineer",
+      "B.Tech EEE → Electrical Design Engineer"
+    ],
+    "topExams": ["JEE Main", "KCET", "MHT CET"]
+  },
+  {
+    "id": "mechanical",
+    "category": "Engineering",
+    "name": "B.Tech Mechanical Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Engineering program covering mechanical systems, manufacturing, thermodynamics, design and automation.",
+    "careerPathways": [
+      "B.Tech Mechanical → Mechanical Engineer",
+      "B.Tech Mechanical → Design Engineer",
+      "B.Tech Mechanical → Production Engineer",
+      "B.Tech Mechanical → Automotive Engineer",
+      "B.Tech Mechanical → Manufacturing Engineer"
+    ],
+    "topExams": ["JEE Main", "KCET", "MHT CET"]
+  },
+  {
+    "id": "civil",
+    "category": "Engineering",
+    "name": "B.Tech Civil Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Engineering degree focused on construction, structural engineering, transportation, environmental engineering and infrastructure.",
+    "careerPathways": [
+      "B.Tech Civil → Civil Engineer",
+      "B.Tech Civil → Structural Engineer",
+      "B.Tech Civil → Site Engineer",
+      "B.Tech Civil → Project Engineer",
+      "B.Tech Civil → Construction Manager"
+    ],
+    "topExams": ["JEE Main", "KCET", "MHT CET"]
+  },
+  {
+    "id": "aerospace",
+    "category": "Engineering",
+    "name": "B.Tech Aerospace Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM",
+    "overview": "Engineering specialization focused on aircraft, spacecraft, aerodynamics, propulsion and aerospace systems.",
+    "careerPathways": [
+      "Aerospace Engineering → Aerospace Engineer",
+      "Aerospace Engineering → Aircraft Design Engineer",
+      "Aerospace Engineering → Propulsion Engineer",
+      "Aerospace Engineering → Defence Engineer"
+    ],
+    "topExams": ["JEE Main", "JEE Advanced", "State Engineering Exams"]
+  },
+
+  {
+    "id": "llb",
+    "category": "Law",
+    "name": "LL.B",
+    "duration": "3 Years",
+    "eligibility": "Graduation in any discipline",
+    "overview": "Professional law degree for graduates interested in legal practice, corporate law, litigation and legal services.",
+    "careerPathways": [
+      "LL.B → Advocate",
+      "LL.B → Legal Associate",
+      "LL.B → Corporate Lawyer",
+      "LL.B → Legal Consultant",
+      "LL.B → Legal Advisor"
+    ],
+    "topExams": ["State Law Entrance Exams", "University Entrance Exams"]
+  },
+  {
+    "id": "ballb",
+    "category": "Law",
+    "name": "BA LL.B",
+    "duration": "5 Years",
+    "eligibility": "10+2",
+    "overview": "Integrated undergraduate program combining arts subjects with professional legal education.",
+    "careerPathways": [
+      "BA LL.B → Advocate",
+      "BA LL.B → Corporate Lawyer",
+      "BA LL.B → Legal Consultant",
+      "BA LL.B → Civil Services",
+      "BA LL.B → Legal Researcher"
+    ],
+    "topExams": ["CLAT", "AILET", "SLAT", "State Law Exams"]
+  },
+  {
+    "id": "bballb",
+    "category": "Law",
+    "name": "BBA LL.B",
+    "duration": "5 Years",
+    "eligibility": "10+2",
+    "overview": "Integrated law program combining business administration with professional legal studies.",
+    "careerPathways": [
+      "BBA LL.B → Corporate Lawyer",
+      "BBA LL.B → Business Legal Consultant",
+      "BBA LL.B → Compliance Officer",
+      "BBA LL.B → Legal Advisor"
+    ],
+    "topExams": ["CLAT", "AILET", "SLAT"]
+  },
+
+  {
+    "id": "bba",
+    "category": "Management",
+    "name": "BBA",
+    "duration": "3 Years",
+    "eligibility": "10+2",
+    "overview": "Undergraduate management program covering business administration, marketing, finance, human resources and operations.",
+    "careerPathways": [
+      "BBA → Business Analyst",
+      "BBA → Marketing Executive",
+      "BBA → HR Executive",
+      "BBA → Operations Executive",
+      "BBA → MBA"
+    ],
+    "topExams": ["CUET UG", "IPMAT", "University Entrance Exams"]
+  },
+  {
+    "id": "bcom",
+    "category": "Management",
+    "name": "B.Com",
+    "duration": "3 Years",
+    "eligibility": "10+2",
+    "overview": "Commerce degree covering accounting, taxation, finance, economics and business management.",
+    "careerPathways": [
+      "B.Com → Accountant",
+      "B.Com → Financial Analyst",
+      "B.Com → Tax Consultant",
+      "B.Com → Banking Professional",
+      "B.Com → CA/CS/CMA"
+    ],
+    "topExams": ["CUET UG", "University Admissions"]
+  },
+  {
+    "id": "mba",
+    "category": "Management",
+    "name": "MBA",
+    "duration": "2 Years",
+    "eligibility": "Bachelor's Degree",
+    "overview": "Postgraduate management program with specializations including finance, marketing, HR, operations and business analytics.",
+    "careerPathways": [
+      "MBA → Management Consultant",
+      "MBA → Product Manager",
+      "MBA → Marketing Manager",
+      "MBA → Finance Manager",
+      "MBA → HR Manager"
+    ],
+    "topExams": ["CAT", "XAT", "CMAT", "MAT", "GMAT"]
+  },
+  {
+    "id": "bms",
+    "category": "Management",
+    "name": "Bachelor of Management Studies",
+    "duration": "3 Years",
+    "eligibility": "10+2",
+    "overview": "Management-focused undergraduate degree covering business strategy, finance, marketing and organizational management.",
+    "careerPathways": [
+      "BMS → Management Trainee",
+      "BMS → Business Analyst",
+      "BMS → Marketing Executive",
+      "BMS → Operations Executive"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+  {
+    "id": "bca",
+    "category": "Management",
+    "name": "BCA",
+    "duration": "3–4 Years",
+    "eligibility": "10+2",
+    "overview": "Computer applications degree covering programming, databases, web development and software applications.",
+    "careerPathways": [
+      "BCA → Software Developer",
+      "BCA → Web Developer",
+      "BCA → Application Developer",
+      "BCA → System Administrator",
+      "BCA → MCA"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+
+  {
+    "id": "bsc-agriculture",
+    "category": "Agriculture",
+    "name": "B.Sc Agriculture",
+    "duration": "4 Years",
+    "eligibility": "10+2 with Science/Agriculture subjects",
+    "overview": "Agriculture degree covering crop science, soil science, horticulture, agricultural economics and farm management.",
+    "careerPathways": [
+      "B.Sc Agriculture → Agriculture Officer",
+      "B.Sc Agriculture → Farm Manager",
+      "B.Sc Agriculture → Agronomist",
+      "B.Sc Agriculture → Agricultural Consultant",
+      "B.Sc Agriculture → Agri-business Professional"
+    ],
+    "topExams": ["CUET UG", "ICAR AIEEA", "State Agriculture Exams"]
+  },
+  {
+    "id": "bsc-horticulture",
+    "category": "Agriculture",
+    "name": "B.Sc Horticulture",
+    "duration": "4 Years",
+    "eligibility": "10+2 with Science",
+    "overview": "Program focused on fruits, vegetables, flowers, plantation crops, landscaping and horticultural production.",
+    "careerPathways": [
+      "B.Sc Horticulture → Horticulture Officer",
+      "B.Sc Horticulture → Farm Manager",
+      "B.Sc Horticulture → Landscape Professional",
+      "B.Sc Horticulture → Horticulture Consultant"
+    ],
+    "topExams": ["CUET UG", "ICAR AIEEA", "State Exams"]
+  },
+  {
+    "id": "btech-agri",
+    "category": "Agriculture",
+    "name": "B.Tech Agricultural Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 with PCM/PCB as applicable",
+    "overview": "Engineering program combining agriculture with machinery, irrigation, food processing and agricultural technology.",
+    "careerPathways": [
+      "Agricultural Engineering → Agricultural Engineer",
+      "Agricultural Engineering → Irrigation Engineer",
+      "Agricultural Engineering → Farm Machinery Engineer",
+      "Agricultural Engineering → Agri-Tech Professional"
+    ],
+    "topExams": ["JEE Main", "State Engineering Exams", "ICAR"]
+  },
+  {
+    "id": "bsc-forestry",
+    "category": "Agriculture",
+    "name": "B.Sc Forestry",
+    "duration": "4 Years",
+    "eligibility": "10+2 with Science",
+    "overview": "Degree focused on forest management, conservation, wildlife, ecology and natural resource management.",
+    "careerPathways": [
+      "B.Sc Forestry → Forest Officer",
+      "B.Sc Forestry → Forest Manager",
+      "B.Sc Forestry → Conservation Professional",
+      "B.Sc Forestry → Environmental Consultant"
+    ],
+    "topExams": ["CUET UG", "ICAR", "State Entrance Exams"]
+  },
+
+  {
+    "id": "bsc-physics",
+    "category": "Science",
+    "name": "B.Sc Physics",
+    "duration": "3 Years",
+    "eligibility": "10+2 with Science",
+    "overview": "Science degree covering mechanics, electromagnetism, optics, quantum physics and mathematical physics.",
+    "careerPathways": [
+      "B.Sc Physics → Research Assistant",
+      "B.Sc Physics → Laboratory Technician",
+      "B.Sc Physics → Data Analyst",
+      "B.Sc Physics → M.Sc Physics",
+      "B.Sc Physics → Teaching"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+  {
+    "id": "bsc-chemistry",
+    "category": "Science",
+    "name": "B.Sc Chemistry",
+    "duration": "3 Years",
+    "eligibility": "10+2 with Science",
+    "overview": "Degree covering organic, inorganic, physical and analytical chemistry with laboratory practice.",
+    "careerPathways": [
+      "B.Sc Chemistry → Laboratory Analyst",
+      "B.Sc Chemistry → Quality Analyst",
+      "B.Sc Chemistry → Research Assistant",
+      "B.Sc Chemistry → Pharmaceutical Industry",
+      "B.Sc Chemistry → M.Sc Chemistry"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+  {
+    "id": "bsc-mathematics",
+    "category": "Science",
+    "name": "B.Sc Mathematics",
+    "duration": "3 Years",
+    "eligibility": "10+2 with Mathematics",
+    "overview": "Mathematics degree covering algebra, calculus, statistics, geometry and mathematical modelling.",
+    "careerPathways": [
+      "B.Sc Mathematics → Data Analyst",
+      "B.Sc Mathematics → Statistician",
+      "B.Sc Mathematics → Actuarial Professional",
+      "B.Sc Mathematics → Teacher",
+      "B.Sc Mathematics → M.Sc Mathematics"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+  {
+    "id": "bsc-biotechnology",
+    "category": "Science",
+    "name": "B.Sc Biotechnology",
+    "duration": "3–4 Years",
+    "eligibility": "10+2 with Science",
+    "overview": "Biological sciences program covering genetics, molecular biology, microbiology and biotechnology applications.",
+    "careerPathways": [
+      "B.Sc Biotechnology → Research Assistant",
+      "B.Sc Biotechnology → Biotech Analyst",
+      "B.Sc Biotechnology → Laboratory Executive",
+      "B.Sc Biotechnology → Clinical Research",
+      "B.Sc Biotechnology → M.Sc Biotechnology"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+
+  {
+    "id": "bdes",
+    "category": "Design",
+    "name": "Bachelor of Design",
+    "duration": "4 Years",
+    "eligibility": "10+2",
+    "overview": "Creative degree covering product design, visual communication, interaction design, fashion and user experience.",
+    "careerPathways": [
+      "B.Des → UX Designer",
+      "B.Des → Product Designer",
+      "B.Des → Graphic Designer",
+      "B.Des → Fashion Designer",
+      "B.Des → Design Researcher"
+    ],
+    "topExams": ["NID DAT", "NIFT", "UCEED", "CEED"]
+  },
+  {
+    "id": "barch",
+    "category": "Architecture",
+    "name": "B.Arch",
+    "duration": "5 Years",
+    "eligibility": "10+2 with Mathematics",
+    "overview": "Professional architecture degree covering architectural design, construction, urban planning and building technology.",
+    "careerPathways": [
+      "B.Arch → Architect",
+      "B.Arch → Architectural Designer",
+      "B.Arch → Urban Planner",
+      "B.Arch → Interior Design Professional",
+      "B.Arch → Project Architect"
+    ],
+    "topExams": ["NATA", "JEE Main Paper 2"]
+  },
+
+  {
+    "id": "bjmc",
+    "category": "Arts & Media",
+    "name": "Bachelor of Journalism & Mass Communication",
+    "duration": "3 Years",
+    "eligibility": "10+2",
+    "overview": "Media degree covering journalism, digital media, broadcasting, public relations and content production.",
+    "careerPathways": [
+      "BJMC → Journalist",
+      "BJMC → Content Writer",
+      "BJMC → Digital Media Executive",
+      "BJMC → News Producer",
+      "BJMC → Public Relations Executive"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+  {
+    "id": "ba",
+    "category": "Arts & Media",
+    "name": "B.A",
+    "duration": "3 Years",
+    "eligibility": "10+2",
+    "overview": "Flexible undergraduate degree offering disciplines such as economics, psychology, political science, sociology and English.",
+    "careerPathways": [
+      "B.A → Civil Services",
+      "B.A → Content Professional",
+      "B.A → Teaching",
+      "B.A → Public Relations",
+      "B.A → Higher Studies"
+    ],
+    "topExams": ["CUET UG", "University Entrance Exams"]
+  },
+  {
+    "id": "bfa",
+    "category": "Arts & Media",
+    "name": "Bachelor of Fine Arts",
+    "duration": "4 Years",
+    "eligibility": "10+2",
+    "overview": "Creative arts degree covering painting, sculpture, visual communication, applied arts and digital creativity.",
+    "careerPathways": [
+      "BFA → Artist",
+      "BFA → Illustrator",
+      "BFA → Graphic Designer",
+      "BFA → Art Director",
+      "BFA → Creative Designer"
+    ],
+    "topExams": ["University Entrance Exams", "Institutional Aptitude Tests"]
+  }
+]

@@ -1,0 +1,188 @@
+[
+  {
+    "id": "eng-cse-foundation",
+    "title": "Engineering & Computer Science Foundation",
+    "category": "Engineering",
+    "stream": ["Science", "PCM"],
+    "careerGoals": [
+      "Engineering",
+      "Software",
+      "Technology"
+    ],
+    "targetJobs": [
+      "Software Engineer",
+      "Frontend Developer",
+      "Backend Developer",
+      "Full Stack Developer"
+    ],
+    "price": 500,
+    "currency": "INR",
+    "access": "PAID",
+    "description": "Complete roadmap from engineering preparation to your first technology job.",
+    "modules": [
+      "Engineering Entrance Preparation",
+      "College Selection",
+      "Programming Fundamentals",
+      "Data Structures & Algorithms",
+      "Web Development",
+      "Database Fundamentals",
+      "Git & GitHub",
+      "Cloud Fundamentals",
+      "Projects",
+      "Internship Preparation",
+      "Resume & ATS",
+      "Aptitude",
+      "Technical Interview",
+      "HR Interview",
+      "Placement Preparation",
+      "First Job Roadmap"
+    ]
+  },
+  {
+    "id": "eng-ece-foundation",
+    "title": "Electronics & Communication Engineering Roadmap",
+    "category": "Engineering",
+    "stream": ["Science", "PCM"],
+    "careerGoals": [
+      "Engineering",
+      "Electronics"
+    ],
+    "targetJobs": [
+      "Embedded Engineer",
+      "Electronics Engineer"
+    ],
+    "price": 500,
+    "currency": "INR",
+    "access": "PAID",
+    "description": "ECE roadmap covering academics, projects, embedded systems and placement preparation.",
+    "modules": [
+      "Engineering Foundation",
+      "Digital Electronics",
+      "Analog Electronics",
+      "Microcontrollers",
+      "Embedded Systems",
+      "Communication Systems",
+      "PCB Fundamentals",
+      "C Programming",
+      "Projects",
+      "Internships",
+      "Resume",
+      "Technical Interview",
+      "HR Interview",
+      "Placement",
+      "First Job"
+    ]
+  },
+  {
+    "id": "eng-mechanical-foundation",
+    "title": "Mechanical Engineering Career Roadmap",
+    "category": "Engineering",
+    "stream": ["Science", "PCM"],
+    "careerGoals": [
+      "Engineering",
+      "Mechanical"
+    ],
+    "targetJobs": [
+      "Mechanical Engineer",
+      "Design Engineer",
+      "Production Engineer"
+    ],
+    "price": 500,
+    "currency": "INR",
+    "access": "PAID",
+    "description": "Complete mechanical engineering roadmap from fundamentals to industry placement.",
+    "modules": [
+      "Engineering Foundation",
+      "Engineering Mechanics",
+      "Thermodynamics",
+      "Manufacturing",
+      "CAD Fundamentals",
+      "AutoCAD",
+      "SolidWorks",
+      "Design Projects",
+      "Industry Projects",
+      "Internship Preparation",
+      "Resume",
+      "Aptitude",
+      "Technical Interview",
+      "HR Interview",
+      "Placement",
+      "First Job"
+    ]
+  },
+  {
+    "id": "commerce-career-foundation",
+    "title": "Commerce Career Foundation",
+    "category": "Commerce",
+    "stream": ["Commerce"],
+    "careerGoals": [
+      "Finance",
+      "Commerce",
+      "Business"
+    ],
+    "targetJobs": [
+      "Accountant",
+      "Financial Analyst",
+      "Business Analyst"
+    ],
+    "price": 500,
+    "currency": "INR",
+    "access": "PAID",
+    "description": "Commerce career roadmap from academics to professional employment.",
+    "modules": [
+      "Commerce Foundation",
+      "Accounting",
+      "Business Studies",
+      "Economics",
+      "Excel",
+      "Financial Analysis",
+      "Communication",
+      "Business Tools",
+      "Projects",
+      "Internships",
+      "Resume",
+      "Aptitude",
+      "Interview Preparation",
+      "Placement",
+      "First Job"
+    ]
+  },
+  {
+    "id": "science-career-foundation",
+    "title": "Science Student Career Foundation",
+    "category": "Science",
+    "stream": ["Science", "PCM", "PCB"],
+    "careerGoals": [
+      "Science",
+      "Research",
+      "Technology",
+      "Engineering"
+    ],
+    "targetJobs": [
+      "Research Assistant",
+      "Data Analyst",
+      "Software Engineer"
+    ],
+    "price": 500,
+    "currency": "INR",
+    "access": "PAID",
+    "description": "Career discovery and skill roadmap for science students.",
+    "modules": [
+      "Career Discovery",
+      "Entrance Exams",
+      "Subject Foundation",
+      "Programming Basics",
+      "Data Skills",
+      "Research Skills",
+      "Communication",
+      "Projects",
+      "Internships",
+      "Resume",
+      "Aptitude",
+      "Interview Preparation",
+      "Higher Studies",
+      "Placement",
+      "First Job"
+    ]
+  }
+]
