@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { prepareExcelStore } from '@/lib/excelPersistence';
+import { getStudentById as getProductionStudentById, getStudentByEmail as getProductionStudentByEmail, getStudentDemoBookings as getProductionStudentDemoBookings } from '@/lib/productionDb';
 import { validateStudentRequest } from '@/lib/roleGuard';
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -23,7 +24,7 @@ export async function GET(
   try {
     const auth = validateStudentRequest(request);
     if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();
+    if (!process.env.DATABASE_URL) await prepareExcelStore();
     const { searchParams } =
       new URL(request.url);
 
@@ -52,12 +53,12 @@ export async function GET(
 
     if (studentId) {
       student =
-        findStudentById(studentId);
+        process.env.DATABASE_URL ? await getProductionStudentById(studentId) : findStudentById(studentId);
     }
 
     if (!student && email) {
       student =
-        findStudentByEmail(email);
+        process.env.DATABASE_URL ? await getProductionStudentByEmail(email) : findStudentByEmail(email);
     }
 
     /* -----------------------------------------------
@@ -82,9 +83,9 @@ export async function GET(
     ----------------------------------------------- */
 
     const demoBookings =
-      getStudentDemoBookings(
-        student.studentId
-      );
+      process.env.DATABASE_URL
+        ? await getProductionStudentDemoBookings(student.studentId)
+        : getStudentDemoBookings(student.studentId);
 
     /* -----------------------------------------------
        DASHBOARD RESPONSE

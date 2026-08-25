@@ -16,7 +16,7 @@ export default function StudentRegisterPage() {
     email: '',
     password: '',
     mobile: '',
-    educationLevel: '12th Appearing',
+    educationLevel: '10th Standard',
     stream: 'Science (PCM)',
     state: 'Karnataka',
     city: 'Bengaluru',
@@ -60,7 +60,7 @@ export default function StudentRegisterPage() {
           <GraduationCap className="w-6 h-6 text-white" />
         </div>
         <h1 className="text-2xl font-black text-slate-900">Create EduPath Student Account</h1>
-        <p className="text-xs text-slate-500">From 12th to Your First Job — One Complete Roadmap</p>
+        <p className="text-xs text-slate-500">From 10th to Your First Job — One Complete Roadmap</p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xl space-y-4 text-xs">
@@ -118,6 +118,19 @@ export default function StudentRegisterPage() {
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               className="w-full p-2.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
             />
+          </div>
+
+          <div>
+            <label className="block font-semibold text-slate-700 mb-1">Current Education Level *</label>
+            <select
+              value={form.educationLevel}
+              onChange={(e) => setForm({ ...form, educationLevel: e.target.value })}
+              className="w-full p-2.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
+            >
+              {['10th Standard', '10th Passed', '11th Standard', '12th Appearing', '12th Passed', 'Diploma Student', 'Undergraduate (Pursuing Degree)'].map((level) => (
+                <option key={level} value={level}>{level}</option>
+              ))}
+            </select>
           </div>
 
           <div>

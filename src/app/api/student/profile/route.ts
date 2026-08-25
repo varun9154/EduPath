@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { prepareExcelStore, persistExcelStore } from '@/lib/excelPersistence';
+import { getStudentById as getProductionStudentById, getStudentByEmail as getProductionStudentByEmail, updateStudent as updateProductionStudent } from '@/lib/productionDb';
 import { validateStudentRequest } from '@/lib/roleGuard';
 
 import {
@@ -55,7 +56,7 @@ export async function GET(
 
     if (studentId) {
       student =
-        findStudentById(studentId);
+        process.env.DATABASE_URL ? await getProductionStudentById(studentId) : findStudentById(studentId);
     }
 
     /* -----------------------------------------------
@@ -64,7 +65,7 @@ export async function GET(
 
     if (!student && email) {
       student =
-        findStudentByEmail(email);
+        process.env.DATABASE_URL ? await getProductionStudentByEmail(email) : findStudentByEmail(email);
     }
 
     /* -----------------------------------------------
@@ -263,16 +264,12 @@ export async function PATCH(
 
     if (studentId) {
       student =
-        findStudentById(
-          String(studentId)
-        );
+        process.env.DATABASE_URL ? await getProductionStudentById(String(studentId)) : findStudentById(String(studentId));
     }
 
     if (!student && email) {
       student =
-        findStudentByEmail(
-          String(email)
-        );
+        process.env.DATABASE_URL ? await getProductionStudentByEmail(String(email)) : findStudentByEmail(String(email));
     }
 
     /* -----------------------------------------------
@@ -523,11 +520,9 @@ export async function PATCH(
        UPDATE EXCEL
     ----------------------------------------------- */
 
-    const updatedStudent =
-      updateStudent(
-        student.studentId,
-        updates
-      );
+    const updatedStudent = process.env.DATABASE_URL
+      ? await updateProductionStudent(student.studentId, updates)
+      : updateStudent(student.studentId, updates);
 
     if (!updatedStudent) {
       await persistExcelStore();

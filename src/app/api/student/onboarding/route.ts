@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { prepareExcelStore, persistExcelStore } from '@/lib/excelPersistence';
+import { getStudentById as getProductionStudentById, updateStudent as updateProductionStudent } from '@/lib/productionDb';
 import { validateStudentRequest } from '@/lib/roleGuard';
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
   try {
     const auth = validateStudentRequest(request);
     if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();
+    if (!process.env.DATABASE_URL) await prepareExcelStore();
     const body = await request.json();
 
     const {
@@ -54,9 +55,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'You cannot update another student account.' }, { status: 403 });
     }
 
-    const student = findStudentById(
-      String(studentId)
-    );
+    const student = process.env.DATABASE_URL
+      ? await getProductionStudentById(String(studentId))
+      : findStudentById(String(studentId));
 
     if (!student) {
       return NextResponse.json(
@@ -232,11 +233,9 @@ export async function POST(request: NextRequest) {
         'ACTIVE',
     };
 
-    const updatedStudent =
-      updateStudent(
-        String(studentId),
-        updates
-      );
+    const updatedStudent = process.env.DATABASE_URL
+      ? await updateProductionStudent(String(studentId), updates)
+      : updateStudent(String(studentId), updates);
 
     if (!updatedStudent) {
       await persistExcelStore();

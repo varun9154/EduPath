@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, Route, MapPin, Compass, ArrowRight, ShieldCheck, CheckCircle2, Award, Zap, BookOpen, Bot, Star } from 'lucide-react';
+import { Sparkles, Route, MapPin, Compass, ArrowRight, CheckCircle2, Award, BookOpen, Target, Layers3 } from 'lucide-react';
 import DemoModal from '@/components/DemoModal';
+import HomeSignupModal from '@/components/HomeSignupModal';
 import statesData from '@/data/states.json';
 import coursesData from '@/data/courses.json';
 import roadmapsData from '@/data/roadmaps.json';
@@ -11,6 +12,20 @@ import roadmapsData from '@/data/roadmaps.json';
 export default function HomePage() {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<string>('');
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+
+  useEffect(() => {
+    const hasStudentSession = document.cookie.split('; ').some((item) => item.startsWith('edupath_student_sess='));
+    const alreadyPrompted = sessionStorage.getItem('edupath_home_signup_prompted') === '1';
+    if (hasStudentSession || alreadyPrompted) return;
+
+    const timer = window.setTimeout(() => {
+      sessionStorage.setItem('edupath_home_signup_prompted', '1');
+      setIsSignupOpen(true);
+    }, 10000);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const handleOpenDemo = (courseName?: string) => {
     if (courseName) setSelectedCourse(courseName);
@@ -37,7 +52,7 @@ export default function HomePage() {
 
           {/* Primary Header */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight uppercase">
-            <span className="block text-slate-100">FROM 12TH TO</span>
+            <span className="block text-slate-100">FROM 10TH TO</span>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-cyan-300 to-emerald-400">
               YOUR FIRST JOB
             </span>
@@ -82,15 +97,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 10TH-TO-JOB VALUE STRIP */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+        <div className="grid grid-cols-1 gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-xl sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { icon: Target, title: 'Start at Class 10', text: 'Stream selection, strengths and career direction.' },
+            { icon: Layers3, title: 'Choose the right course', text: `${coursesData.length}+ degree and professional pathways.` },
+            { icon: BookOpen, title: 'Learn job-ready skills', text: 'Tools, projects, internships and mock tests.' },
+            { icon: Award, title: 'Reach your first job', text: 'Resume, interviews and placement preparation.' },
+          ].map(({ icon: Icon, title, text }) => (
+            <div key={title} className="flex items-start gap-3 rounded-2xl bg-slate-50 p-4">
+              <div className="rounded-xl bg-brand-100 p-2.5 text-brand-700"><Icon className="h-5 w-5" /></div>
+              <div><h3 className="text-sm font-extrabold text-slate-900">{title}</h3><p className="mt-1 text-[11px] leading-5 text-slate-600">{text}</p></div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* 16-STEP STUDENT JOURNEY SHOWCASE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-2">
           <div className="text-xs font-bold text-brand-600 tracking-wider uppercase">End-to-End Progression</div>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">
-            The 16-Step Student Journey (12th → First Job)
+            The 16-Step Student Journey (10th → First Job)
           </h2>
           <p className="text-sm text-slate-600 max-w-2xl mx-auto">
-            EduPath supports you through every single phase of your higher education and early career lifecycle.
+            EduPath starts from Class 10, helps you choose the right stream and course, then takes you through exams, college, skills, internships, interviews and your first job.
           </p>
         </div>
 
@@ -114,7 +146,7 @@ export default function HomePage() {
             href="/journey"
             className="inline-flex items-center px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow transition"
           >
-            View Complete 16-Step Timeline <ArrowRight className="w-4 h-4 ml-1.5" />
+            View Complete 16-Step 10th → First Job Timeline <ArrowRight className="w-4 h-4 ml-1.5" />
           </Link>
         </div>
       </section>
@@ -192,7 +224,7 @@ export default function HomePage() {
             Featured Pathways (Pharmacy, CSE, Medical, Law)
           </h2>
           <p className="text-xs text-slate-600 max-w-xl mx-auto">
-            From D.Pharm/B.Pharm pharma industry careers to B.Tech software engineering roles.
+            Explore pharmacy, engineering, medical, law, management, agriculture and other degree pathways, then follow the skills-to-job roadmap.
           </p>
         </div>
 
@@ -237,7 +269,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-brand-600 to-cyan-700 rounded-3xl p-8 sm:p-12 text-white text-center space-y-4 shadow-xl">
           <h2 className="text-2xl sm:text-4xl font-black">
-            Ready to Plan Your Journey from 12th to Your First Job?
+            Ready to Plan Your Journey from 10th to Your First Job?
           </h2>
           <p className="text-sm text-cyan-100 max-w-2xl mx-auto">
             Book your free demo session now. Our team will contact you to confirm your slot.
@@ -252,6 +284,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <HomeSignupModal isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
 
       <DemoModal
         isOpen={isDemoOpen}

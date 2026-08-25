@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { prepareExcelStore } from '@/lib/excelPersistence';
+import { getStudentById as getProductionStudentById, getStudentDemoBookings as getProductionStudentDemoBookings } from '@/lib/productionDb';
 import { validateStudentRequest } from '@/lib/roleGuard';
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,7 +17,7 @@ export async function GET(
   try {
     const auth = validateStudentRequest(request);
     if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();
+    if (!process.env.DATABASE_URL) await prepareExcelStore();
     const studentId =
       request.cookies.get(
         'edupath_student_id'
@@ -33,7 +34,7 @@ export async function GET(
     }
 
     const student =
-      findStudentById(studentId);
+      process.env.DATABASE_URL ? await getProductionStudentById(studentId) : findStudentById(studentId);
 
     if (!student) {
       return NextResponse.json(
@@ -46,9 +47,9 @@ export async function GET(
     }
 
     const demoBookings =
-      getStudentDemoBookings(
-        student.studentId
-      );
+      process.env.DATABASE_URL
+        ? await getProductionStudentDemoBookings(student.studentId)
+        : getStudentDemoBookings(student.studentId);
 
     return NextResponse.json({
       success: true,

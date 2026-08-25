@@ -1,5 +1,19 @@
 import nodemailer from 'nodemailer';
+import { addNotificationLog as addProductionNotificationLog } from '@/lib/productionDb';
+
 import { LeadRecord, StudentRecord, DemoBookingRecord, leadStore } from './storage';
+
+async function persistNotificationLog(log: Parameters<typeof addProductionNotificationLog>[0]) {
+  if (process.env.DATABASE_URL) {
+    try {
+      await addProductionNotificationLog(log);
+      return;
+    } catch (error) {
+      console.error('Production notification log persistence failed:', error);
+    }
+  }
+  leadStore.addNotificationLog(log);
+}
 
 const adminEmailAddress = process.env.ADMIN_EMAIL || 'edupathadmin@gmail.com';
 const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -114,7 +128,7 @@ export async function sendRegistrationEmails(
         html: studentHtml,
       });
 
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-ADM-${Date.now()}`,
         targetType: 'ADMIN_EMAIL',
         recipient: adminEmailAddress,
@@ -124,7 +138,7 @@ export async function sendRegistrationEmails(
         timestamp,
       });
 
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-STU-${Date.now()}`,
         targetType: 'STUDENT_EMAIL',
         recipient: student.email,
@@ -137,7 +151,7 @@ export async function sendRegistrationEmails(
       return { adminEmailSent: true, studentEmailSent: true, mode: 'SMTP_LIVE' };
     } catch (err: unknown) {
       const errDetail = err instanceof Error ? err.message : 'SMTP dispatch error';
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-FAIL-${Date.now()}`,
         targetType: 'ADMIN_EMAIL',
         recipient: adminEmailAddress,
@@ -151,7 +165,7 @@ export async function sendRegistrationEmails(
     }
   } else {
     // Development fallback logging
-    leadStore.addNotificationLog({
+    await persistNotificationLog({
       id: `NOTIF-DEV-ADM-${Date.now()}`,
       targetType: 'ADMIN_EMAIL',
       recipient: adminEmailAddress,
@@ -161,7 +175,7 @@ export async function sendRegistrationEmails(
       timestamp,
     });
 
-    leadStore.addNotificationLog({
+    await persistNotificationLog({
       id: `NOTIF-DEV-STU-${Date.now()}`,
       targetType: 'STUDENT_EMAIL',
       recipient: student.email,

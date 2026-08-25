@@ -9,7 +9,7 @@ import { validateAdminRequest } from '@/lib/roleGuard';
 
 export async function GET(req: Request) {
   try {
-    await prepareExcelStore();
+    if (!process.env.DATABASE_URL) await prepareExcelStore();
     // --------------------------------------------------
     // ADMIN AUTHORIZATION
     // --------------------------------------------------

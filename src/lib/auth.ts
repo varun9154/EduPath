@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { leadStore } from '@/lib/storage';
+import { getStudentByEmail as getProductionStudentByEmail, getStudentById as getProductionStudentById } from '@/lib/productionDb';
 
 export type AccountType = 'Student' | 'Admin';
 
@@ -97,6 +98,23 @@ class AuthManager {
     return this.loginStudent(email, data.password, 'Registration');
   }
 
+  async loginStudentAsync(email: string, password: string, deviceInfo = 'Web Browser'): Promise<LoginResult> {
+    const normalized = email.trim().toLowerCase();
+    const student = process.env.DATABASE_URL
+      ? await getProductionStudentByEmail(normalized)
+      : leadStore.getStudentByEmail(normalized);
+
+    if (!student) return { success: false, message: 'Invalid student email or password' };
+
+    const storedHash = String((student as unknown as Record<string, unknown>).passwordHash || '');
+    const storedPassword = String((student as unknown as Record<string, unknown>).password || '');
+    const valid = storedHash ? await bcrypt.compare(password, storedHash) : storedPassword === password;
+    if (!valid) return { success: false, message: 'Invalid student email or password' };
+
+    const session = createSession(student.studentId, normalized, 'STUDENT', deviceInfo);
+    return { success: true, message: 'Student login successful', sessionId: sign(session), session, user: { id: student.studentId, email: normalized, name: student.name, role: 'STUDENT' } };
+  }
+
   loginStudent(email: string, password: string, deviceInfo = 'Web Browser'): LoginResult {
     const normalized = email.trim().toLowerCase();
     const student = leadStore.getStudentByEmail(normalized);
@@ -123,6 +141,8 @@ class AuthManager {
 
   logoutStudent(_token: string) { return true; }
 
+  async getStudentByEmailAsync(email: string) { return process.env.DATABASE_URL ? getProductionStudentByEmail(email) : leadStore.getStudentByEmail(email); }
+  async getStudentByIdAsync(studentId: string) { return process.env.DATABASE_URL ? getProductionStudentById(studentId) : leadStore.getStudentById(studentId); }
   getStudentByEmail(email: string) { return leadStore.getStudentByEmail(email); }
   getStudentById(studentId: string) { return leadStore.getStudentById(studentId); }
 }

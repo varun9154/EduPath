@@ -1,9 +1,23 @@
+import { addNotificationLog as addProductionNotificationLog } from '@/lib/productionDb';
+
 import {
   LeadRecord,
   StudentRecord,
   DemoBookingRecord,
   leadStore,
 } from './storage';
+
+async function persistNotificationLog(log: Parameters<typeof addProductionNotificationLog>[0]) {
+  if (process.env.DATABASE_URL) {
+    try {
+      await addProductionNotificationLog(log);
+      return;
+    } catch (error) {
+      console.error('Production notification log persistence failed:', error);
+    }
+  }
+  leadStore.addNotificationLog(log);
+}
 
 type NotificationStatus =
   | 'SENT'
@@ -103,7 +117,7 @@ Thank you for choosing EduPath AI.`;
           timestamp,
         };
 
-        leadStore.addNotificationLog(log);
+        await persistNotificationLog(log);
 
       } else {
         whatsappStatus = 'FAILED';
@@ -122,7 +136,7 @@ Thank you for choosing EduPath AI.`;
           errorDetail: errorText,
         };
 
-        leadStore.addNotificationLog(log);
+        await persistNotificationLog(log);
       }
     } catch (error: unknown) {
       whatsappStatus = 'FAILED';
@@ -132,7 +146,7 @@ Thank you for choosing EduPath AI.`;
           ? error.message
           : 'WhatsApp network error';
 
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-WA-REG-ERR-${Date.now()}`,
         targetType: 'STUDENT_WHATSAPP',
         recipient: student.mobile,
@@ -149,7 +163,7 @@ Thank you for choosing EduPath AI.`;
        WHATSAPP DEVELOPMENT MODE
        ======================================================== */
 
-    leadStore.addNotificationLog({
+    await persistNotificationLog({
       id: `NOTIF-DEV-WA-REG-${Date.now()}`,
       targetType: 'STUDENT_WHATSAPP',
       recipient: student.mobile,
@@ -207,14 +221,14 @@ Thank you for choosing EduPath AI.`;
           timestamp,
         };
 
-        leadStore.addNotificationLog(log);
+        await persistNotificationLog(log);
 
       } else {
         smsStatus = 'FAILED';
 
         const errorText = await response.text();
 
-        leadStore.addNotificationLog({
+        await persistNotificationLog({
           id: `NOTIF-SMS-REG-ERR-${Date.now()}`,
           targetType: 'STUDENT_SMS',
           recipient: student.mobile,
@@ -234,7 +248,7 @@ Thank you for choosing EduPath AI.`;
           ? error.message
           : 'SMS network error';
 
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-SMS-REG-ERR-${Date.now()}`,
         targetType: 'STUDENT_SMS',
         recipient: student.mobile,
@@ -251,7 +265,7 @@ Thank you for choosing EduPath AI.`;
        SMS DEVELOPMENT MODE
        ======================================================== */
 
-    leadStore.addNotificationLog({
+    await persistNotificationLog({
       id: `NOTIF-DEV-SMS-REG-${Date.now()}`,
       targetType: 'STUDENT_SMS',
       recipient: student.mobile,
@@ -369,7 +383,7 @@ From 12th to Your First Job.`;
       if (!adminResponse.ok) {
         const errorText = await adminResponse.text();
 
-        leadStore.addNotificationLog({
+        await persistNotificationLog({
           id: `NOTIF-WA-ERR-${Date.now()}`,
           targetType: 'ADMIN_WHATSAPP',
           recipient: adminPhone,
@@ -386,7 +400,7 @@ From 12th to Your First Job.`;
         };
       }
 
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-WA-ADM-${Date.now()}`,
         targetType: 'ADMIN_WHATSAPP',
         recipient: adminPhone,
@@ -423,7 +437,7 @@ From 12th to Your First Job.`;
       if (!studentResponse.ok) {
         const errorText = await studentResponse.text();
 
-        leadStore.addNotificationLog({
+        await persistNotificationLog({
           id: `NOTIF-WA-STU-ERR-${Date.now()}`,
           targetType: 'STUDENT_WHATSAPP',
           recipient: student.mobile,
@@ -440,7 +454,7 @@ From 12th to Your First Job.`;
         };
       }
 
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-WA-STU-${Date.now()}`,
         targetType: 'STUDENT_WHATSAPP',
         recipient: student.mobile,
@@ -461,7 +475,7 @@ From 12th to Your First Job.`;
           ? error.message
           : 'Network error';
 
-      leadStore.addNotificationLog({
+      await persistNotificationLog({
         id: `NOTIF-WA-ERR-${Date.now()}`,
         targetType: 'ADMIN_WHATSAPP',
         recipient: adminPhone,
@@ -483,7 +497,7 @@ From 12th to Your First Job.`;
      DEVELOPMENT MODE
      ========================================================== */
 
-  leadStore.addNotificationLog({
+  await persistNotificationLog({
     id: `NOTIF-DEV-WA-ADM-${Date.now()}`,
     targetType: 'ADMIN_WHATSAPP',
     recipient: adminPhone,
@@ -494,7 +508,7 @@ From 12th to Your First Job.`;
     timestamp,
   });
 
-  leadStore.addNotificationLog({
+  await persistNotificationLog({
     id: `NOTIF-DEV-WA-STU-${Date.now()}`,
     targetType: 'STUDENT_WHATSAPP',
     recipient: student.mobile,

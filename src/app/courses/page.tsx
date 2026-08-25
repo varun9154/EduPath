@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Compass, CheckCircle2, Sparkles, ArrowRight, BookOpen } from 'lucide-react';
+import { Compass, CheckCircle2, Sparkles } from 'lucide-react';
 import DemoModal from '@/components/DemoModal';
 import coursesData from '@/data/courses.json';
 
@@ -10,7 +10,7 @@ export default function CoursesPage() {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
   const [defaultCourse, setDefaultCourse] = useState('');
 
-  const categories = ['All', 'Pharmacy', 'Engineering', 'Medical', 'Law', 'Management', 'Agriculture'];
+  const categories = ['All', ...Array.from(new Set(coursesData.map((course) => course.category)))];
 
   const filteredCourses = selectedCategory === 'All'
     ? coursesData
@@ -31,10 +31,10 @@ export default function CoursesPage() {
           <span>Degree Pathways & Career Roadmaps</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-          Educational Degree Catalog & Pharmacy Specializations
+          Complete Course & Career Pathway Catalog
         </h1>
         <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
-          From 12th grade to your first job: Explore undergraduate & postgraduate programs with verified career tracks in Pharmacy (D.Pharm, B.Pharm, Pharm.D, M.Pharm), Computer Science, AI/ML, Medical, Law, and Management.
+          From 10th grade to your first job: Explore every listed undergraduate and postgraduate pathway with verified career tracks in Pharmacy (D.Pharm, B.Pharm, Pharm.D, M.Pharm), Computer Science, AI/ML, Medical, Law, and Management.
         </p>
       </div>
 
@@ -108,7 +108,7 @@ export default function CoursesPage() {
                 className="w-full py-3 bg-slate-900 hover:bg-brand-600 text-white text-xs font-bold rounded-xl transition shadow flex items-center justify-center"
               >
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                Book Counselling for {c.name.split(' ')[0]}
+                Book Free Demo for {c.name.split(' ')[0]}
               </button>
             </div>
           </div>

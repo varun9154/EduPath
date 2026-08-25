@@ -18,7 +18,7 @@ export default function Footer() {
               <span>EduPath</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              From 12th to Your First Job — We Show You the Path.
+              From 10th to Your First Job — We Show You the Path.
             </p>
             <div className="pt-2 text-xs space-y-1 text-slate-500">
               <div className="flex items-center">

@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
 
 export const metadata: Metadata = {
-  title: 'EduPath — From 12th to Your First Job',
+  title: 'EduPath — From 10th to Your First Job',
   description:
     'Complete guidance platform for 12th students: All 36 Indian States & UTs entrance exams, Engineering, Medical, Pharmacy, Management, Law, Architecture, Design, Commerce, Arts, professional courses, career roadmaps, study resources, and free expert counselling.',
   keywords: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'career roadmap',
     'college guidance',
     'student counselling',
-    '12th career guidance',
+    '10th career guidance',
   ],
   authors: [{ name: 'EduPath' }],
   creator: 'EduPath',
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'EduPath — From 12th to Your First Job',
+    title: 'EduPath — From 10th to Your First Job',
     description:
-      'Your complete education and career guidance platform from 12th grade to your first job.',
+      'Your complete education and career guidance platform from 10th grade to your first job.',
     type: 'website',
     siteName: 'EduPath',
   },

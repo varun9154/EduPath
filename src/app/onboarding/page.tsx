@@ -32,6 +32,7 @@ type Student = {
   name?: string;
   email?: string;
   phone?: string;
+  [key: string]: unknown;
 };
 
 type FormData = {
@@ -202,28 +203,39 @@ export default function OnboardingPage() {
 
   /* =======================================================
      LOAD STUDENT
+
+     localStorage is an external browser store. We intentionally
+     synchronize it into React state here.
+
+     React 19's eslint rule flags this legitimate synchronization,
+     so only this specific statement is excluded.
   ======================================================= */
 
   useEffect(() => {
     try {
       const stored =
-        localStorage.getItem(
-          'edupath_student'
-        );
+        localStorage.getItem('edupath_student');
 
       if (!stored) {
         router.replace('/login');
         return;
       }
 
-      const parsed = JSON.parse(stored);
+      const parsed: unknown = JSON.parse(stored);
 
-      if (!parsed?.studentId) {
+      if (
+        !parsed ||
+        typeof parsed !== 'object' ||
+        !('studentId' in parsed) ||
+        typeof parsed.studentId !== 'string' ||
+        !parsed.studentId
+      ) {
         router.replace('/login');
         return;
       }
 
-      setStudent(parsed);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setStudent(parsed as Student);
     } catch (err) {
       console.error(
         'Failed to load student:',
@@ -643,7 +655,6 @@ export default function OnboardingPage() {
         <div className="bg-white border border-slate-200 rounded-2xl p-4 mb-6 shadow-sm">
 
           <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
-
             <span>
               Step {step} of {totalSteps}
             </span>
@@ -651,18 +662,15 @@ export default function OnboardingPage() {
             <span>
               {progress}%
             </span>
-
           </div>
 
           <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-
             <div
               className="h-full bg-brand-600 rounded-full transition-all duration-300"
               style={{
                 width: `${progress}%`,
               }}
             />
-
           </div>
 
         </div>
@@ -671,9 +679,7 @@ export default function OnboardingPage() {
 
         <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
 
-          {/* =================================================
-              STEP 1
-          ================================================= */}
+          {/* STEP 1 */}
 
           {step === 1 && (
             <section className="p-6 sm:p-8 space-y-7">
@@ -740,9 +746,7 @@ export default function OnboardingPage() {
             </section>
           )}
 
-          {/* =================================================
-              STEP 2
-          ================================================= */}
+          {/* STEP 2 */}
 
           {step === 2 && (
             <section className="p-6 sm:p-8 space-y-7">
@@ -782,9 +786,7 @@ export default function OnboardingPage() {
             </section>
           )}
 
-          {/* =================================================
-              STEP 3
-          ================================================= */}
+          {/* STEP 3 */}
 
           {step === 3 && (
             <section className="p-6 sm:p-8 space-y-7">
@@ -828,9 +830,7 @@ export default function OnboardingPage() {
             </section>
           )}
 
-          {/* =================================================
-              STEP 4
-          ================================================= */}
+          {/* STEP 4 */}
 
           {step === 4 && (
             <section className="p-6 sm:p-8 space-y-7">
@@ -874,9 +874,7 @@ export default function OnboardingPage() {
             </section>
           )}
 
-          {/* =================================================
-              STEP 5
-          ================================================= */}
+          {/* STEP 5 */}
 
           {step === 5 && (
             <section className="p-6 sm:p-8 space-y-7">
@@ -924,9 +922,7 @@ export default function OnboardingPage() {
             </section>
           )}
 
-          {/* =================================================
-              STEP 6
-          ================================================= */}
+          {/* STEP 6 */}
 
           {step === 6 && (
             <section className="p-6 sm:p-8 space-y-7">
@@ -1002,9 +998,7 @@ export default function OnboardingPage() {
             </section>
           )}
 
-          {/* =================================================
-              ERROR
-          ================================================= */}
+          {/* ERROR */}
 
           {error && (
             <div className="mx-6 sm:mx-8 mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
@@ -1012,9 +1006,7 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* =================================================
-              FOOTER
-          ================================================= */}
+          {/* FOOTER */}
 
           <div className="border-t border-slate-200 p-5 sm:p-6 flex items-center justify-between gap-3">
 
@@ -1028,7 +1020,6 @@ export default function OnboardingPage() {
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40 hover:bg-slate-50 transition"
             >
               <ArrowLeft className="w-4 h-4" />
-
               Back
             </button>
 
@@ -1036,7 +1027,8 @@ export default function OnboardingPage() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold shadow-sm transition"
+                disabled={saving}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold shadow-sm transition disabled:opacity-60"
               >
                 Continue
 
@@ -1052,13 +1044,11 @@ export default function OnboardingPage() {
                 {saving ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-
                     Saving...
                   </>
                 ) : (
                   <>
                     Complete My Profile
-
                     <CheckCircle2 className="w-4 h-4" />
                   </>
                 )}
