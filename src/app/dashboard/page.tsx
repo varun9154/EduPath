@@ -88,147 +88,158 @@ export default function StudentDashboardPage() {
     useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
     const loadDashboard = async () => {
       try {
-        const local =
-          localStorage.getItem(
-            'edupath_student'
-          );
+        // The secure HTTP-only session cookie is the source of truth.
+        // localStorage is only used as an instant UI fallback/cache.
+        const local = localStorage.getItem('edupath_student');
+        if (local) {
+          try {
+            const cached = JSON.parse(local) as Student;
+            const cachedId =
+              cached.studentId ||
+              (cached as Student & { id?: string }).id;
 
-        if (!local) {
-          router.replace('/login');
+            if (cachedId) {
+              setStudent({
+                ...cached,
+                studentId: cachedId,
+              });
+            }
+          } catch {
+            localStorage.removeItem('edupath_student');
+          }
+        }
+
+        const response = await fetch(
+          '/api/student/dashboard',
+          {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store',
+          }
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (response.status === 401) {
+          localStorage.removeItem('edupath_student');
+          if (!cancelled) {
+            setStudent(null);
+            router.replace('/login');
+          }
           return;
         }
 
-        const parsed: Student =
-          JSON.parse(local);
+        if (!response.ok || !data?.success || !data?.student?.studentId) {
+          throw new Error(
+            data?.message ||
+              'Unable to load your student dashboard.'
+          );
+        }
 
-        if (!parsed.studentId) {
-          router.replace('/login');
+        const latestStudent: Student = {
+          ...data.student,
+          studentId: String(data.student.studentId),
+        };
+
+        if (!cancelled) {
+          setStudent(latestStudent);
+          localStorage.setItem(
+            'edupath_student',
+            JSON.stringify(latestStudent)
+          );
+
+          window.dispatchEvent(
+            new CustomEvent('edupath-auth-changed', {
+              detail: {
+                authenticated: true,
+                student: latestStudent,
+              },
+            })
+          );
+        }
+
+        // Demo history must come from the authenticated student endpoint.
+        // Never call the admin leads endpoint from a student browser.
+        const demoResponse = await fetch(
+          '/api/student/demos',
+          {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store',
+          }
+        );
+
+        const demoData = await demoResponse
+          .json()
+          .catch(() => ({}));
+
+        if (demoResponse.status === 401) {
+          localStorage.removeItem('edupath_student');
+          if (!cancelled) {
+            setStudent(null);
+            router.replace('/login');
+          }
           return;
         }
 
-        /*
-         * First use the local session so
-         * dashboard appears immediately.
-         */
-        setStudent(parsed);
-
-        /*
-         * Then get the latest profile from API.
-         */
-        try {
-          const profileResponse =
-            await fetch(
-              `/api/student/profile?studentId=${encodeURIComponent(
-                parsed.studentId
-              )}`,
-              {
-                cache: 'no-store',
-              }
-            );
-
-          if (profileResponse.ok) {
-            const profileData =
-              await profileResponse.json();
-
-            if (
-              profileData?.success &&
-              profileData?.student
-            ) {
-              const latestStudent =
-                profileData.student;
-
-              setStudent(
-                latestStudent
-              );
-
-              localStorage.setItem(
-                'edupath_student',
-                JSON.stringify(
-                  latestStudent
-                )
-              );
-            }
+        if (demoResponse.ok && Array.isArray(demoData?.demoBookings)) {
+          if (!cancelled) {
+            setDemoRequests(demoData.demoBookings);
           }
-        } catch (profileError) {
-          console.error(
-            'Profile loading failed:',
-            profileError
-          );
-        }
-
-        /*
-         * Load demo history.
-         */
-        try {
-          const demoResponse =
-            await fetch(
-              '/api/admin/leads',
-              {
-                cache: 'no-store',
-              }
-            );
-
-          if (demoResponse.ok) {
-            const data =
-              await demoResponse.json();
-
-            if (
-              data?.success &&
-              Array.isArray(
-                data.demoBookings
-              )
-            ) {
-              const userDemos =
-                data.demoBookings.filter(
-                  (booking: DemoBooking) =>
-                    booking.email
-                      ?.trim()
-                      .toLowerCase() ===
-                      parsed.email
-                        ?.trim()
-                        .toLowerCase() ||
-                    booking.studentId ===
-                      parsed.studentId
-                );
-
-              setDemoRequests(
-                userDemos
-              );
-            }
-          }
-        } catch (demoError) {
-          console.error(
-            'Demo history loading failed:',
-            demoError
-          );
         }
       } catch (error) {
-        console.error(
-          'Dashboard loading failed:',
-          error
-        );
+        console.error('Dashboard loading failed:', error);
 
-        localStorage.removeItem(
-          'edupath_student'
-        );
-
-        router.replace('/login');
+        // If a cached student exists, keep the UI usable while the API
+        // is temporarily unavailable. Otherwise require login.
+        const cached = localStorage.getItem('edupath_student');
+        if (!cached && !cancelled) {
+          setStudent(null);
+          router.replace('/login');
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
     loadDashboard();
+
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
-  const handleLogout = () => {
-    localStorage.removeItem(
-      'edupath_student'
-    );
-
-    router.replace('/login');
+  const handleLogout = async () => {
+    try {
+      // Clear the server-side session cookie as well as the local cache.
+      await fetch('/api/auth/student/force-logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email: student?.email || '',
+        }),
+      });
+    } catch (error) {
+      console.error('Student logout error:', error);
+    } finally {
+      localStorage.removeItem('edupath_student');
+      window.dispatchEvent(
+        new CustomEvent('edupath-auth-changed', {
+          detail: { authenticated: false },
+        })
+      );
+      router.replace('/login');
+      router.refresh();
+    }
   };
 
   /*

@@ -154,14 +154,45 @@ export default function LoginPage() {
       if (
         typeof window !== 'undefined'
       ) {
-        const studentData =
-          data.student || {
-            email: normalizedEmail,
-          };
+        const apiStudent = data.student || {};
+        const studentData = {
+          ...apiStudent,
+          // The auth API returns the identifier as `id`, while the
+          // student/profile APIs use `studentId`. Keep both forms so
+          // navigation and profile loading remain compatible.
+          studentId:
+            String(
+              apiStudent.studentId ||
+              apiStudent.id ||
+              ''
+            ),
+          id:
+            String(
+              apiStudent.id ||
+              apiStudent.studentId ||
+              ''
+            ),
+          email:
+            String(
+              apiStudent.email ||
+              normalizedEmail
+            ),
+        };
 
         window.localStorage.setItem(
           'edupath_student',
           JSON.stringify(studentData)
+        );
+
+        // Let the shared navbar react immediately without requiring
+        // a full page reload.
+        window.dispatchEvent(
+          new CustomEvent('edupath-auth-changed', {
+            detail: {
+              authenticated: true,
+              student: studentData,
+            },
+          })
         );
       }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   Compass,
@@ -14,6 +14,7 @@ import {
   User,
   FileText,
   BriefcaseBusiness,
+  LogOut,
 } from 'lucide-react';
 import DemoModal from './DemoModal';
 
@@ -29,6 +30,50 @@ const NAV_ITEMS = [
 export default function Navbar() {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [student, setStudent] = useState<{ studentId?: string; name?: string; email?: string } | null>(null);
+
+  useEffect(() => {
+    const readStudent = () => {
+      try {
+        const raw = localStorage.getItem('edupath_student');
+        if (!raw) {
+          setStudent(null);
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        const studentId = parsed?.studentId || parsed?.id;
+        setStudent(studentId ? { ...parsed, studentId } : null);
+      } catch {
+        setStudent(null);
+      }
+    };
+
+    readStudent();
+    window.addEventListener('edupath-auth-changed', readStudent);
+    window.addEventListener('storage', readStudent);
+
+    return () => {
+      window.removeEventListener('edupath-auth-changed', readStudent);
+      window.removeEventListener('storage', readStudent);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/student/force-logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email: student?.email || '' }),
+      });
+    } catch (error) {
+      console.error('Navbar logout error:', error);
+    } finally {
+      localStorage.removeItem('edupath_student');
+      window.dispatchEvent(new CustomEvent('edupath-auth-changed', { detail: { authenticated: false } }));
+      window.location.href = '/';
+    }
+  };
 
   const openDemo = () => {
     setMobileMenuOpen(false);
@@ -51,24 +96,35 @@ export default function Navbar() {
           <nav className="hidden items-center space-x-5 text-xs font-medium text-slate-300 lg:flex">
             <Link href="/" className="transition hover:text-white">Home</Link>
             {NAV_ITEMS.map(({ href, label, icon: Icon, iconClass }) => (
-              <button
+              <Link
                 key={href}
-                type="button"
-                onClick={openDemo}
+                href={href}
                 className="flex items-center transition hover:text-white"
-                title={`Book a free demo for ${label}`}
+                onClick={() => setMobileMenuOpen(false)}
               >
                 <Icon className={`mr-1 h-3.5 w-3.5 ${iconClass}`} />
                 {label}
-              </button>
+              </Link>
             ))}
           </nav>
 
           <div className="hidden items-center space-x-3 lg:flex">
-            <Link href="/login" className="flex items-center rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:bg-slate-700">
-              <User className="mr-1 h-3.5 w-3.5 text-brand-400" />
-              Login
-            </Link>
+            {student ? (
+              <>
+                <Link href="/dashboard" className="flex max-w-52 items-center rounded-xl border border-brand-500/30 bg-brand-500/10 px-3 py-1.5 text-xs font-semibold text-brand-200 transition hover:bg-brand-500/20">
+                  <User className="mr-1 h-3.5 w-3.5 text-brand-400" />
+                  <span className="truncate">{student.name || 'Student'}</span>
+                </Link>
+                <button type="button" onClick={handleLogout} className="rounded-xl border border-slate-700 bg-slate-800 p-2 text-slate-300 transition hover:bg-slate-700" title="Sign out">
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </>
+            ) : (
+              <Link href="/login" className="flex items-center rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:bg-slate-700">
+                <User className="mr-1 h-3.5 w-3.5 text-brand-400" />
+                Login
+              </Link>
+            )}
             <button
               type="button"
               onClick={openDemo}
@@ -94,19 +150,30 @@ export default function Navbar() {
           <div className="space-y-2 border-b border-slate-800 bg-slate-900 px-4 pb-4 pt-2 text-xs lg:hidden">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-200">Home</Link>
             {NAV_ITEMS.map(({ href, label, icon: Icon, iconClass }) => (
-              <button
+              <Link
                 key={href}
-                type="button"
-                onClick={openDemo}
+                href={href}
+                onClick={() => setMobileMenuOpen(false)}
                 className="flex w-full items-center py-2 text-left text-slate-200"
               >
                 <Icon className={`mr-2 h-4 w-4 ${iconClass}`} />
                 {label}
-              </button>
+              </Link>
             ))}
-            <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="flex items-center py-2 font-bold text-brand-400">
-              <User className="mr-2 h-4 w-4" /> Login
-            </Link>
+            {student ? (
+              <>
+                <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center py-2 font-bold text-brand-400">
+                  <User className="mr-2 h-4 w-4" /> {student.name || 'Student Dashboard'}
+                </Link>
+                <button type="button" onClick={handleLogout} className="flex items-center py-2 font-bold text-slate-300">
+                  <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                </button>
+              </>
+            ) : (
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="flex items-center py-2 font-bold text-brand-400">
+                <User className="mr-2 h-4 w-4" /> Login
+              </Link>
+            )}
             <button type="button" onClick={openDemo} className="mt-2 flex w-full items-center justify-center rounded-xl bg-brand-600 py-2.5 font-bold text-white shadow">
               <BriefcaseBusiness className="mr-2 h-4 w-4" /> BOOK A FREE DEMO
             </button>
