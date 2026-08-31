@@ -1,273 +1,89 @@
 // src/app/api/admin/route.ts
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
+import { NextRequest, NextResponse } from 'next/server';
+import { validateAdminRequest } from '@/lib/roleGuard';
 import {
-  NextRequest,
-  NextResponse,
-} from 'next/server';
-
+  getDashboardData,
+  updateDemoBooking,
+  addAuditLog,
+} from '@/lib/productionDb';
 import { leadStore } from '@/lib/storage';
-import { authManager } from '@/lib/auth';
 
-function isAdminAuthenticated(
-  request: NextRequest
-) {
-  const sessionId =
-    request.cookies.get(
-      'edupath_admin_sess'
-    )?.value;
-
-  if (!sessionId) {
-    return false;
-  }
-
-  return authManager.validateAdminSession(
-    sessionId
-  );
+function authorized(request: NextRequest) {
+  return validateAdminRequest(request);
 }
 
-// ============================================================
-// GET /api/admin
-// ============================================================
-
-export async function GET(
-  request: NextRequest
-) {
+export async function GET(request: NextRequest) {
   try {
+    const guard = authorized(request);
+    if (!guard.authorized) return guard.response!;
 
-    if (
-      !isAdminAuthenticated(request)
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Unauthorized admin access.',
-        },
-        {
-          status: 401,
-        }
-      );
+    if (process.env.DATABASE_URL) {
+      const dashboard = await getDashboardData();
+      return NextResponse.json({ success: true, data: dashboard });
     }
 
-    const dashboard =
-      leadStore.getDashboardData();
-
-    return NextResponse.json({
-      success: true,
-
-      data: dashboard,
-    });
-
+    return NextResponse.json({ success: true, data: leadStore.getDashboardData() });
   } catch (error) {
-
-    console.error(
-      'Admin dashboard error:',
-      error
-    );
-
-    return NextResponse.json(
-      {
-        success: false,
-        message:
-          'Unable to load admin dashboard.',
-      },
-      {
-        status: 500,
-      }
-    );
+    console.error('Admin dashboard error:', error);
+    return NextResponse.json({ success: false, message: 'Unable to load admin dashboard.' }, { status: 500 });
   }
 }
 
-// ============================================================
-// POST /api/admin
-//
-// Admin actions
-// ============================================================
-
-export async function POST(
-  request: NextRequest
-) {
-
+export async function POST(request: NextRequest) {
   try {
+    const guard = authorized(request);
+    if (!guard.authorized) return guard.response!;
+    const body = (await request.json()) as Record<string, unknown>;
+    const action = String(body.action || '');
 
-    if (
-      !isAdminAuthenticated(request)
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Unauthorized admin access.',
-        },
-        {
-          status: 401,
-        }
-      );
-    }
+    if (action === 'update_demo_booking') {
+      const bookingId = String(body.bookingId || '');
+      if (!bookingId) return NextResponse.json({ success: false, message: 'Booking ID is required.' }, { status: 400 });
+      const updates = {
+        ...(body.status ? { status: String(body.status) } : {}),
+        ...(body.counsellor !== undefined ? { counsellor: String(body.counsellor) } : {}),
+        ...(body.notes !== undefined ? { notes: String(body.notes) } : {}),
+      } as Parameters<typeof updateDemoBooking>[1];
 
-    const body =
-      await request.json();
+      const updated = process.env.DATABASE_URL
+        ? await updateDemoBooking(bookingId, updates)
+        : leadStore.updateDemoBooking(bookingId, updates);
+      if (!updated) return NextResponse.json({ success: false, message: 'Booking not found.' }, { status: 404 });
 
-    const action =
-      body.action;
-
-    // --------------------------------------------------------
-    // UPDATE DEMO BOOKING
-    // --------------------------------------------------------
-
-    if (
-      action ===
-      'update_demo_booking'
-    ) {
-
-      const bookingId =
-        body.bookingId;
-
-      if (!bookingId) {
-        return NextResponse.json(
-          {
-            success: false,
-            message:
-              'Booking ID is required.',
-          },
-          {
-            status: 400,
-          }
-        );
-      }
-
-      const updated =
-        leadStore.updateDemoBooking(
-          bookingId,
-          {
-            ...(body.status
-              ? {
-                  status:
-                    body.status,
-                }
-              : {}),
-
-            ...(body.counsellor !==
-            undefined
-              ? {
-                  counsellor:
-                    body.counsellor,
-                }
-              : {}),
-
-            ...(body.notes !==
-            undefined
-              ? {
-                  notes:
-                    body.notes,
-                }
-              : {}),
-          }
-        );
-
-      if (!updated) {
-        return NextResponse.json(
-          {
-            success: false,
-            message:
-              'Booking not found.',
-          },
-          {
-            status: 404,
-          }
-        );
-      }
-
-      leadStore.addAuditLog({
+      const audit = {
         id: `AUDIT-${Date.now()}`,
+        action: 'DEMO_BOOKING_UPDATED',
+        actor: 'ADMIN',
+        target: bookingId,
+        details: `Status: ${String(body.status || 'UNCHANGED')}`,
+        timestamp: new Date().toISOString(),
+      };
+      if (process.env.DATABASE_URL) await addAuditLog(audit);
+      else leadStore.addAuditLog(audit);
 
-        action:
-          'DEMO_BOOKING_UPDATED',
-
-        actor:
-          'ADMIN',
-
-        target:
-          bookingId,
-
-        details:
-          `Status: ${
-            body.status ||
-            'UNCHANGED'
-          }`,
-
-        timestamp:
-          new Date().toISOString(),
-      });
-
-      return NextResponse.json({
-        success: true,
-        message:
-          'Demo booking updated successfully.',
-        booking: updated,
-      });
+      return NextResponse.json({ success: true, message: 'Demo booking updated successfully.', booking: updated });
     }
 
-    // --------------------------------------------------------
-    // ADD ADMIN NOTE
-    // --------------------------------------------------------
-
-    if (
-      action === 'audit'
-    ) {
-
-      leadStore.addAuditLog({
+    if (action === 'audit') {
+      const audit = {
         id: `AUDIT-${Date.now()}`,
-
-        action:
-          body.auditAction ||
-          'ADMIN_ACTION',
-
-        actor:
-          'ADMIN',
-
-        target:
-          body.target || '',
-
-        details:
-          body.details || '',
-
-        timestamp:
-          new Date().toISOString(),
-      });
-
-      return NextResponse.json({
-        success: true,
-      });
+        action: String(body.auditAction || 'ADMIN_ACTION'),
+        actor: 'ADMIN',
+        target: String(body.target || ''),
+        details: String(body.details || ''),
+        timestamp: new Date().toISOString(),
+      };
+      if (process.env.DATABASE_URL) await addAuditLog(audit);
+      else leadStore.addAuditLog(audit);
+      return NextResponse.json({ success: true });
     }
 
-    return NextResponse.json(
-      {
-        success: false,
-        message:
-          'Unknown admin action.',
-      },
-      {
-        status: 400,
-      }
-    );
-
+    return NextResponse.json({ success: false, message: 'Unknown admin action.' }, { status: 400 });
   } catch (error) {
-
-    console.error(
-      'Admin API error:',
-      error
-    );
-
-    return NextResponse.json(
-      {
-        success: false,
-        message:
-          'Admin operation failed.',
-      },
-      {
-        status: 500,
-      }
-    );
+    console.error('Admin API error:', error);
+    return NextResponse.json({ success: false, message: 'Admin operation failed.' }, { status: 500 });
   }
 }

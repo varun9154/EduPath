@@ -1,197 +1,687 @@
+// src/app/api/register/route.ts
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { authManager, COOKIE_MAX_AGE } from '@/lib/auth';
-import { leadStore, StudentRecord, DemoBookingRecord, LeadRecord, CounsellingRecord } from '@/lib/storage';
-import { syncLeadToGoogleSheets, ensureHeaders, appendRow } from '@/lib/googleSheets';
+import crypto from 'crypto';
+
+import {
+  assertProductionDatabase,
+  isDatabaseNotConfiguredError,
+  isProductionDatabaseError,
+  registerStudentBundle,
+} from '@/lib/productionDb';
+
+import type {
+  StudentRecord,
+  DemoBookingRecord,
+  LeadRecord,
+  CounsellingRecord,
+} from '@/lib/storage';
+
 import { sendRegistrationEmails } from '@/lib/email';
 import { sendWhatsAppAndSmsNotifications } from '@/lib/notifications';
+import {
+  authManager,
+  COOKIE_MAX_AGE,
+} from '@/lib/auth';
 
-export async function POST(req: Request) {
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function makeId(prefix: string): string {
+  return `${prefix}-${Date.now()}-${crypto
+    .randomBytes(5)
+    .toString('hex')}`;
+}
+
+function operationKey(
+  request: Request,
+  email: string,
+  mobile: string
+): string {
+  const supplied =
+    request.headers
+      .get('idempotency-key')
+      ?.trim();
+
+  if (supplied) {
+    return supplied.slice(0, 200);
+  }
+
+  return crypto
+    .createHash('sha256')
+    .update(
+      `${email}|${mobile}|${new Date()
+        .toISOString()
+        .slice(0, 10)}`
+    )
+    .digest('hex');
+}
+
+function stringValue(
+  value: unknown,
+  fallback = ''
+): string {
+  if (
+    typeof value === 'string' ||
+    typeof value === 'number'
+  ) {
+    return String(value);
+  }
+
+  return fallback;
+}
+
+/* =========================================================
+   POST
+========================================================= */
+
+export async function POST(
+  request: Request
+) {
   try {
-    const body = await req.json();
+    /*
+     * =======================================================
+     * DATABASE IS REQUIRED
+     * =======================================================
+     *
+     * There is intentionally NO Excel fallback.
+     *
+     * Both local development and Render production use Neon.
+     */
+    assertProductionDatabase();
 
-    const {
-      name,
-      email,
-      mobile,
-      educationLevel = '12th Appearing',
-      stream = 'Science (PCM)',
-      state = 'Karnataka',
-      city = 'Bengaluru',
-      marks10th = 'N/A',
-      marks12th = 'N/A',
-      password = '',
-      interestedCourse = 'B.Tech Computer Science',
-      careerGoal = 'Software Development Engineer',
-      entranceExam = 'KCET',
-      counsellingMode = 'Online Video Call',
-      preferredDate = new Date().toISOString().split('T')[0],
-      preferredTimeSlot = '10:00 AM – 10:30 AM',
-      leadSource = 'EduPath Website Form'
-    } = body;
+    const body =
+      (await request.json()) as Record<
+        string,
+        unknown
+      >;
 
-    // Basic Validation
-    if (!name || !email || !mobile || !password) {
-      return NextResponse.json({ success: false, message: 'Name, Email, and Mobile are required.' }, { status: 400 });
+    const name =
+      stringValue(body.name).trim();
+
+    const email =
+      stringValue(body.email)
+        .trim()
+        .toLowerCase();
+
+    const mobile =
+      stringValue(body.mobile).trim();
+
+    const password =
+      stringValue(body.password);
+
+    if (!name || !email || !mobile) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Name, Email, and Mobile are required.',
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
-    // Anti-Double Booking Validation
-    if (leadStore.isSlotBooked(preferredDate, preferredTimeSlot)) {
-      return NextResponse.json({
-        success: false,
-        message: `The selected time slot (${preferredTimeSlot} on ${preferredDate}) has already been reserved. Please choose another slot.`
-      }, { status: 409 });
+    if (
+      password &&
+      password.length < 6
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Password must contain at least 6 characters.',
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
-    const randomSuffix = Math.floor(100000 + Math.random() * 900000);
-    const studentId = `EDU-STU-${randomSuffix}`;
-    const bookingId = `EDU-DEMO-${randomSuffix}`;
-    const leadId = `EDU-LEAD-${randomSuffix}`;
-    const now = new Date().toISOString();
+    const preferredDate =
+      stringValue(
+        body.preferredDate,
+        new Date()
+          .toISOString()
+          .slice(0, 10)
+      );
+
+    const preferredTimeSlot =
+      stringValue(
+        body.preferredTimeSlot,
+        '10:00 AM - 10:30 AM'
+      );
+
+    const now =
+      new Date().toISOString();
+
+    const studentId =
+      makeId('EDU-STU');
+
+    const bookingId =
+      makeId('EDU-DEMO');
+
+    const leadId =
+      makeId('EDU-LEAD');
+
+    /* =====================================================
+       STUDENT
+    ===================================================== */
 
     const student: StudentRecord = {
       studentId,
+
       name,
+
       email,
+
       mobile,
-      password: bcrypt.hashSync(String(password), 12),
-      educationLevel,
-      stream,
-      state,
-      city,
-      marks10th,
-      marks12th,
-      registrationDate: now
+
+      educationLevel:
+        stringValue(
+          body.educationLevel,
+          '10th / School Student'
+        ),
+
+      stream:
+        stringValue(
+          body.stream,
+          'Not Selected'
+        ),
+
+      state:
+        stringValue(
+          body.state,
+          'Karnataka'
+        ),
+
+      city:
+        stringValue(
+          body.city,
+          'Bengaluru'
+        ),
+
+      marks10th:
+        stringValue(
+          body.marks10th,
+          'N/A'
+        ),
+
+      marks12th:
+        stringValue(
+          body.marks12th,
+          'N/A'
+        ),
+
+      registrationDate:
+        now,
+
+      registeredAt:
+        now,
+
+      updatedAt:
+        now,
+
+      status:
+        'ACTIVE',
+
+      passwordHash:
+        password
+          ? bcrypt.hashSync(
+              password,
+              12
+            )
+          : '',
+
+      interestedCourse:
+        stringValue(
+          body.interestedCourse,
+          'Career Guidance'
+        ),
+
+      careerGoal:
+        stringValue(
+          body.careerGoal,
+          'Explore My Career Path'
+        ),
+
+      targetJob:
+        stringValue(
+          body.targetJob
+        ),
+
+      targetExam:
+        stringValue(
+          body.entranceExam
+        ),
+
+      leadSource:
+        stringValue(
+          body.leadSource,
+          'EduPath Website'
+        ),
     };
 
-    const booking: DemoBookingRecord = {
-      bookingId,
-      studentId,
-      name,
-      email,
-      mobile,
-      interestedCourse,
-      counsellingMode,
-      preferredDate,
-      preferredTimeSlot,
-      registrationDate: now,
-      status: 'REQUEST RECEIVED'
-    };
+    /* =====================================================
+       DEMO BOOKING
+    ===================================================== */
+
+    const booking:
+      DemoBookingRecord = {
+        bookingId,
+
+        studentId,
+
+        name,
+
+        email,
+
+        mobile,
+
+        interestedCourse:
+          String(
+            student.interestedCourse ??
+              ''
+          ),
+
+        counsellingMode:
+          stringValue(
+            body.counsellingMode,
+            'Online Video Call'
+          ),
+
+        preferredDate,
+
+        preferredTimeSlot,
+
+        registrationDate:
+          now,
+
+        status:
+          'REQUEST RECEIVED',
+      };
+
+    /* =====================================================
+       LEAD
+    ===================================================== */
 
     const lead: LeadRecord = {
       leadId,
+
       studentId,
+
       name,
+
       email,
+
       mobile,
-      educationLevel,
-      stream,
-      state,
-      city,
-      marks10th,
-      marks12th,
-      interestedCourse,
-      careerGoal,
-      entranceExam,
-      counsellingMode,
+
+      educationLevel:
+        stringValue(
+          student.educationLevel
+        ),
+
+      stream:
+        stringValue(
+          student.stream
+        ),
+
+      state:
+        stringValue(
+          student.state
+        ),
+
+      city:
+        stringValue(
+          student.city
+        ),
+
+      marks10th:
+        stringValue(
+          student.marks10th
+        ),
+
+      marks12th:
+        stringValue(
+          student.marks12th
+        ),
+
+      interestedCourse:
+        stringValue(
+          student.interestedCourse
+        ),
+
+      careerGoal:
+        stringValue(
+          student.careerGoal
+        ),
+
+      entranceExam:
+        stringValue(
+          student.targetExam
+        ),
+
+      counsellingMode:
+        stringValue(
+          booking.counsellingMode
+        ),
+
       preferredDate,
+
       preferredTimeSlot,
-      registrationDate: now,
-      leadSource,
-      status: 'NEW',
-      counsellor: 'Unassigned',
-      notes: `Demo booked for ${preferredDate} at ${preferredTimeSlot}. Mode: ${counsellingMode}`,
-      sheetsSyncStatus: 'PENDING_SYNC'
+
+      registrationDate:
+        now,
+
+      leadSource:
+        stringValue(
+          body.leadSource,
+          'EduPath Website'
+        ),
+
+      status:
+        'NEW',
+
+      counsellor:
+        'Unassigned',
+
+      notes:
+        `Demo requested for ${preferredDate} at ${preferredTimeSlot}.`,
+
+      sheetsSyncStatus:
+        'PENDING_SYNC',
     };
 
-    const counsellingSession: CounsellingRecord = {
-      sessionId: `EDU-COUN-${randomSuffix}`,
-      studentId,
-      name,
-      preferredSlot: `${preferredDate} ${preferredTimeSlot}`,
-      counsellor: 'Unassigned',
-      mode: counsellingMode,
-      notes: 'Initial free demo session request.',
-      outcome: 'Pending Session',
-      date: preferredDate
-    };
+    /* =====================================================
+       COUNSELLING
+    ===================================================== */
 
-    // Save to global serverless buffer
-    // Persist each entity to Google Sheets. If any operation fails, keep the record in the in‑memory store for later retry.
-    await ensureHeaders('Students', ['studentId', 'name', 'email', 'mobile', 'educationLevel', 'stream', 'state', 'city', 'marks10th', 'marks12th', 'registrationDate']);
-    await ensureHeaders('DemoBookings', ['bookingId', 'studentId', 'name', 'email', 'mobile', 'interestedCourse', 'counsellingMode', 'preferredDate', 'preferredTimeSlot', 'registrationDate', 'status']);
-    await ensureHeaders('Leads', ['leadId', 'studentId', 'name', 'email', 'mobile', 'educationLevel', 'stream', 'state', 'city', 'marks10th', 'marks12th', 'interestedCourse', 'careerGoal', 'entranceExam', 'counsellingMode', 'preferredDate', 'preferredTimeSlot', 'registrationDate', 'leadSource', 'status', 'counsellor', 'notes']);
-    await ensureHeaders('Counselling', ['sessionId', 'studentId', 'name', 'preferredSlot', 'counsellor', 'mode', 'notes', 'outcome', 'date']);
+    const counselling:
+      CounsellingRecord = {
+        sessionId:
+          makeId('EDU-COUN'),
 
-    const studentResult = await appendRow('Students', [student.studentId, student.name, student.email, student.mobile, student.educationLevel, student.stream, student.state, student.city, student.marks10th, student.marks12th, student.registrationDate]);
-    if (!studentResult.success) leadStore.addStudent(student);
+        studentId,
 
-    const bookingResult = await appendRow('DemoBookings', [booking.bookingId, booking.studentId, booking.name, booking.email, booking.mobile, booking.interestedCourse, booking.counsellingMode, booking.preferredDate, booking.preferredTimeSlot, booking.registrationDate, booking.status]);
-    if (!bookingResult.success) leadStore.addDemoBooking(booking);
+        name,
 
-    const leadResult = await appendRow('Leads', [lead.leadId, lead.studentId, lead.name, lead.email, lead.mobile, lead.educationLevel, lead.stream, lead.state, lead.city, lead.marks10th, lead.marks12th, lead.interestedCourse, lead.careerGoal, lead.entranceExam, lead.counsellingMode, lead.preferredDate, lead.preferredTimeSlot, lead.registrationDate, lead.leadSource, lead.status, lead.counsellor, lead.notes]);
-    if (!leadResult.success) leadStore.addLead(lead);
+        preferredSlot:
+          `${preferredDate} ${preferredTimeSlot}`,
 
-    const counsellingResult = await appendRow('Counselling', [counsellingSession.sessionId, counsellingSession.studentId, counsellingSession.name, counsellingSession.preferredSlot, counsellingSession.counsellor, counsellingSession.mode, counsellingSession.notes, counsellingSession.outcome, counsellingSession.date]);
-    if (!counsellingResult.success) leadStore.addCounsellingRecord(counsellingSession);
+        counsellor:
+          'Unassigned',
 
-    const auth = authManager.createStudentSession(
-      studentId,
-      email,
-      name,
-      'Registration'
-    );
+        mode:
+          stringValue(
+            booking.counsellingMode
+          ),
 
-    // Asynchronous notifications & cloud synchronization
-    const emailRes = await sendRegistrationEmails(lead, student, booking);
-    const notifyRes = await sendWhatsAppAndSmsNotifications(lead, student, booking);
-    const sheetsRes = await syncLeadToGoogleSheets(lead, student, booking);
+        notes:
+          'Initial free demo session request.',
 
-    const response = NextResponse.json({
+        outcome:
+          'Pending Session',
+
+        date:
+          preferredDate,
+      };
+
+    /* =====================================================
+       RESPONSE PAYLOAD
+    ===================================================== */
+
+    const responsePayload = {
       success: true,
-      message: 'Your Free EduPath Demo Request Has Been Received 🎉',
-      status: 'REQUEST RECEIVED',
-      notice: 'Your requested slot is pending confirmation. Our counsellor will contact you.',
+
+      message:
+        'Your EduPath registration has been received.',
+
+      status:
+        'REQUEST RECEIVED',
+
+      notice:
+        'Your requested slot is pending confirmation. Our counsellor will contact you.',
+
       data: {
         studentId,
-        bookingId,
-        leadId,
-        name,
-        email,
-        mobile,
-        interestedCourse,
-        careerGoal,
-        entranceExam,
-        counsellingMode,
-        preferredDate,
-        preferredTimeSlot,
-        emailStatus: emailRes.mode,
-        notificationStatus: notifyRes.adminNotifyStatus,
-        sheetsSyncMessage: sheetsRes.message
-      }
-    });
 
-    if (auth.success && auth.sessionId) {
-      response.cookies.set('edupath_student_sess', auth.sessionId, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-        maxAge: COOKIE_MAX_AGE,
+        bookingId,
+
+        leadId,
+
+        name,
+
+        email,
+
+        mobile,
+
+        storage:
+          'Neon PostgreSQL',
+      },
+    };
+
+    /* =====================================================
+       NEON TRANSACTION
+    ===================================================== */
+
+    const registrationResult =
+      await registerStudentBundle(
+        {
+          student,
+          booking,
+          lead,
+          counselling,
+        },
+        operationKey(
+          request,
+          email,
+          mobile
+        ),
+        responsePayload
+      );
+
+    /* =====================================================
+       NOTIFICATIONS
+       AFTER DURABLE DATABASE WRITE
+    ===================================================== */
+
+    let emailRes = {
+      mode: 'NOT_ATTEMPTED',
+    };
+
+    let notifyRes = {
+      adminNotifyStatus:
+        'NOT_ATTEMPTED',
+    };
+
+    if (
+      !registrationResult.replayed
+    ) {
+      try {
+        emailRes =
+          await sendRegistrationEmails(
+            lead,
+            student,
+            booking
+          );
+      } catch (error) {
+        console.error(
+          'Registration email dispatch failed:',
+          error
+        );
+      }
+
+      try {
+        notifyRes =
+          await sendWhatsAppAndSmsNotifications(
+            lead,
+            student,
+            booking
+          );
+      } catch (error) {
+        console.error(
+          'Registration messaging dispatch failed:',
+          error
+        );
+      }
+    }
+
+    /* =====================================================
+       CREATE STUDENT SESSION
+    ===================================================== */
+
+    const auth =
+      password
+        ? authManager.loginStudent(
+            email,
+            password,
+            'Registration'
+          )
+        : null;
+
+    const response =
+      NextResponse.json({
+        ...registrationResult.response,
+
+        data: {
+          ...(registrationResult.response
+            .data as Record<
+            string,
+            unknown
+          >),
+
+          emailStatus:
+            emailRes.mode,
+
+          notificationStatus:
+            notifyRes.adminNotifyStatus,
+
+          replayed:
+            registrationResult.replayed,
+        },
       });
-      response.cookies.set('edupath_student_id', studentId, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-        maxAge: COOKIE_MAX_AGE,
-      });
+
+    /* =====================================================
+       STUDENT COOKIES
+    ===================================================== */
+
+    if (
+      auth?.success &&
+      auth.sessionId
+    ) {
+      response.cookies.set(
+        'edupath_student_sess',
+        auth.sessionId,
+        {
+          httpOnly: true,
+          secure:
+            process.env.NODE_ENV ===
+            'production',
+
+          sameSite: 'lax',
+
+          path: '/',
+
+          maxAge:
+            COOKIE_MAX_AGE,
+        }
+      );
+
+      response.cookies.set(
+        'edupath_student_id',
+        studentId,
+        {
+          httpOnly: false,
+
+          secure:
+            process.env.NODE_ENV ===
+            'production',
+
+          sameSite: 'lax',
+
+          path: '/',
+
+          maxAge:
+            COOKIE_MAX_AGE,
+        }
+      );
     }
 
     return response;
+  } catch (error) {
+    console.error(
+      'Registration error:',
+      error
+    );
 
-  } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Internal Server Error';
-    return NextResponse.json({ success: false, message: errorMsg }, { status: 500 });
+    if (
+      isProductionDatabaseError(
+        error,
+        'DUPLICATE_STUDENT_EMAIL'
+      )
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'A student account with this email already exists.',
+        },
+        {
+          status: 409,
+        }
+      );
+    }
+
+    if (
+      isProductionDatabaseError(
+        error,
+        'DUPLICATE_DEMO_SLOT'
+      )
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'The selected counselling slot has already been reserved. Please choose another slot.',
+        },
+        {
+          status: 409,
+        }
+      );
+    }
+
+    if (
+      isDatabaseNotConfiguredError(
+        error
+      )
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'DATABASE_URL is not configured. Add your Neon PostgreSQL connection string to .env.local.',
+        },
+        {
+          status: 503,
+        }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          'Registration could not be completed. Please try again.',
+      },
+      {
+        status: 500,
+      }
+    );
   }
 }
