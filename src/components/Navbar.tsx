@@ -2,186 +2,65 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import {
-  Compass,
-  GraduationCap,
-  MapPin,
-  Route,
-  Bot,
-  Menu,
-  X,
-  Sparkles,
-  User,
-  FileText,
-  BriefcaseBusiness,
-  LogOut,
-} from 'lucide-react';
+import { Bot, GraduationCap, MapPin, Menu, Route, X, User, FileText, Award, Compass, LogOut, LayoutDashboard, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import DemoModal from './DemoModal';
+import AuthGuardModal from './AuthGuardModal';
 
-const NAV_ITEMS = [
-  { href: '/entrance-exams', label: '36 States Exams', icon: MapPin, iconClass: 'text-cyan-400' },
-  { href: '/courses', label: 'Courses', icon: Compass, iconClass: 'text-brand-400' },
-  { href: '/resources', label: 'Resources', icon: FileText, iconClass: 'text-amber-400' },
-  { href: '/colleges', label: 'Colleges', icon: GraduationCap, iconClass: 'text-purple-400' },
-  { href: '/journey', label: '10th → First Job', icon: Route, iconClass: 'text-emerald-400' },
-  { href: '/ai-counsellor', label: 'AI Counsellor', icon: Bot, iconClass: 'text-pink-400' },
-];
+type StudentInfo = { id?: string; studentId?: string; name?: string; email?: string; };
+const NAV = [
+  ['/entrance-exams','36 States Exams',MapPin,'text-cyan-400'],
+  ['/courses','Courses',Compass,'text-brand-400'],
+  ['/resources','Resources',FileText,'text-amber-400'],
+  ['/colleges','Colleges',GraduationCap,'text-purple-400'],
+  ['/scholarships','Scholarships',Award,'text-yellow-400'],
+  ['/journey','10th → First Job',Route,'text-emerald-400'],
+  ['/ai-counsellor','AI Counsellor',Bot,'text-pink-400'],
+] as const;
 
 export default function Navbar() {
-  const [isDemoOpen, setIsDemoOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [student, setStudent] = useState<{ studentId?: string; name?: string; email?: string } | null>(null);
+  const [student, setStudent] = useState<StudentInfo | null>(null);
+  const [ready, setReady] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [authModal, setAuthModal] = useState(false);
+  const [targetPath, setTargetPath] = useState('/');
+  const router = useRouter();
 
   useEffect(() => {
-    const readStudent = () => {
-      try {
-        const raw = localStorage.getItem('edupath_student');
-        if (!raw) {
+    let active = true;
+    fetch('/api/auth/student', { credentials: 'include', cache: 'no-store' })
+      .then(async (res) => ({ res, data: await res.json().catch(() => ({})) }))
+      .then(({ res, data }) => {
+        if (!active) return;
+        if (res.ok && data?.authenticated && data?.student) {
+          setStudent(data.student);
+          localStorage.setItem('edupath_student', JSON.stringify(data.student));
+        } else {
           setStudent(null);
-          return;
         }
-        const parsed = JSON.parse(raw);
-        const studentId = parsed?.studentId || parsed?.id;
-        setStudent(studentId ? { ...parsed, studentId } : null);
-      } catch {
-        setStudent(null);
-      }
-    };
-
-    readStudent();
-    window.addEventListener('edupath-auth-changed', readStudent);
-    window.addEventListener('storage', readStudent);
-
-    return () => {
-      window.removeEventListener('edupath-auth-changed', readStudent);
-      window.removeEventListener('storage', readStudent);
-    };
+      })
+      .catch(() => { if (active) setStudent(null); })
+      .finally(() => active && setReady(true));
+    return () => { active = false; };
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/student/force-logout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email: student?.email || '' }),
-      });
-    } catch (error) {
-      console.error('Navbar logout error:', error);
-    } finally {
-      localStorage.removeItem('edupath_student');
-      window.dispatchEvent(new CustomEvent('edupath-auth-changed', { detail: { authenticated: false } }));
-      window.location.href = '/';
+  const navigate = (path: string) => {
+    const protectedRoutes = ['/dashboard','/courses','/entrance-exams','/resources','/colleges','/scholarships','/journey','/ai-counsellor','/mock-tests'];
+    if (!student && protectedRoutes.some((x)=>path===x || path.startsWith(`${x}/`))) {
+      setTargetPath(path); setAuthModal(true); setMobileOpen(false); return;
     }
+    router.push(path);
   };
 
-  const openDemo = () => {
-    setMobileMenuOpen(false);
-    setIsDemoOpen(true);
+  const logout = async () => {
+    try { await fetch('/api/auth/student', { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body:JSON.stringify({action:'logout'}) }); } catch {}
+    localStorage.removeItem('edupath_student');
+    setStudent(null);
+    router.replace('/');
+    router.refresh();
   };
 
-  return (
-    <>
-      <header className="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-950/90 text-white backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center space-x-2.5 font-black tracking-tight" aria-label="EduPath home">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-cyan-400 shadow-lg shadow-brand-500/30">
-              <GraduationCap className="h-5 w-5 text-white" />
-            </div>
-            <span className="bg-gradient-to-r from-white via-slate-100 to-brand-300 bg-clip-text text-xl text-transparent">
-              EduPath AI
-            </span>
-          </Link>
-
-          <nav className="hidden items-center space-x-5 text-xs font-medium text-slate-300 lg:flex">
-            <Link href="/" className="transition hover:text-white">Home</Link>
-            {NAV_ITEMS.map(({ href, label, icon: Icon, iconClass }) => (
-              <Link
-                key={href}
-                href={href}
-                className="flex items-center transition hover:text-white"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Icon className={`mr-1 h-3.5 w-3.5 ${iconClass}`} />
-                {label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="hidden items-center space-x-3 lg:flex">
-            {student ? (
-              <>
-                <Link href="/dashboard" className="flex max-w-52 items-center rounded-xl border border-brand-500/30 bg-brand-500/10 px-3 py-1.5 text-xs font-semibold text-brand-200 transition hover:bg-brand-500/20">
-                  <User className="mr-1 h-3.5 w-3.5 text-brand-400" />
-                  <span className="truncate">{student.name || 'Student'}</span>
-                </Link>
-                <button type="button" onClick={handleLogout} className="rounded-xl border border-slate-700 bg-slate-800 p-2 text-slate-300 transition hover:bg-slate-700" title="Sign out">
-                  <LogOut className="h-3.5 w-3.5" />
-                </button>
-              </>
-            ) : (
-              <Link href="/login" className="flex items-center rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:bg-slate-700">
-                <User className="mr-1 h-3.5 w-3.5 text-brand-400" />
-                Login
-              </Link>
-            )}
-            <button
-              type="button"
-              onClick={openDemo}
-              className="flex items-center rounded-xl bg-gradient-to-r from-brand-500 to-cyan-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-brand-500/25 transition hover:-translate-y-0.5 hover:from-brand-600 hover:to-cyan-700"
-            >
-              <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-              BOOK A FREE DEMO
-            </button>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((value) => !value)}
-            className="rounded-lg p-2 text-slate-300 hover:bg-slate-800 lg:hidden"
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-
-        {mobileMenuOpen && (
-          <div className="space-y-2 border-b border-slate-800 bg-slate-900 px-4 pb-4 pt-2 text-xs lg:hidden">
-            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-200">Home</Link>
-            {NAV_ITEMS.map(({ href, label, icon: Icon, iconClass }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex w-full items-center py-2 text-left text-slate-200"
-              >
-                <Icon className={`mr-2 h-4 w-4 ${iconClass}`} />
-                {label}
-              </Link>
-            ))}
-            {student ? (
-              <>
-                <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center py-2 font-bold text-brand-400">
-                  <User className="mr-2 h-4 w-4" /> {student.name || 'Student Dashboard'}
-                </Link>
-                <button type="button" onClick={handleLogout} className="flex items-center py-2 font-bold text-slate-300">
-                  <LogOut className="mr-2 h-4 w-4" /> Sign Out
-                </button>
-              </>
-            ) : (
-              <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="flex items-center py-2 font-bold text-brand-400">
-                <User className="mr-2 h-4 w-4" /> Login
-              </Link>
-            )}
-            <button type="button" onClick={openDemo} className="mt-2 flex w-full items-center justify-center rounded-xl bg-brand-600 py-2.5 font-bold text-white shadow">
-              <BriefcaseBusiness className="mr-2 h-4 w-4" /> BOOK A FREE DEMO
-            </button>
-          </div>
-        )}
-      </header>
-
-      <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
-    </>
-  );
+  return <>
+    <header className="sticky top-0 z-40 w-full bg-slate-950/90 backdrop-blur-md border-b border-slate-800 text-white"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"><Link href="/" className="flex items-center gap-2.5 font-black text-xl"><div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-cyan-400 flex items-center justify-center shadow-lg"><GraduationCap className="w-5 h-5"/></div><span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-brand-300">EduPath AI</span></Link><nav className="hidden lg:flex items-center gap-5 text-xs font-medium text-slate-300"><Link href="/" className="hover:text-white">Home</Link>{NAV.map(([href,label,Icon,iconClass])=><button key={href} type="button" onClick={()=>navigate(href)} className="flex items-center hover:text-white transition"><Icon className={`w-3.5 h-3.5 mr-1 ${iconClass}`}/>{label}</button>)}</nav><div className="hidden lg:flex items-center gap-3">{ready && student ? <><Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-2 bg-brand-600 rounded-xl text-xs font-bold"><LayoutDashboard className="w-3.5 h-3.5"/>{student.name || 'Dashboard'}</Link><button type="button" onClick={logout} className="p-2 rounded-xl bg-slate-800 hover:bg-red-600"><LogOut className="w-4 h-4"/></button></> : <><Link href="/login" className="flex items-center px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-xl border border-slate-700"><User className="w-3.5 h-3.5 mr-1 text-brand-400"/>Login</Link><button type="button" onClick={()=>setDemoOpen(true)} className="flex items-center px-4 py-2 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-bold text-xs rounded-xl shadow-lg"><Sparkles className="w-3.5 h-3.5 mr-1.5"/>BOOK A FREE DEMO</button></>}</div><button type="button" onClick={()=>setMobileOpen(v=>!v)} className="lg:hidden p-2 rounded-lg text-slate-300">{mobileOpen?<X className="w-6 h-6"/>:<Menu className="w-6 h-6"/>}</button></div>{mobileOpen&&<div className="lg:hidden bg-slate-900 border-b border-slate-800 px-4 pt-2 pb-4 space-y-2 text-xs"><Link href="/" onClick={()=>setMobileOpen(false)} className="block py-1.5">Home</Link>{NAV.map(([href,label,Icon])=><button key={href} type="button" onClick={()=>navigate(href)} className="flex items-center w-full text-left py-1.5 text-slate-200"><Icon className="w-4 h-4 mr-2"/>{label}</button>)}{student?<button onClick={logout} className="flex items-center py-1.5 text-red-400"><LogOut className="w-4 h-4 mr-2"/>Logout</button>:<Link href="/login" onClick={()=>setMobileOpen(false)} className="block py-1.5 text-brand-400 font-bold">Login</Link>}<button type="button" onClick={()=>{setMobileOpen(false);setDemoOpen(true)}} className="w-full py-2.5 bg-brand-600 text-white font-bold rounded-xl">BOOK A FREE DEMO</button></div>}</header><DemoModal isOpen={demoOpen} onClose={()=>setDemoOpen(false)}/><AuthGuardModal targetPath={targetPath} isOpen={authModal} onClose={()=>setAuthModal(false)}/></>;
 }

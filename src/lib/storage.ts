@@ -245,8 +245,6 @@ export const SHEETS = {
   NOTIFICATIONS: 'Notifications',
   AUDIT: 'AuditLogs',
   TIME_SLOTS: 'TimeSlots',
-  COURSE_PURCHASES: 'CoursePurchases',
-  COURSE_PROGRESS: 'CourseProgress',
 } as const;
 
 // ============================================================
@@ -430,12 +428,11 @@ function ensureExcelFile(): void {
 
   XLSX.utils.book_append_sheet(
     workbook,
-    XLSX.utils.json_to_sheet(DEFAULT_TIME_SLOTS),
+    XLSX.utils.json_to_sheet(
+      DEFAULT_TIME_SLOTS
+    ),
     SHEETS.TIME_SLOTS
   );
-
-  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet([]), SHEETS.COURSE_PURCHASES);
-  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet([]), SHEETS.COURSE_PROGRESS);
 
   XLSX.writeFile(
     workbook,
@@ -580,15 +577,6 @@ export class ExcelStorageManager {
     );
 
     return student;
-  }
-
-  updateStudentPassword(studentId: string, passwordHash: string): StudentRecord | null {
-    const students = this.getStudents();
-    const index = students.findIndex((student) => student.studentId === studentId);
-    if (index === -1) return null;
-    students[index] = { ...students[index], passwordHash, updatedAt: new Date().toISOString() };
-    writeSheet(SHEETS.STUDENTS, students);
-    return students[index];
   }
 
   // ==========================================================

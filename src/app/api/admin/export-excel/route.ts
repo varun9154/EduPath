@@ -1,15 +1,9 @@
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
-import { prepareExcelStore } from '@/lib/excelPersistence';
-
 import { NextResponse } from 'next/server';
 import { generateEduPathExcelBuffer } from '@/lib/excelExport';
 import { validateAdminRequest } from '@/lib/roleGuard';
 
 export async function GET(req: Request) {
   try {
-    if (!process.env.DATABASE_URL) await prepareExcelStore();
     // --------------------------------------------------
     // ADMIN AUTHORIZATION
     // --------------------------------------------------

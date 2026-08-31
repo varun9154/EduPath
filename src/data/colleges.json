@@ -5,8 +5,16 @@
     "city": "Bengaluru",
     "state": "Karnataka",
     "type": "Private Autonomous",
-    "courses": ["B.Tech CSE", "B.Tech ECE", "B.Tech AI/ML", "B.Tech Mechanical"],
-    "acceptedExams": ["KCET", "COMEDK"],
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech AI/ML",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "KCET",
+      "COMEDK"
+    ],
     "accreditation": "NAAC A+ / NBA",
     "website": "https://rvce.edu.in/",
     "tier": "Dream"
@@ -17,8 +25,16 @@
     "city": "Mumbai",
     "state": "Maharashtra",
     "type": "Deemed Government",
-    "courses": ["B.Pharm", "B.Tech Chemical", "M.Pharm"],
-    "acceptedExams": ["MHT-CET", "JEE Main", "GPAT"],
+    "courses": [
+      "B.Pharm",
+      "B.Tech Chemical",
+      "M.Pharm"
+    ],
+    "acceptedExams": [
+      "MHT-CET",
+      "JEE Main",
+      "GPAT"
+    ],
     "accreditation": "NAAC A++",
     "website": "https://www.ictmumbai.edu.in/",
     "tier": "Dream"
@@ -29,8 +45,16 @@
     "city": "Bengaluru",
     "state": "Karnataka",
     "type": "Private Autonomous",
-    "courses": ["B.Tech CSE", "B.Tech ECE", "B.Tech Civil", "B.Tech Biotechnology"],
-    "acceptedExams": ["KCET", "COMEDK"],
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil",
+      "B.Tech Biotechnology"
+    ],
+    "acceptedExams": [
+      "KCET",
+      "COMEDK"
+    ],
     "accreditation": "NAAC A++",
     "website": "https://bmsce.ac.in/",
     "tier": "Target"
@@ -41,8 +65,16 @@
     "city": "Pune",
     "state": "Maharashtra",
     "type": "Government Autonomous",
-    "courses": ["B.Tech Mechanical", "B.Tech CSE", "B.Tech Electrical", "B.Tech Civil"],
-    "acceptedExams": ["MHT-CET", "JEE Main"],
+    "courses": [
+      "B.Tech Mechanical",
+      "B.Tech CSE",
+      "B.Tech Electrical",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "MHT-CET",
+      "JEE Main"
+    ],
     "accreditation": "NAAC A+",
     "website": "https://www.coep.org.in/",
     "tier": "Dream"
@@ -53,10 +85,1779 @@
     "city": "Bengaluru",
     "state": "Karnataka",
     "type": "National Law University",
-    "courses": ["BA LL.B (Hons)", "LLM"],
-    "acceptedExams": ["CLAT"],
+    "courses": [
+      "BA LL.B (Hons)",
+      "LLM"
+    ],
+    "acceptedExams": [
+      "CLAT"
+    ],
     "accreditation": "NIRF Rank #1 Law",
     "website": "https://www.nls.ac.in/",
     "tier": "Dream"
+  },
+  {
+    "id": "iit-delhi",
+    "name": "Indian Institute of Technology Delhi",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Electrical",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://home.iitd.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-bombay",
+    "name": "Indian Institute of Technology Bombay",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech EE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitb.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-madras",
+    "name": "Indian Institute of Technology Madras",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Electrical",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitm.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-kanpur",
+    "name": "Indian Institute of Technology Kanpur",
+    "city": "Kanpur",
+    "state": "Uttar Pradesh",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Electrical",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitk.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-kharagpur",
+    "name": "Indian Institute of Technology Kharagpur",
+    "city": "Kharagpur",
+    "state": "West Bengal",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitkgp.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-hyderabad",
+    "name": "Indian Institute of Technology Hyderabad",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech AI",
+      "B.Tech ECE"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://iith.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-roorkee",
+    "name": "Indian Institute of Technology Roorkee",
+    "city": "Roorkee",
+    "state": "Uttarakhand",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Civil",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitr.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nitk",
+    "name": "National Institute of Technology Karnataka",
+    "city": "Surathkal",
+    "state": "Karnataka",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.nitk.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nitr",
+    "name": "National Institute of Technology Rourkela",
+    "city": "Rourkela",
+    "state": "Odisha",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nitrkl.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-trichy",
+    "name": "National Institute of Technology Tiruchirappalli",
+    "city": "Tiruchirappalli",
+    "state": "Tamil Nadu",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech EEE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.nitt.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-warangal",
+    "name": "National Institute of Technology Warangal",
+    "city": "Warangal",
+    "state": "Telangana",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nitw.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iiit-h",
+    "name": "International Institute of Information Technology Hyderabad",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE"
+    ],
+    "acceptedExams": [
+      "JEE Main",
+      "UGEE"
+    ],
+    "website": "https://www.iiit.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iiitd",
+    "name": "Indraprastha Institute of Information Technology Delhi",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "State University",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech AI",
+      "B.Tech ECE"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://iiitd.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "jadavpur",
+    "name": "Jadavpur University",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "type": "State University",
+    "ownership": "Government",
+    "courses": [
+      "B.E CSE",
+      "B.E ECE",
+      "B.E Electrical"
+    ],
+    "acceptedExams": [
+      "WBJEE"
+    ],
+    "website": "https://jadavpuruniversity.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "anna-university",
+    "name": "Anna University",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "type": "State University",
+    "ownership": "Government",
+    "courses": [
+      "B.E CSE",
+      "B.E ECE",
+      "B.E Mechanical"
+    ],
+    "acceptedExams": [
+      "TNEA"
+    ],
+    "website": "https://www.annauniv.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "uoh",
+    "name": "University of Hyderabad",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "Integrated Sciences",
+      "Postgraduate Programs"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "CUET-PG"
+    ],
+    "website": "https://uohyd.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "du",
+    "name": "University of Delhi",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Com",
+      "BMS"
+    ],
+    "acceptedExams": [
+      "CUET-UG"
+    ],
+    "website": "https://www.du.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "jnu",
+    "name": "Jawaharlal Nehru University",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA Hons",
+      "MA",
+      "MCA",
+      "M.Tech"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "CUET-PG"
+    ],
+    "website": "https://www.jnu.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "aiims-delhi",
+    "name": "All India Institute of Medical Sciences New Delhi",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBBS",
+      "MD/MS"
+    ],
+    "acceptedExams": [
+      "NEET-UG"
+    ],
+    "website": "https://www.aiims.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "aiims-jodhpur",
+    "name": "AIIMS Jodhpur",
+    "city": "Jodhpur",
+    "state": "Rajasthan",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBBS",
+      "MD/MS"
+    ],
+    "acceptedExams": [
+      "NEET-UG"
+    ],
+    "website": "https://www.aiimsjodhpur.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "aiims-bhopal",
+    "name": "AIIMS Bhopal",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBBS",
+      "MD/MS"
+    ],
+    "acceptedExams": [
+      "NEET-UG"
+    ],
+    "website": "https://aiimsbhopal.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nlsiu",
+    "name": "National Law School of India University",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "National Law University",
+    "ownership": "Government",
+    "courses": [
+      "BA LL.B (Hons)",
+      "LLM"
+    ],
+    "acceptedExams": [
+      "CLAT"
+    ],
+    "website": "https://www.nls.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nalsar",
+    "name": "NALSAR University of Law",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "type": "National Law University",
+    "ownership": "Government",
+    "courses": [
+      "BA LL.B",
+      "LLM"
+    ],
+    "acceptedExams": [
+      "CLAT"
+    ],
+    "website": "https://nalsar.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nlud",
+    "name": "National Law University Delhi",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "National Law University",
+    "ownership": "Government",
+    "courses": [
+      "BA LL.B",
+      "LLM"
+    ],
+    "acceptedExams": [
+      "AILET"
+    ],
+    "website": "https://nludelhi.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "manipal",
+    "name": "Manipal Institute of Technology",
+    "city": "Manipal",
+    "state": "Karnataka",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "MET"
+    ],
+    "website": "https://manipal.edu/mit.html",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "pesu",
+    "name": "PES University",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE"
+    ],
+    "acceptedExams": [
+      "KCET",
+      "JEE Main"
+    ],
+    "website": "https://www.pes.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "rvce",
+    "name": "R.V. College of Engineering",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Private Autonomous",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech AI/ML"
+    ],
+    "acceptedExams": [
+      "KCET",
+      "COMEDK"
+    ],
+    "website": "https://rvce.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "bmsce",
+    "name": "B.M.S. College of Engineering",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Private Autonomous",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "KCET",
+      "COMEDK"
+    ],
+    "website": "https://bmsce.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "msrit",
+    "name": "Ramaiah Institute of Technology",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Private Autonomous",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "KCET",
+      "COMEDK"
+    ],
+    "website": "https://www.msrit.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "kiit",
+    "name": "KIIT Deemed to be University",
+    "city": "Bhubaneswar",
+    "state": "Odisha",
+    "type": "Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "BBA"
+    ],
+    "acceptedExams": [
+      "KIITEE"
+    ],
+    "website": "https://kiit.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "vit",
+    "name": "Vellore Institute of Technology",
+    "city": "Vellore",
+    "state": "Tamil Nadu",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "VITEEE"
+    ],
+    "website": "https://vit.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "srm",
+    "name": "SRM Institute of Science and Technology",
+    "city": "Kattankulathur",
+    "state": "Tamil Nadu",
+    "type": "Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "SRMJEEE"
+    ],
+    "website": "https://www.srmist.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "bits-pilani",
+    "name": "Birla Institute of Technology and Science Pilani",
+    "city": "Pilani",
+    "state": "Rajasthan",
+    "type": "Private Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "B.E CSE",
+      "B.E ECE",
+      "B.Pharm"
+    ],
+    "acceptedExams": [
+      "BITSAT"
+    ],
+    "website": "https://www.bits-pilani.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "lpu",
+    "name": "Lovely Professional University",
+    "city": "Phagwara",
+    "state": "Punjab",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "BBA",
+      "MBA",
+      "B.Pharm"
+    ],
+    "acceptedExams": [
+      "LPUNEST"
+    ],
+    "website": "https://www.lpu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "amity-noida",
+    "name": "Amity University Noida",
+    "city": "Noida",
+    "state": "Uttar Pradesh",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "BBA",
+      "MBA",
+      "Law"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "University Admissions"
+    ],
+    "website": "https://www.amity.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "christ",
+    "name": "Christ University",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "BCA",
+      "BBA",
+      "B.Com",
+      "BA"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "University Admissions"
+    ],
+    "website": "https://christuniversity.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "symbiosis",
+    "name": "Symbiosis International University",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "type": "Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "BBA",
+      "BCA",
+      "Law"
+    ],
+    "acceptedExams": [
+      "SET",
+      "SLAT"
+    ],
+    "website": "https://www.siu.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nmims",
+    "name": "SVKM's NMIMS",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech",
+      "BBA",
+      "MBA",
+      "B.Pharm"
+    ],
+    "acceptedExams": [
+      "NPAT",
+      "NMIMS CET"
+    ],
+    "website": "https://www.nmims.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "coep",
+    "name": "COEP Technological University",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "type": "State University",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Mechanical",
+      "B.Tech Electrical"
+    ],
+    "acceptedExams": [
+      "MHT-CET",
+      "JEE Main"
+    ],
+    "website": "https://www.coeptech.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "vjti",
+    "name": "Veermata Jijabai Technological Institute",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Government Autonomous",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "MHT-CET",
+      "JEE Main"
+    ],
+    "website": "https://vjti.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "bits-goa",
+    "name": "BITS Pilani Goa Campus",
+    "city": "Goa",
+    "state": "Goa",
+    "type": "Private Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "B.E CSE",
+      "B.E ECE"
+    ],
+    "acceptedExams": [
+      "BITSAT"
+    ],
+    "website": "https://www.bits-pilani.ac.in/goa/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-calicut",
+    "name": "National Institute of Technology Calicut",
+    "city": "Kozhikode",
+    "state": "Kerala",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nitc.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-gandhinagar",
+    "name": "Indian Institute of Technology Gandhinagar",
+    "city": "Gandhinagar",
+    "state": "Gujarat",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Electrical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://iitgn.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "daiict",
+    "name": "Dhirubhai Ambani Institute of Information and Communication Technology",
+    "city": "Gandhinagar",
+    "state": "Gujarat",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech ICT",
+      "M.Tech"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.daiict.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-bhu",
+    "name": "Indian Institute of Technology (BHU) Varanasi",
+    "city": "Varanasi",
+    "state": "Uttar Pradesh",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Electrical",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://iitbhu.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "bhu",
+    "name": "Banaras Hindu University",
+    "city": "Varanasi",
+    "state": "Uttar Pradesh",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Com",
+      "Law"
+    ],
+    "acceptedExams": [
+      "CUET-UG"
+    ],
+    "website": "https://www.bhu.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "aligarh",
+    "name": "Aligarh Muslim University",
+    "city": "Aligarh",
+    "state": "Uttar Pradesh",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech",
+      "B.Sc",
+      "B.Com",
+      "Law"
+    ],
+    "acceptedExams": [
+      "CUET-UG"
+    ],
+    "website": "https://www.amu.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iim-ahmedabad",
+    "name": "Indian Institute of Management Ahmedabad",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBA",
+      "PGP"
+    ],
+    "acceptedExams": [
+      "CAT"
+    ],
+    "website": "https://www.iima.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iim-bangalore",
+    "name": "Indian Institute of Management Bangalore",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBA",
+      "PGP"
+    ],
+    "acceptedExams": [
+      "CAT"
+    ],
+    "website": "https://www.iimb.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iim-calcutta",
+    "name": "Indian Institute of Management Calcutta",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBA",
+      "PGP"
+    ],
+    "acceptedExams": [
+      "CAT"
+    ],
+    "website": "https://www.iimcal.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iim-kozhikode",
+    "name": "Indian Institute of Management Kozhikode",
+    "city": "Kozhikode",
+    "state": "Kerala",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBA",
+      "PGP"
+    ],
+    "acceptedExams": [
+      "CAT"
+    ],
+    "website": "https://iimk.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "anna-ap",
+    "name": "Andhra University",
+    "city": "Visakhapatnam",
+    "state": "Andhra Pradesh",
+    "type": "State University",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech",
+      "B.Sc",
+      "B.Com"
+    ],
+    "acceptedExams": [
+      "AP EAPCET",
+      "University Admissions"
+    ],
+    "website": "https://www.andhrauniversity.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "vit-ap",
+    "name": "VIT-AP University",
+    "city": "Amaravati",
+    "state": "Andhra Pradesh",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "BBA"
+    ],
+    "acceptedExams": [
+      "VITEEE"
+    ],
+    "website": "https://vitap.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nitap",
+    "name": "National Institute of Technology Arunachal Pradesh",
+    "city": "Yupia",
+    "state": "Arunachal Pradesh",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nitap.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "gauhati-univ",
+    "name": "Gauhati University",
+    "city": "Guwahati",
+    "state": "Assam",
+    "type": "State University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Com",
+      "MBA"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "University Admissions"
+    ],
+    "website": "https://gauhati.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-patna",
+    "name": "Indian Institute of Technology Patna",
+    "city": "Patna",
+    "state": "Bihar",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitp.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-patna",
+    "name": "National Institute of Technology Patna",
+    "city": "Patna",
+    "state": "Bihar",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.nitp.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-raipur",
+    "name": "National Institute of Technology Raipur",
+    "city": "Raipur",
+    "state": "Chhattisgarh",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.nitrr.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "gec-daman",
+    "name": "Government Engineering College, Daman",
+    "city": "Daman",
+    "state": "Dadra and Nagar Haveli and Daman and Diu",
+    "type": "Government College",
+    "ownership": "Government",
+    "courses": [
+      "Engineering"
+    ],
+    "acceptedExams": [
+      "State Admissions"
+    ],
+    "website": "https://daman.nic.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-goa",
+    "name": "National Institute of Technology Goa",
+    "city": "Ponda",
+    "state": "Goa",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech EEE"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.nitgoa.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nirma",
+    "name": "Nirma University",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Pharm",
+      "BBA"
+    ],
+    "acceptedExams": [
+      "JEE Main",
+      "GUJCET"
+    ],
+    "website": "https://nirmauni.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "mnit-jaipur",
+    "name": "Malaviya National Institute of Technology Jaipur",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://mnit.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iim-trichy",
+    "name": "Indian Institute of Management Tiruchirappalli",
+    "city": "Tiruchirappalli",
+    "state": "Tamil Nadu",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBA"
+    ],
+    "acceptedExams": [
+      "CAT"
+    ],
+    "website": "https://www.iimtrichy.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-hamirpur",
+    "name": "National Institute of Technology Hamirpur",
+    "city": "Hamirpur",
+    "state": "Himachal Pradesh",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nith.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "shoolini",
+    "name": "Shoolini University",
+    "city": "Solan",
+    "state": "Himachal Pradesh",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech",
+      "B.Pharm",
+      "B.Sc"
+    ],
+    "acceptedExams": [
+      "University Admissions"
+    ],
+    "website": "https://shooliniuniversity.com/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-dhanbad",
+    "name": "Indian Institute of Technology (ISM) Dhanbad",
+    "city": "Dhanbad",
+    "state": "Jharkhand",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Mining",
+      "B.Tech Electrical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitism.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "bit-mesra",
+    "name": "Birla Institute of Technology Mesra",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Arch"
+    ],
+    "acceptedExams": [
+      "JEE Main",
+      "University Admissions"
+    ],
+    "website": "https://www.bitmesra.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-indore",
+    "name": "Indian Institute of Technology Indore",
+    "city": "Indore",
+    "state": "Madhya Pradesh",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech Electrical",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://iiti.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "manit-bhopal",
+    "name": "Maulana Azad National Institute of Technology Bhopal",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.manit.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-manipur",
+    "name": "National Institute of Technology Manipur",
+    "city": "Imphal",
+    "state": "Manipur",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nitmanipur.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nehu",
+    "name": "North-Eastern Hill University",
+    "city": "Shillong",
+    "state": "Meghalaya",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "MBA",
+      "MCA"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "CUET-PG"
+    ],
+    "website": "https://nehu.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "mizoram-univ",
+    "name": "Mizoram University",
+    "city": "Aizawl",
+    "state": "Mizoram",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Tech"
+    ],
+    "acceptedExams": [
+      "CUET-UG"
+    ],
+    "website": "https://mzu.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nagaland-univ",
+    "name": "Nagaland University",
+    "city": "Lumami",
+    "state": "Nagaland",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Com"
+    ],
+    "acceptedExams": [
+      "CUET-UG"
+    ],
+    "website": "https://nagalanduniversity.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-sikkim",
+    "name": "National Institute of Technology Sikkim",
+    "city": "Ravangla",
+    "state": "Sikkim",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nitsikkim.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "smu-sikkim",
+    "name": "Sikkim Manipal Institute of Technology",
+    "city": "Majitar",
+    "state": "Sikkim",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE"
+    ],
+    "acceptedExams": [
+      "JEE Main",
+      "University Admissions"
+    ],
+    "website": "https://smu.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-agartala",
+    "name": "National Institute of Technology Agartala",
+    "city": "Agartala",
+    "state": "Tripura",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Civil"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nita.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "jammu-univ",
+    "name": "University of Jammu",
+    "city": "Jammu",
+    "state": "Jammu & Kashmir",
+    "type": "State University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Com",
+      "MBA"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "University Admissions"
+    ],
+    "website": "https://www.jammuuniversity.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nit-srinagar",
+    "name": "National Institute of Technology Srinagar",
+    "city": "Srinagar",
+    "state": "Jammu & Kashmir",
+    "type": "National Institute of Technology",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Electrical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://nitsri.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "university-ladakh",
+    "name": "University of Ladakh",
+    "city": "Leh",
+    "state": "Ladakh",
+    "type": "University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Com"
+    ],
+    "acceptedExams": [
+      "University Admissions"
+    ],
+    "website": "https://uol.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "pu-chandigarh",
+    "name": "Panjab University",
+    "city": "Chandigarh",
+    "state": "Chandigarh",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "B.Com",
+      "Law"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "University Admissions"
+    ],
+    "website": "https://puchd.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "thapar",
+    "name": "Thapar Institute of Engineering and Technology",
+    "city": "Patiala",
+    "state": "Punjab",
+    "type": "Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Main"
+    ],
+    "website": "https://www.thapar.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "jecrc",
+    "name": "JECRC University",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "BCA",
+      "BBA"
+    ],
+    "acceptedExams": [
+      "JEE Main",
+      "University Admissions"
+    ],
+    "website": "https://jecrcuniversity.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "amity-jaipur",
+    "name": "Amity University Rajasthan",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech",
+      "BBA",
+      "MBA",
+      "Law"
+    ],
+    "acceptedExams": [
+      "JEE Main",
+      "University Admissions"
+    ],
+    "website": "https://www.amity.edu/jaipur/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "bits-hyderabad",
+    "name": "BITS Pilani Hyderabad Campus",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "type": "Private Deemed University",
+    "ownership": "Private",
+    "courses": [
+      "B.E CSE",
+      "B.E ECE",
+      "B.Pharm"
+    ],
+    "acceptedExams": [
+      "BITSAT"
+    ],
+    "website": "https://www.bits-pilani.ac.in/hyderabad/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "gitam",
+    "name": "GITAM University",
+    "city": "Visakhapatnam",
+    "state": "Andhra Pradesh",
+    "type": "Private University",
+    "ownership": "Private",
+    "courses": [
+      "B.Tech CSE",
+      "B.Pharm",
+      "BBA"
+    ],
+    "acceptedExams": [
+      "GAT",
+      "JEE Main"
+    ],
+    "website": "https://www.gitam.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iit-bhubaneswar",
+    "name": "Indian Institute of Technology Bhubaneswar",
+    "city": "Bhubaneswar",
+    "state": "Odisha",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Tech CSE",
+      "B.Tech ECE",
+      "B.Tech Mechanical"
+    ],
+    "acceptedExams": [
+      "JEE Advanced"
+    ],
+    "website": "https://www.iitbbs.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "jipmer",
+    "name": "Jawaharlal Institute of Postgraduate Medical Education & Research",
+    "city": "Puducherry",
+    "state": "Puducherry",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "MBBS",
+      "MD/MS"
+    ],
+    "acceptedExams": [
+      "NEET-UG"
+    ],
+    "website": "https://www.jipmer.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "pondicherry-univ",
+    "name": "Pondicherry University",
+    "city": "Puducherry",
+    "state": "Puducherry",
+    "type": "Central University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "B.Sc",
+      "MBA",
+      "MCA"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "CUET-PG"
+    ],
+    "website": "https://www.pondiuni.edu.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "tiss",
+    "name": "Tata Institute of Social Sciences",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "type": "Deemed University",
+    "ownership": "Government",
+    "courses": [
+      "BA",
+      "MA",
+      "MBA",
+      "MPH"
+    ],
+    "acceptedExams": [
+      "CUET-UG",
+      "CUET-PG"
+    ],
+    "website": "https://tiss.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nift-delhi",
+    "name": "National Institute of Fashion Technology Delhi",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "type": "Institute under Ministry of Textiles",
+    "ownership": "Government",
+    "courses": [
+      "B.Des",
+      "B.FTech",
+      "M.Des"
+    ],
+    "acceptedExams": [
+      "NIFT Entrance"
+    ],
+    "website": "https://www.nift.ac.in/delhi/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "nid",
+    "name": "National Institute of Design Ahmedabad",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "B.Des",
+      "M.Des"
+    ],
+    "acceptedExams": [
+      "NID DAT"
+    ],
+    "website": "https://www.nid.edu/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
+  },
+  {
+    "id": "iiser-pune",
+    "name": "Indian Institute of Science Education and Research Pune",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "type": "Institute of National Importance",
+    "ownership": "Government",
+    "courses": [
+      "BS-MS",
+      "PhD"
+    ],
+    "acceptedExams": [
+      "IISER Aptitude Test"
+    ],
+    "website": "https://www.iiserpune.ac.in/",
+    "dataStatus": "CURATED_STARTER_DATA",
+    "verificationNote": "Use the official institution website for current admissions, fees, eligibility and dates."
   }
 ]

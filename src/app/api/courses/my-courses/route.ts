@@ -1,9 +1,3 @@
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
-import { prepareExcelStore } from '@/lib/excelPersistence';
-import { validateStudentRequest } from '@/lib/roleGuard';
-
 import { NextRequest, NextResponse } from 'next/server';
 
 import {
@@ -15,17 +9,10 @@ export async function GET(
   request: NextRequest
 ) {
   try {
-    const auth = validateStudentRequest(request);
-    if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();
     const studentId =
       request.nextUrl.searchParams.get(
         'studentId'
       );
-
-    if (studentId && studentId !== auth.userId) {
-      return NextResponse.json({ success: false, message: 'You cannot access another student account.' }, { status: 403 });
-    }
 
     if (!studentId) {
       return NextResponse.json(

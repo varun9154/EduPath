@@ -40,6 +40,3 @@ Thumbs.db
 
 # Local development data
 data/leads_store.json
-# EduPath local Excel runtime data
-src/data/excel/*.xlsx
-data/*.xlsx

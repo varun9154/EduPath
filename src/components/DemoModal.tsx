@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { X, CheckCircle2, Calendar, Clock, Sparkles, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import statesData from '@/data/states.json';
 import coursesData from '@/data/courses.json';
@@ -21,7 +21,6 @@ export default function DemoModal({ isOpen, onClose, defaultCourse }: DemoModalP
     name: '',
     mobile: '',
     email: '',
-    password: '',
     educationLevel: '12th Appearing',
     stream: 'Science (PCM)',
     state: 'Karnataka',
@@ -29,40 +28,9 @@ export default function DemoModal({ isOpen, onClose, defaultCourse }: DemoModalP
     careerGoal: 'Pharma Industry QA/QC & Regulatory Affairs',
     entranceExam: 'KCET',
     counsellingMode: 'Online Video Call',
-    preferredDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    preferredDate: '',
     preferredTimeSlot: '10:00 AM – 10:30 AM'
   });
-
-  useEffect(() => {
-    if (!isOpen || typeof window === 'undefined') return;
-
-    try {
-      const cached = localStorage.getItem('edupath_student');
-      if (!cached) return;
-
-      const student = JSON.parse(cached);
-      const studentId = student?.studentId || student?.id;
-
-      if (!studentId) return;
-
-      setFormData(prev => ({
-        ...prev,
-        name: String(student.name || prev.name),
-        mobile: String(student.phone || student.mobile || prev.mobile),
-        email: String(student.email || prev.email),
-        interestedCourse: String(
-          defaultCourse ||
-          student.interestedCourse ||
-          prev.interestedCourse
-        ),
-        state: String(student.state || prev.state),
-        careerGoal: String(student.careerGoal || prev.careerGoal),
-        entranceExam: String(student.targetExam || prev.entranceExam),
-      }));
-    } catch {
-      // Ignore invalid cached UI data. The server session remains authoritative.
-    }
-  }, [isOpen, defaultCourse]);
 
   if (!isOpen) return null;
 
@@ -77,12 +45,20 @@ export default function DemoModal({ isOpen, onClose, defaultCourse }: DemoModalP
         setErrorMessage('Please complete Name, Email, and Mobile number.');
         return;
       }
-      if (!formData.password || formData.password.length < 6) {
-        setErrorMessage('Please create a password with at least 6 characters.');
-        return;
-      }
     }
     if (step < 10) {
+      // Give the date step a sensible default without calling impure
+      // browser time APIs during render. The value is generated in the
+      // button event handler, which is allowed to read the current time.
+      if (step === 8 && !formData.preferredDate) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        setFormData(prev => ({
+          ...prev,
+          preferredDate: tomorrow.toISOString().split('T')[0],
+        }));
+      }
+
       setStep(prev => prev + 1);
     } else if (step === 10) {
       handleSubmit();
@@ -104,56 +80,8 @@ export default function DemoModal({ isOpen, onClose, defaultCourse }: DemoModalP
       });
       const data = await res.json();
       if (data.success) {
-        const result = data.data || {};
-
-        // /api/register creates the student and, when a password is supplied,
-        // also creates the secure student session cookie. Persist a normalized
-        // client cache so the dashboard/navbar can immediately identify the
-        // logged-in student.
-        const studentId = String(
-          result.studentId || ''
-        );
-
-        if (studentId && typeof window !== 'undefined') {
-          const student = {
-            studentId,
-            id: studentId,
-            name: formData.name,
-            email: formData.email.trim().toLowerCase(),
-            phone: formData.mobile,
-            mobile: formData.mobile,
-            educationLevel: formData.educationLevel,
-            stream: formData.stream,
-            state: formData.state,
-            interestedCourse: formData.interestedCourse,
-            careerGoal: formData.careerGoal,
-            targetExam: formData.entranceExam,
-            onboardingCompleted: false,
-          };
-
-          localStorage.setItem(
-            'edupath_student',
-            JSON.stringify(student)
-          );
-
-          window.dispatchEvent(
-            new CustomEvent('edupath-auth-changed', {
-              detail: {
-                authenticated: true,
-                student,
-              },
-            })
-          );
-        }
-
-        setSuccessData({
-          ...result,
-          interestedCourse: result.interestedCourse || formData.interestedCourse,
-          preferredDate: result.preferredDate || formData.preferredDate,
-          preferredTimeSlot: result.preferredTimeSlot || formData.preferredTimeSlot,
-          counsellingMode: result.counsellingMode || formData.counsellingMode,
-        });
-        setStep(11);
+        setSuccessData(data.data);
+        setStep(11); // Step 11: Confirmation
       } else {
         setErrorMessage(data.message || 'Registration failed.');
       }
@@ -251,20 +179,6 @@ export default function DemoModal({ isOpen, onClose, defaultCourse }: DemoModalP
                   onChange={(e) => handleChange('email', e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
                 />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Create Student Password *</label>
-                <input
-                  type="password"
-                  minLength={6}
-                  placeholder="At least 6 characters"
-                  value={formData.password}
-                  onChange={(e) => handleChange('password', e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
-                />
-                <p className="mt-1 text-[11px] text-slate-500">
-                  This password lets you return to your EduPath student dashboard without logging in again after the demo request.
-                </p>
               </div>
             </div>
           )}

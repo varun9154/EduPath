@@ -13,7 +13,9 @@ export default function StateExamsDetailPage() {
 
   const stateInfo = statesData.find(s => s.id === stateId);
   const stateExams = examsData.filter(e => e.stateId === stateId);
-  const nationalExams = examsData.filter(e => e.stateId === 'delhi'); // JEE Main, NEET-UG, CUET-UG, GPAT, CLAT
+  const nationalIds = new Set(['jee-main', 'neet-ug', 'cuet-ug', 'clat', 'gpat', 'gate']);
+  const nationalExams = examsData.filter(e => nationalIds.has(e.id) || String(e.courseCategory || '').toLowerCase().includes('all india'));
+  const displayedNationalExams = nationalExams.filter(e => !stateExams.some(s => s.id === e.id));
 
   if (!stateInfo) {
     return (
@@ -116,20 +118,24 @@ export default function StateExamsDetailPage() {
         )}
       </div>
 
-      {/* National Level Exams Applicable */}
-      <div className="space-y-4 pt-6">
-        <h3 className="text-lg font-bold text-slate-900">National Exams Applicable in {stateInfo.name}</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {nationalExams.map((e) => (
-            <div key={e.id} className="p-4 bg-white border border-slate-200 rounded-xl space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-sm text-slate-900">{e.examName}</span>
-                <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded">Verified</span>
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 flex items-center">
+            <CheckCircle2 className="w-6 h-6 mr-2 text-brand-600" />
+            National / All-India Exams for {stateInfo.name}
+          </h2>
+          <p className="text-xs text-slate-500 mt-1">State preference personalizes local opportunities, but national opportunities remain visible.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {displayedNationalExams.map((exam) => (
+            <div key={exam.id} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+              <div className="flex items-center justify-between gap-2">
+                <span className="px-2.5 py-1 rounded-full bg-brand-50 text-brand-700 text-[10px] font-black">NATIONAL</span>
+                <span className="text-[10px] text-slate-500">{exam.lastVerifiedDate}</span>
               </div>
-              <p className="text-xs text-slate-600 line-clamp-2">{e.fullName}</p>
-              <a href={e.officialWebsite} target="_blank" rel="noreferrer" className="text-xs font-bold text-brand-600 hover:underline flex items-center pt-1">
-                Official NTA Portal <ExternalLink className="w-3 h-3 ml-1" />
-              </a>
+              <h3 className="mt-3 text-lg font-black text-slate-900">{exam.fullName} ({exam.examName})</h3>
+              <p className="text-xs text-slate-600 mt-2">{exam.courseCategory}</p>
+              <a href={exam.officialWebsite} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-4 text-xs font-bold text-brand-600">Official portal <ExternalLink className="w-3 h-3"/></a>
             </div>
           ))}
         </div>

@@ -16,7 +16,7 @@ export default function StudentRegisterPage() {
     email: '',
     password: '',
     mobile: '',
-    educationLevel: '10th Standard',
+    educationLevel: '12th Appearing',
     stream: 'Science (PCM)',
     state: 'Karnataka',
     city: 'Bengaluru',
@@ -41,8 +41,23 @@ export default function StudentRegisterPage() {
       const regData = await regRes.json();
 
       if (regData.success) {
-        localStorage.setItem('edupath_student', JSON.stringify({ name: form.name, email: form.email, mobile: form.mobile }));
-        router.push('/dashboard');
+        const authRes = await fetch('/api/auth/student', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ action: 'register', email: form.email, password: form.password })
+        });
+        const authData = await authRes.json().catch(() => ({}));
+        if (!authRes.ok || !authData.success) {
+          setErrorMessage(authData.message || 'Account credentials could not be created.');
+          return;
+        }
+
+        const studentData = { ...(authData.student || {}), ...form };
+        if (!studentData.studentId && authData.student?.id) studentData.studentId = authData.student.id;
+        localStorage.setItem('edupath_student', JSON.stringify(studentData));
+        router.replace('/dashboard');
+        router.refresh();
       } else {
         setErrorMessage(regData.message || 'Registration failed.');
       }
@@ -113,24 +128,10 @@ export default function StudentRegisterPage() {
             <input
               type="password"
               required
-              minLength={6}
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               className="w-full p-2.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
             />
-          </div>
-
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Current Education Level *</label>
-            <select
-              value={form.educationLevel}
-              onChange={(e) => setForm({ ...form, educationLevel: e.target.value })}
-              className="w-full p-2.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none"
-            >
-              {['10th Standard', '10th Passed', '11th Standard', '12th Appearing', '12th Passed', 'Diploma Student', 'Undergraduate (Pursuing Degree)'].map((level) => (
-                <option key={level} value={level}>{level}</option>
-              ))}
-            </select>
           </div>
 
           <div>

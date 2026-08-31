@@ -8,7 +8,7 @@ import MobileStickyCTA from '@/components/MobileStickyCTA';
 export const metadata: Metadata = {
   title: 'EduPath — From 10th to Your First Job',
   description:
-    'Complete guidance platform for 12th students: All 36 Indian States & UTs entrance exams, Engineering, Medical, Pharmacy, Management, Law, Architecture, Design, Commerce, Arts, professional courses, career roadmaps, study resources, and free expert counselling.',
+    'Complete guidance platform for 10th and 12th students: All 36 Indian States & UTs entrance exams, Engineering, Medical, Pharmacy, Management, Law, Architecture, Design, Commerce, Arts, professional courses, career roadmaps, study resources, and free expert counselling.',
   keywords: [
     'EduPath',
     'EduPath AI',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'career roadmap',
     'college guidance',
     'student counselling',
-    '10th career guidance',
+    '12th career guidance',
   ],
   authors: [{ name: 'EduPath' }],
   creator: 'EduPath',

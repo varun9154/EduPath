@@ -1,54 +1,67 @@
-import {
-  leadStore,
-  StudentRecord as CoreStudentRecord,
-  DemoBookingRecord,
-} from '@/lib/storage';
-import { EXCEL_FILE } from '@/lib/excelPersistence';
-import * as XLSX from 'xlsx';
 import fs from 'fs';
+import path from 'path';
+import * as XLSX from 'xlsx';
 
-/**
- * ============================================================
- * EDUPATH - EXCEL STORE
- * ============================================================
- *
- * This module provides the legacy/local Excel-compatible data
- * access layer used by the application.
- *
- * IMPORTANT:
- * - StudentRecord extends the CORE StudentRecord.
- * - registeredAt / updatedAt are optional here because the
- *   core storage layer may return older records without them.
- * - Production persistence should use the production database
- *   layer when configured.
- * ============================================================
- */
+const DATA_DIR = path.join(process.cwd(), 'data');
 
-export interface StudentRecord extends CoreStudentRecord {
+const EXCEL_FILE = path.join(
+  DATA_DIR,
+  'edupath-data.xlsx'
+);
+
+const STUDENTS_SHEET = 'Students';
+const DEMOS_SHEET = 'DemoBookings';
+const COURSE_PURCHASES_SHEET = 'CoursePurchases';
+const COURSE_PROGRESS_SHEET = 'CourseProgress';
+
+/* =========================================================
+   STUDENT
+========================================================= */
+
+export interface StudentRecord {
+  studentId: string;
+
+  name: string;
+  email: string;
   phone?: string;
+  mobile?: string;
   password?: string;
-  passwordHash?: string;
 
+  educationLevel?: string;
   currentClass?: string;
+  stream?: string;
   board?: string;
+
   percentage?: string | number;
   passingYear?: string | number;
+
+  marks10th?: string | number;
+  marks12th?: string | number;
 
   tenthStatus?: string;
   twelfthStatus?: string;
 
-  preferredStudyState?: string;
-  learningMode?: string;
-  targetJob?: string;
-  preferredExam?: string;
-  targetExam?: string;
-  entranceExams?: string;
-  preferredIndustry?: string;
+  state?: string;
+  city?: string;
 
+  preferredStudyState?: string;
+  preferredStudyMode?: string;
+  learningMode?: string;
+
+  careerGoal?: string;
+  interestedCourse?: string;
+  targetJob?: string;
+
+  targetExam?: string;
+  preferredExam?: string;
+  entranceExams?: string;
+
+  preferredIndustry?: string;
   budget?: string | number;
   preferredCollegeType?: string;
 
   roadmapId?: string;
+
   currentStep?: number | string;
   totalSteps?: number | string;
 
@@ -57,13 +70,15 @@ export interface StudentRecord extends CoreStudentRecord {
   onboardingCompleted?: boolean;
   onboardingCompletedAt?: string;
 
-  /**
-   * These are optional in the Excel compatibility layer.
-   * The API/database layer can normalize them when required.
-   */
-  registeredAt?: string;
-  updatedAt?: string;
+  registeredAt: string;
+  updatedAt: string;
+
+  status?: string;
 }
+
+/* =========================================================
+   DEMO BOOKING
+========================================================= */
 
 export interface DemoBooking {
   bookingId: string;
@@ -72,11 +87,10 @@ export interface DemoBooking {
 
   name: string;
   email: string;
-
   phone?: string;
-  mobile?: string;
 
   interestedCourse?: string;
+
   counsellingMode?: string;
 
   preferredDate?: string;
@@ -89,19 +103,27 @@ export interface DemoBooking {
   updatedAt: string;
 }
 
+/* =========================================================
+   COURSE PURCHASE
+========================================================= */
+
 export interface CoursePurchase {
   purchaseId: string;
 
   studentId: string;
+
   courseId: string;
 
   courseTitle?: string;
 
   amount?: number | string;
+
   currency?: string;
 
   paymentStatus?: string;
+
   paymentReference?: string;
+
   paymentMethod?: string;
 
   status?: string;
@@ -112,10 +134,15 @@ export interface CoursePurchase {
   updatedAt: string;
 }
 
+/* =========================================================
+   COURSE PROGRESS
+========================================================= */
+
 export interface CourseProgress {
   progressId: string;
 
   studentId: string;
+
   courseId: string;
 
   courseTitle?: string;
@@ -123,546 +150,586 @@ export interface CourseProgress {
   progressPercent?: number;
 
   completedModules?: number;
+
   totalModules?: number;
 
   currentModule?: string;
+
   currentLesson?: string;
 
   status?: string;
 
   startedAt?: string;
+
   completedAt?: string;
+
   lastAccessedAt?: string;
 
   createdAt: string;
+
   updatedAt: string;
 }
 
-/**
- * ============================================================
- * EXCEL HELPERS
- * ============================================================
- */
+/* =========================================================
+   FILE HELPERS
+========================================================= */
 
-function readWorkbook(): XLSX.WorkBook {
-  if (!fs.existsSync(EXCEL_FILE)) {
-    return XLSX.utils.book_new();
+function ensureDataDirectory() {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, {
+      recursive: true,
+    });
   }
-
-  return XLSX.readFile(EXCEL_FILE);
 }
 
-function readRows<T>(sheet: string): T[] {
-  const workbook = readWorkbook();
+function createWorkbookIfMissing() {
+  ensureDataDirectory();
 
-  const worksheet = workbook.Sheets[sheet];
+  if (fs.existsSync(EXCEL_FILE)) {
+    return;
+  }
 
-  if (!worksheet) {
+  const workbook = XLSX.utils.book_new();
+
+  const studentsSheet =
+    XLSX.utils.json_to_sheet([]);
+
+  const demosSheet =
+    XLSX.utils.json_to_sheet([]);
+
+  const purchasesSheet =
+    XLSX.utils.json_to_sheet([]);
+
+  const progressSheet =
+    XLSX.utils.json_to_sheet([]);
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    studentsSheet,
+    STUDENTS_SHEET
+  );
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    demosSheet,
+    DEMOS_SHEET
+  );
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    purchasesSheet,
+    COURSE_PURCHASES_SHEET
+  );
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    progressSheet,
+    COURSE_PROGRESS_SHEET
+  );
+
+  XLSX.writeFile(
+    workbook,
+    EXCEL_FILE
+  );
+}
+
+function loadWorkbook() {
+  createWorkbookIfMissing();
+
+  return XLSX.readFile(
+    EXCEL_FILE
+  );
+}
+
+function saveWorkbook(
+  workbook: XLSX.WorkBook
+) {
+  XLSX.writeFile(
+    workbook,
+    EXCEL_FILE
+  );
+}
+
+function readSheet<T>(
+  workbook: XLSX.WorkBook,
+  sheetName: string
+): T[] {
+  const sheet =
+    workbook.Sheets[sheetName];
+
+  if (!sheet) {
     return [];
   }
 
-  return XLSX.utils.sheet_to_json<T>(worksheet, {
-    defval: '',
-  });
+  return XLSX.utils.sheet_to_json<T>(
+    sheet,
+    {
+      defval: '',
+    }
+  );
 }
 
-function writeRows<T>(
-  sheet: string,
-  rows: T[],
-): void {
-  const workbook = readWorkbook();
+function writeSheet<T>(
+  workbook: XLSX.WorkBook,
+  sheetName: string,
+  rows: T[]
+) {
+  const sheet =
+    XLSX.utils.json_to_sheet(rows);
 
-  const worksheet = XLSX.utils.json_to_sheet(rows);
+  workbook.Sheets[sheetName] =
+    sheet;
 
-  workbook.Sheets[sheet] = worksheet;
-
-  if (!workbook.SheetNames.includes(sheet)) {
-    workbook.SheetNames.push(sheet);
+  if (
+    !workbook.SheetNames.includes(
+      sheetName
+    )
+  ) {
+    workbook.SheetNames.push(
+      sheetName
+    );
   }
-
-  XLSX.writeFile(workbook, EXCEL_FILE);
 }
 
-/**
- * ============================================================
- * STUDENTS
- * ============================================================
- */
+/* =========================================================
+   STUDENTS
+========================================================= */
 
 export function getStudents(): StudentRecord[] {
-  return leadStore.getStudents().map((student) => ({
-    ...student,
+  const workbook =
+    loadWorkbook();
 
-    registeredAt:
-      typeof (student as StudentRecord).registeredAt === 'string'
-        ? (student as StudentRecord).registeredAt
-        : undefined,
-
-    updatedAt:
-      typeof (student as StudentRecord).updatedAt === 'string'
-        ? (student as StudentRecord).updatedAt
-        : undefined,
-  }));
+  return readSheet<StudentRecord>(
+    workbook,
+    STUDENTS_SHEET
+  );
 }
 
 export function findStudentByEmail(
-  email: string,
+  email: string
 ): StudentRecord | null {
-  const student = leadStore.getStudentByEmail(email);
+  const normalized =
+    email
+      .trim()
+      .toLowerCase();
 
-  if (!student) {
-    return null;
-  }
+  const students =
+    getStudents();
 
-  return {
-    ...student,
-
-    registeredAt:
-      typeof (student as StudentRecord).registeredAt === 'string'
-        ? (student as StudentRecord).registeredAt
-        : undefined,
-
-    updatedAt:
-      typeof (student as StudentRecord).updatedAt === 'string'
-        ? (student as StudentRecord).updatedAt
-        : undefined,
-  };
+  return (
+    students.find(
+      (student) =>
+        student.email
+          ?.trim()
+          .toLowerCase() ===
+        normalized
+    ) || null
+  );
 }
 
 export function findStudentById(
-  id: string,
+  studentId: string
 ): StudentRecord | null {
-  const student = leadStore.getStudentById(id);
+  const students =
+    getStudents();
 
-  if (!student) {
-    return null;
-  }
-
-  return {
-    ...student,
-
-    registeredAt:
-      typeof (student as StudentRecord).registeredAt === 'string'
-        ? (student as StudentRecord).registeredAt
-        : undefined,
-
-    updatedAt:
-      typeof (student as StudentRecord).updatedAt === 'string'
-        ? (student as StudentRecord).updatedAt
-        : undefined,
-  };
+  return (
+    students.find(
+      (student) =>
+        student.studentId ===
+        studentId
+    ) || null
+  );
 }
 
 export function createStudent(
-  student: StudentRecord,
+  student: StudentRecord
 ): StudentRecord {
-  const now = new Date().toISOString();
+  const workbook =
+    loadWorkbook();
 
-  /*
-   * Normalize the dates BEFORE passing the record to the
-   * underlying storage layer.
-   *
-   * The storage layer can expose these properties as unknown,
-   * so we deliberately create our own strongly typed strings.
-   */
-  const registeredAt: string =
-    typeof student.registeredAt === 'string'
-      ? student.registeredAt
-      : now;
+  const students =
+    readSheet<StudentRecord>(
+      workbook,
+      STUDENTS_SHEET
+    );
 
-  const updatedAt: string =
-    typeof student.updatedAt === 'string'
-      ? student.updatedAt
-      : now;
+  const emailExists =
+    students.some(
+      (item) =>
+        item.email
+          ?.trim()
+          .toLowerCase() ===
+        student.email
+          ?.trim()
+          .toLowerCase()
+    );
 
-  /*
-   * Core storage record.
-   *
-   * The underlying storage layer is allowed to have its own
-   * StudentRecord definition. We pass the complete student
-   * object while explicitly normalizing the timestamps.
-   */
-  const normalized = {
-    ...student,
-    registeredAt,
-    updatedAt,
-  } as CoreStudentRecord;
+  if (emailExists) {
+    throw new Error(
+      'A student with this email already exists.'
+    );
+  }
 
-  const created = leadStore.addStudent(normalized);
+  students.push(student);
 
-  /*
-   * Do NOT read registeredAt / updatedAt back from `created`
-   * because the legacy storage type may expose them as unknown.
-   *
-   * We already have validated string values above.
-   */
-  return {
-    ...created,
+  writeSheet(
+    workbook,
+    STUDENTS_SHEET,
+    students
+  );
 
-    registeredAt,
+  saveWorkbook(workbook);
 
-    updatedAt,
-  };
+  return student;
 }
-
-  
 
 export function updateStudent(
   studentId: string,
-  updates: Partial<StudentRecord>,
+  updates: Partial<StudentRecord>
 ): StudentRecord | null {
-  const students = getStudents();
+  const workbook =
+    loadWorkbook();
 
-  const index = students.findIndex(
-    (student) => student.studentId === studentId,
-  );
+  const students =
+    readSheet<StudentRecord>(
+      workbook,
+      STUDENTS_SHEET
+    );
 
-  if (index < 0) {
+  const index =
+    students.findIndex(
+      (student) =>
+        student.studentId ===
+        studentId
+    );
+
+  if (index === -1) {
     return null;
   }
 
-  const updatedAt = new Date().toISOString();
-
-  const updated: StudentRecord = {
+  students[index] = {
     ...students[index],
     ...updates,
-    updatedAt,
+    updatedAt:
+      new Date().toISOString(),
   };
 
-  students[index] = updated;
+  writeSheet(
+    workbook,
+    STUDENTS_SHEET,
+    students
+  );
 
-  /**
-   * Excel compatibility persistence.
-   *
-   * In production, the database layer should be the primary
-   * persistence mechanism. This write is retained for the
-   * local/legacy Excel workflow.
-   */
-  try {
-    writeRows(
-      'Students',
-      students,
-    );
-  } catch (error) {
-    console.error(
-      '[EduPath] Failed to write Students sheet:',
-      error,
-    );
-  }
+  saveWorkbook(workbook);
 
-  return updated;
+  return students[index];
 }
 
-/**
- * ============================================================
- * DEMO BOOKINGS
- * ============================================================
- */
+/* =========================================================
+   DEMO BOOKINGS
+========================================================= */
 
 export function getDemoBookings(): DemoBooking[] {
-  return leadStore
-    .getDemoBookings()
-    .map((booking) => {
-      const registrationDate =
-        String(
-          booking.registrationDate ||
-            '',
-        );
+  const workbook =
+    loadWorkbook();
 
-      return {
-        bookingId: String(
-          booking.bookingId || '',
-        ),
-
-        studentId: String(
-          booking.studentId || '',
-        ),
-
-        name: String(
-          booking.name || '',
-        ),
-
-        email: String(
-          booking.email || '',
-        ),
-
-        phone: String(
-          booking.mobile || '',
-        ),
-
-        mobile: String(
-          booking.mobile || '',
-        ),
-
-        interestedCourse: String(
-          booking.interestedCourse || '',
-        ),
-
-        counsellingMode: String(
-          booking.counsellingMode || '',
-        ),
-
-        preferredDate: String(
-          booking.preferredDate || '',
-        ),
-
-        preferredTimeSlot: String(
-          booking.preferredTimeSlot || '',
-        ),
-
-        status: String(
-          booking.status ||
-            'REQUEST RECEIVED',
-        ),
-
-        counsellor:
-          booking.counsellor
-            ? String(booking.counsellor)
-            : undefined,
-
-        createdAt:
-          registrationDate ||
-          new Date().toISOString(),
-
-        updatedAt:
-          registrationDate ||
-          new Date().toISOString(),
-      };
-    });
+  return readSheet<DemoBooking>(
+    workbook,
+    DEMOS_SHEET
+  );
 }
 
 export function getStudentDemoBookings(
-  studentId: string,
+  studentId: string
 ): DemoBooking[] {
   return getDemoBookings().filter(
-    (booking) =>
-      booking.studentId === studentId,
+    (demo) =>
+      demo.studentId ===
+      studentId
   );
 }
 
 export function createDemoBooking(
-  booking: DemoBooking,
+  booking: DemoBooking
 ): DemoBooking {
-  const now =
-    new Date().toISOString();
+  const workbook =
+    loadWorkbook();
 
-  const record: DemoBookingRecord = {
-    bookingId: booking.bookingId,
+  const bookings =
+    readSheet<DemoBooking>(
+      workbook,
+      DEMOS_SHEET
+    );
 
-    studentId:
-      booking.studentId || '',
+  bookings.push(booking);
 
-    name: booking.name,
+  writeSheet(
+    workbook,
+    DEMOS_SHEET,
+    bookings
+  );
 
-    email: booking.email,
+  saveWorkbook(workbook);
 
-    mobile:
-      booking.mobile ||
-      booking.phone ||
-      '',
-
-    interestedCourse:
-      booking.interestedCourse ||
-      '',
-
-    counsellingMode:
-      booking.counsellingMode ||
-      '',
-
-    preferredDate:
-      booking.preferredDate ||
-      '',
-
-    preferredTimeSlot:
-      booking.preferredTimeSlot ||
-      '',
-
-    registrationDate:
-      booking.createdAt ||
-      now,
-
-    status:
-      (booking.status ||
-        'REQUEST RECEIVED') as DemoBookingRecord['status'],
-
-    counsellor:
-      booking.counsellor,
-  };
-
-  const created =
-    leadStore.addDemoBooking(record);
-
-  const createdAt =
-    created.registrationDate ||
-    booking.createdAt ||
-    now;
-
-  return {
-    ...booking,
-
-    mobile:
-      created.mobile,
-
-    phone:
-      created.mobile,
-
-    createdAt,
-
-    updatedAt:
-      booking.updatedAt ||
-      createdAt,
-  };
+  return booking;
 }
 
-/**
- * ============================================================
- * COURSE PURCHASES
- * ============================================================
- */
+/* =========================================================
+   COURSE PURCHASES
+========================================================= */
 
 export function getCoursePurchases(): CoursePurchase[] {
-  return readRows<CoursePurchase>(
-    'CoursePurchases',
+  const workbook =
+    loadWorkbook();
+
+  return readSheet<CoursePurchase>(
+    workbook,
+    COURSE_PURCHASES_SHEET
   );
 }
 
 export function getStudentCoursePurchases(
-  studentId: string,
+  studentId: string
 ): CoursePurchase[] {
   return getCoursePurchases().filter(
     (purchase) =>
-      purchase.studentId === studentId,
+      purchase.studentId ===
+      studentId
   );
 }
 
 export function findCoursePurchase(
   studentId: string,
-  courseId: string,
+  courseId: string
 ): CoursePurchase | null {
   return (
     getCoursePurchases().find(
       (purchase) =>
-        purchase.studentId === studentId &&
-        purchase.courseId === courseId,
+        purchase.studentId ===
+          studentId &&
+        purchase.courseId ===
+          courseId
     ) || null
   );
 }
 
+/*
+  Supports both:
+
+  createCoursePurchase(purchase)
+
+  and
+
+  createCoursePurchase(studentId, purchase)
+*/
+
 export function createCoursePurchase(
-  purchase: CoursePurchase,
+  purchaseOrStudentId:
+    | CoursePurchase
+    | string,
+  maybePurchase?: CoursePurchase
 ): CoursePurchase {
-  const existing =
-    findCoursePurchase(
-      purchase.studentId,
-      purchase.courseId,
-    );
+  let purchase: CoursePurchase;
 
-  if (existing) {
-    return existing;
+  if (
+    typeof purchaseOrStudentId ===
+    'string'
+  ) {
+    if (!maybePurchase) {
+      throw new Error(
+        'Course purchase data is required.'
+      );
+    }
+
+    purchase = {
+      ...maybePurchase,
+      studentId:
+        purchaseOrStudentId,
+    };
+  } else {
+    purchase =
+      purchaseOrStudentId;
   }
 
-  const rows =
-    getCoursePurchases();
+  const workbook =
+    loadWorkbook();
 
-  rows.unshift(purchase);
+  const purchases =
+    readSheet<CoursePurchase>(
+      workbook,
+      COURSE_PURCHASES_SHEET
+    );
 
-  try {
-    writeRows(
-      'CoursePurchases',
-      rows,
-    );
-  } catch (error) {
-    console.error(
-      '[EduPath] Failed to persist course purchase:',
-      error,
-    );
-  }
+  purchases.push(purchase);
+
+  writeSheet(
+    workbook,
+    COURSE_PURCHASES_SHEET,
+    purchases
+  );
+
+  saveWorkbook(workbook);
 
   return purchase;
 }
 
-/**
- * ============================================================
- * COURSE PROGRESS
- * ============================================================
- */
+/* =========================================================
+   COURSE PROGRESS
+========================================================= */
 
 export function getCourseProgress(): CourseProgress[] {
-  return readRows<CourseProgress>(
-    'CourseProgress',
+  const workbook =
+    loadWorkbook();
+
+  return readSheet<CourseProgress>(
+    workbook,
+    COURSE_PROGRESS_SHEET
   );
 }
 
 export function getStudentCourseProgress(
-  studentId: string,
+  studentId: string
 ): CourseProgress[] {
   return getCourseProgress().filter(
     (progress) =>
-      progress.studentId === studentId,
+      progress.studentId ===
+      studentId
   );
 }
 
 export function findCourseProgress(
   studentId: string,
-  courseId: string,
+  courseId: string
 ): CourseProgress | null {
   return (
     getCourseProgress().find(
       (progress) =>
-        progress.studentId === studentId &&
-        progress.courseId === courseId,
+        progress.studentId ===
+          studentId &&
+        progress.courseId ===
+          courseId
     ) || null
   );
 }
 
-export function createCourseProgress(
-  progress: CourseProgress,
-): CourseProgress {
-  const existing =
-    findCourseProgress(
-      progress.studentId,
-      progress.courseId,
-    );
+/*
+  Supports:
 
-  if (existing) {
-    return existing;
+  createCourseProgress(progress)
+
+  createCourseProgress(studentId, progress)
+*/
+
+export function createCourseProgress(
+  progressOrStudentId:
+    | CourseProgress
+    | string,
+  maybeProgress?: CourseProgress
+): CourseProgress {
+  let progress: CourseProgress;
+
+  if (
+    typeof progressOrStudentId ===
+    'string'
+  ) {
+    if (!maybeProgress) {
+      throw new Error(
+        'Course progress data is required.'
+      );
+    }
+
+    progress = {
+      ...maybeProgress,
+      studentId:
+        progressOrStudentId,
+    };
+  } else {
+    progress =
+      progressOrStudentId;
   }
+
+  const workbook =
+    loadWorkbook();
 
   const rows =
-    getCourseProgress();
-
-  rows.unshift(progress);
-
-  try {
-    writeRows(
-      'CourseProgress',
-      rows,
+    readSheet<CourseProgress>(
+      workbook,
+      COURSE_PROGRESS_SHEET
     );
-  } catch (error) {
-    console.error(
-      '[EduPath] Failed to persist course progress:',
-      error,
-    );
-  }
+
+  rows.push(progress);
+
+  writeSheet(
+    workbook,
+    COURSE_PROGRESS_SHEET,
+    rows
+  );
+
+  saveWorkbook(workbook);
 
   return progress;
 }
 
-export function updateCourseProgress(
-  progressId: string,
-  updates: Partial<CourseProgress>,
-): CourseProgress | null {
-  const rows =
-    getCourseProgress();
+/*
+  Supports:
 
-  const index =
-    rows.findIndex(
-      (progress) =>
-        progress.progressId ===
-        progressId,
+  updateCourseProgress(progressId, updates)
+
+  and
+
+  updateCourseProgress(studentId, courseId, updates)
+*/
+
+export function updateCourseProgress(
+  firstId: string,
+  second:
+    | Partial<CourseProgress>
+    | string,
+  third?: Partial<CourseProgress>
+): CourseProgress | null {
+  const workbook =
+    loadWorkbook();
+
+  const rows =
+    readSheet<CourseProgress>(
+      workbook,
+      COURSE_PROGRESS_SHEET
     );
 
-  if (index < 0) {
+  let index = -1;
+  let updates: Partial<CourseProgress>;
+
+  if (
+    typeof second === 'string'
+  ) {
+    const courseId =
+      second;
+
+    updates =
+      third || {};
+
+    index =
+      rows.findIndex(
+        (row) =>
+          row.studentId ===
+            firstId &&
+          row.courseId ===
+            courseId
+      );
+  } else {
+    updates =
+      second;
+
+    index =
+      rows.findIndex(
+        (row) =>
+          row.progressId ===
+          firstId
+      );
+  }
+
+  if (index === -1) {
     return null;
   }
 
@@ -673,66 +740,89 @@ export function updateCourseProgress(
       new Date().toISOString(),
   };
 
-  try {
-    writeRows(
-      'CourseProgress',
-      rows,
-    );
-  } catch (error) {
-    console.error(
-      '[EduPath] Failed to persist course progress:',
-      error,
-    );
-  }
+  writeSheet(
+    workbook,
+    COURSE_PROGRESS_SHEET,
+    rows
+  );
+
+  saveWorkbook(workbook);
 
   return rows[index];
 }
 
-/**
- * ============================================================
- * STUDENT STATISTICS
- * ============================================================
- */
+/* =========================================================
+   ADMIN STATISTICS
+========================================================= */
 
-export function getStudentStatistics(
-  studentId: string,
-) {
+export function getStudentStatistics() {
+  const students =
+    getStudents();
+
+  const demos =
+    getDemoBookings();
+
   const purchases =
-    getStudentCoursePurchases(
-      studentId,
-    );
-
-  const progress =
-    getStudentCourseProgress(
-      studentId,
-    );
-
-  const averageProgress =
-    progress.length > 0
-      ? Math.round(
-          progress.reduce(
-            (sum, item) =>
-              sum +
-              Number(
-                item.progressPercent ||
-                  0,
-              ),
-            0,
-          ) / progress.length,
-        )
-      : 0;
+    getCoursePurchases();
 
   return {
-    purchasedCourses:
-      purchases.length,
+    totalStudents:
+      students.length,
 
-    activeCourses:
-      purchases.filter(
-        (purchase) =>
-          purchase.status ===
-          'ACTIVE',
+    activeStudents:
+      students.filter(
+        (student) =>
+          student.status !==
+          'INACTIVE'
       ).length,
 
-    averageProgress,
+    completedOnboarding:
+      students.filter(
+        (student) =>
+          student.onboardingCompleted ===
+            true ||
+          String(
+            student.onboardingCompleted
+          ).toLowerCase() ===
+            'true'
+      ).length,
+
+    totalDemoBookings:
+      demos.length,
+
+    pendingDemoBookings:
+      demos.filter(
+        (demo) =>
+          !demo.status ||
+          demo.status ===
+            'REQUEST RECEIVED' ||
+          demo.status ===
+            'PENDING'
+      ).length,
+
+    totalCoursePurchases:
+      purchases.length,
+
+    paidCoursePurchases:
+      purchases.filter(
+        (purchase) =>
+          String(
+            purchase.paymentStatus
+          ).toUpperCase() ===
+          'PAID'
+      ).length,
   };
 }
+
+/* =========================================================
+   EXPORTS
+========================================================= */
+
+export {
+  EXCEL_FILE,
+  DATA_DIR,
+  STUDENTS_SHEET,
+  DEMOS_SHEET,
+  COURSE_PURCHASES_SHEET,
+  COURSE_PROGRESS_SHEET,
+};

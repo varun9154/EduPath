@@ -1,48 +1,14 @@
 'use client';
 
-import React from 'react';
-import { Award, ExternalLink, ShieldCheck } from 'lucide-react';
-import scholarshipsData from '@/data/scholarships.json';
+import React, { useMemo, useState } from 'react';
+import { Award, ExternalLink, Search } from 'lucide-react';
+import scholarships from '@/data/scholarships.json';
 
 export default function ScholarshipsPage() {
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-      <div className="space-y-3">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-xs font-bold text-amber-800">
-          <Award className="w-3.5 h-3.5 text-amber-600" />
-          <span>Central & State Scholarship Directory</span>
-        </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-900">
-          EduPath Scholarship Finder
-        </h1>
-        <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
-          National Central Sector Schemes, State Post-Matric SSP portals, fee reimbursements, and private merit scholarships.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {scholarshipsData.map((sch) => (
-          <div key={sch.id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 bg-amber-50 text-amber-800 font-bold text-xs rounded-md">{sch.category}</span>
-                <span className="text-xs text-slate-500 font-semibold">{sch.provider}</span>
-              </div>
-
-              <h3 className="text-lg font-bold text-slate-900">{sch.name}</h3>
-              <p className="text-xs text-slate-600">Course: {sch.course}</p>
-              <p className="text-xs text-slate-500 leading-relaxed">Eligibility: {sch.eligibility}</p>
-            </div>
-
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-[10px] text-slate-400">Verified: {sch.lastVerifiedAt}</span>
-              <a href={sch.officialUrl} target="_blank" rel="noreferrer" className="inline-flex items-center px-4 py-2 bg-slate-900 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition">
-                Apply on Official Portal <ExternalLink className="w-3.5 h-3.5 ml-1" />
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('All');
+  const [state, setState] = useState('All');
+  const categories = ['All', ...Array.from(new Set(scholarships.map((s) => s.category))).sort()];
+  const filtered = useMemo(() => { const q=search.trim().toLowerCase(); return scholarships.filter((s)=> (category==='All'||s.category===category) && (state==='All'||s.category===state||String(s.provider).includes(state)) && (!q||[s.name,s.provider,s.course,s.eligibility,s.category].join(' ').toLowerCase().includes(q)));},[search,category,state]);
+  return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8"><section className="rounded-3xl bg-gradient-to-r from-amber-950 via-slate-950 to-slate-950 text-white p-7 sm:p-10 shadow-xl"><div className="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase"><Award className="w-4 h-4"/> EduPath Scholarship Finder</div><h1 className="mt-3 text-3xl sm:text-5xl font-black">Scholarships & Fee Support</h1><p className="mt-3 text-sm text-slate-300 max-w-3xl">Explore national, state and institution-level scholarship portals. Always confirm current eligibility, benefit amount and deadlines on the official source before applying.</p></section><section className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-4"><div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"/><input value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="Search scholarship, provider, course or eligibility..." className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-amber-500 text-sm"/></div><div className="flex flex-wrap gap-2">{categories.map((c)=><button key={c} type="button" onClick={()=>setCategory(c)} className={`px-3 py-2 rounded-xl text-xs font-bold ${category===c?'bg-amber-600 text-white':'bg-slate-100 text-slate-700'}`}>{c}</button>)}<span className="text-xs text-slate-500 font-bold self-center">{filtered.length} opportunities</span></div></section><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{filtered.map((s)=><article key={s.id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm"><div className="flex items-center justify-between"><span className="px-2.5 py-1 bg-amber-50 text-amber-800 rounded-full text-[10px] font-black">{s.category}</span>{s.isOfficial&&<span className="text-[10px] font-bold text-emerald-600">Official portal</span>}</div><h2 className="mt-4 text-lg font-black text-slate-900">{s.name}</h2><p className="mt-1 text-xs text-slate-500">{s.provider}</p><div className="mt-4 space-y-2 text-xs text-slate-700"><div><b>Applicable:</b> {s.course}</div><div><b>Eligibility:</b> {s.eligibility}</div></div><div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between"><span className="text-[10px] text-slate-400">Verify before applying</span><a href={s.officialUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-amber-700">Official source <ExternalLink className="w-3 h-3"/></a></div></article>)}</div></div>;
 }

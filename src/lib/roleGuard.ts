@@ -1,34 +1,130 @@
+// src/lib/roleGuard.ts
+
 import { NextResponse } from 'next/server';
 import { authManager } from '@/lib/auth';
 
-type GuardResult = {
+/*
+============================================================
+ADMIN REQUEST VALIDATION
+============================================================
+*/
+
+export function validateAdminRequest(
+  req: Request
+): {
   authorized: boolean;
   response?: NextResponse;
   sessionId?: string;
-  userId?: string;
-  email?: string;
-};
+} {
 
-function cookieValue(req: Request, name: string) {
-  const cookieHeader = req.headers.get('cookie') || '';
-  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
-  return match?.[1] ? decodeURIComponent(match[1]) : null;
+  const cookieHeader =
+    req.headers.get('cookie') || '';
+
+  const match =
+    cookieHeader.match(
+      /(?:^|;\s*)edupath_admin_sess=([^;]+)/
+    );
+
+  const sessionId =
+    match?.[1]
+      ? decodeURIComponent(match[1])
+      : null;
+
+  if (!sessionId) {
+    return {
+      authorized: false,
+      response: NextResponse.json(
+        {
+          success: false,
+          message: 'Missing admin session',
+        },
+        { status: 401 }
+      ),
+    };
+  }
+
+  if (
+    !authManager.validateAdminSession(
+      sessionId
+    )
+  ) {
+    return {
+      authorized: false,
+      response: NextResponse.json(
+        {
+          success: false,
+          message: 'Admin session expired or invalid',
+        },
+        { status: 401 }
+      ),
+    };
+  }
+
+  return {
+    authorized: true,
+    sessionId,
+  };
 }
 
-export function validateAdminRequest(req: Request): GuardResult {
-  const sessionId = cookieValue(req, 'edupath_admin_sess');
-  if (!sessionId || !authManager.validateAdminSession(sessionId)) {
-    return { authorized: false, response: NextResponse.json({ success: false, message: 'Admin session expired or invalid.' }, { status: 401 }) };
-  }
-  const session = authManager.getAdminSession(sessionId);
-  return { authorized: true, sessionId, userId: session?.userId, email: session?.email };
-}
+/*
+============================================================
+STUDENT REQUEST VALIDATION
+============================================================
+*/
 
-export function validateStudentRequest(req: Request): GuardResult {
-  const sessionId = cookieValue(req, 'edupath_student_sess');
-  if (!sessionId || !authManager.validateStudentSession(sessionId)) {
-    return { authorized: false, response: NextResponse.json({ success: false, message: 'Student session expired or invalid.' }, { status: 401 }) };
+export function validateStudentRequest(
+  req: Request
+): {
+  authorized: boolean;
+  response?: NextResponse;
+  sessionId?: string;
+} {
+
+  const cookieHeader =
+    req.headers.get('cookie') || '';
+
+  const match =
+    cookieHeader.match(
+      /(?:^|;\s*)edupath_student_sess=([^;]+)/
+    );
+
+  const sessionId =
+    match?.[1]
+      ? decodeURIComponent(match[1])
+      : null;
+
+  if (!sessionId) {
+    return {
+      authorized: false,
+      response: NextResponse.json(
+        {
+          success: false,
+          message: 'Missing student session',
+        },
+        { status: 401 }
+      ),
+    };
   }
-  const session = authManager.getStudentSession(sessionId);
-  return { authorized: true, sessionId, userId: session?.userId, email: session?.email };
+
+  if (
+    !authManager.validateStudentSession(
+      sessionId
+    )
+  ) {
+    return {
+      authorized: false,
+      response: NextResponse.json(
+        {
+          success: false,
+          message: 'Student session expired or invalid',
+        },
+        { status: 401 }
+      ),
+    };
+  }
+
+  return {
+    authorized: true,
+    sessionId,
+  };
 }

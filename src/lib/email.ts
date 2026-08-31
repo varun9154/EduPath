@@ -1,21 +1,7 @@
 import nodemailer from 'nodemailer';
-import { addNotificationLog as addProductionNotificationLog } from '@/lib/productionDb';
-
 import { LeadRecord, StudentRecord, DemoBookingRecord, leadStore } from './storage';
 
-async function persistNotificationLog(log: Parameters<typeof addProductionNotificationLog>[0]) {
-  if (process.env.DATABASE_URL) {
-    try {
-      await addProductionNotificationLog(log);
-      return;
-    } catch (error) {
-      console.error('Production notification log persistence failed:', error);
-    }
-  }
-  leadStore.addNotificationLog(log);
-}
-
-const adminEmailAddress = process.env.ADMIN_EMAIL || 'edupathadmin@gmail.com';
+const adminEmailAddress = process.env.ADMIN_EMAIL || 'admin@edupath.in';
 const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 function getTransporter() {
@@ -82,7 +68,7 @@ export async function sendRegistrationEmails(
       <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0;">
         <div style="text-align: center; border-bottom: 2px solid #0c8de9; padding-bottom: 20px; margin-bottom: 24px;">
           <h1 style="color: #0c8de9; margin: 0; font-size: 24px;">EduPath</h1>
-          <p style="color: #64748b; font-size: 14px; margin-top: 4px;">From 12th to Your First Job — We Show You the Path</p>
+          <p style="color: #64748b; font-size: 14px; margin-top: 4px;">From 10th to Your First Job — We Show You the Path</p>
         </div>
 
         <p style="font-size: 16px; color: #1e293b;">Hi <strong>${student.name}</strong>,</p>
@@ -106,7 +92,7 @@ export async function sendRegistrationEmails(
 
         <div style="border-top: 1px solid #e2e8f0; margin-top: 32px; padding-top: 20px; text-align: center; color: #94a3b8; font-size: 12px;">
           Thank you for choosing EduPath.<br/>
-          From 12th to Your First Job — We Show You the Path.
+          From 10th to Your First Job — We Show You the Path.
         </div>
       </div>
     </div>
@@ -128,7 +114,7 @@ export async function sendRegistrationEmails(
         html: studentHtml,
       });
 
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-ADM-${Date.now()}`,
         targetType: 'ADMIN_EMAIL',
         recipient: adminEmailAddress,
@@ -138,7 +124,7 @@ export async function sendRegistrationEmails(
         timestamp,
       });
 
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-STU-${Date.now()}`,
         targetType: 'STUDENT_EMAIL',
         recipient: student.email,
@@ -151,7 +137,7 @@ export async function sendRegistrationEmails(
       return { adminEmailSent: true, studentEmailSent: true, mode: 'SMTP_LIVE' };
     } catch (err: unknown) {
       const errDetail = err instanceof Error ? err.message : 'SMTP dispatch error';
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-FAIL-${Date.now()}`,
         targetType: 'ADMIN_EMAIL',
         recipient: adminEmailAddress,
@@ -165,7 +151,7 @@ export async function sendRegistrationEmails(
     }
   } else {
     // Development fallback logging
-    await persistNotificationLog({
+    leadStore.addNotificationLog({
       id: `NOTIF-DEV-ADM-${Date.now()}`,
       targetType: 'ADMIN_EMAIL',
       recipient: adminEmailAddress,
@@ -175,7 +161,7 @@ export async function sendRegistrationEmails(
       timestamp,
     });
 
-    await persistNotificationLog({
+    leadStore.addNotificationLog({
       id: `NOTIF-DEV-STU-${Date.now()}`,
       targetType: 'STUDENT_EMAIL',
       recipient: student.email,

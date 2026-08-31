@@ -1,4 +1,3 @@
-import { prepareExcelStore, persistExcelStore } from '@/lib/excelPersistence';
 // src/app/api/admin/route.ts
 
 import {
@@ -8,7 +7,6 @@ import {
 
 import { leadStore } from '@/lib/storage';
 import { authManager } from '@/lib/auth';
-import { getDashboardData as getProductionDashboardData, updateDemoBooking as updateProductionDemoBooking, addAuditLog as addProductionAuditLog } from '@/lib/productionDb';
 
 function isAdminAuthenticated(
   request: NextRequest
@@ -35,6 +33,7 @@ export async function GET(
   request: NextRequest
 ) {
   try {
+
     if (
       !isAdminAuthenticated(request)
     ) {
@@ -50,9 +49,8 @@ export async function GET(
       );
     }
 
-    const dashboard = process.env.DATABASE_URL
-      ? await getProductionDashboardData()
-      : (await prepareExcelStore(), leadStore.getDashboardData());
+    const dashboard =
+      leadStore.getDashboardData();
 
     return NextResponse.json({
       success: true,
@@ -91,6 +89,7 @@ export async function POST(
 ) {
 
   try {
+
     if (
       !isAdminAuthenticated(request)
     ) {
@@ -137,15 +136,34 @@ export async function POST(
         );
       }
 
-      const updates = {
-        ...(body.status ? { status: body.status } : {}),
-        ...(body.counsellor !== undefined ? { counsellor: body.counsellor } : {}),
-        ...(body.notes !== undefined ? { notes: body.notes } : {}),
-      };
+      const updated =
+        leadStore.updateDemoBooking(
+          bookingId,
+          {
+            ...(body.status
+              ? {
+                  status:
+                    body.status,
+                }
+              : {}),
 
-      const updated = process.env.DATABASE_URL
-        ? await updateProductionDemoBooking(bookingId, updates)
-        : (await prepareExcelStore(), leadStore.updateDemoBooking(bookingId, updates));
+            ...(body.counsellor !==
+            undefined
+              ? {
+                  counsellor:
+                    body.counsellor,
+                }
+              : {}),
+
+            ...(body.notes !==
+            undefined
+              ? {
+                  notes:
+                    body.notes,
+                }
+              : {}),
+          }
+        );
 
       if (!updated) {
         return NextResponse.json(
@@ -160,7 +178,7 @@ export async function POST(
         );
       }
 
-      const audit = {
+      leadStore.addAuditLog({
         id: `AUDIT-${Date.now()}`,
 
         action:
@@ -180,11 +198,14 @@ export async function POST(
 
         timestamp:
           new Date().toISOString(),
-      };
-      if (process.env.DATABASE_URL) await addProductionAuditLog(audit);
-      else { leadStore.addAuditLog(audit); await persistExcelStore(); }
+      });
 
-      return NextResponse.json({ success: true, message: 'Demo booking updated successfully.', booking: updated });
+      return NextResponse.json({
+        success: true,
+        message:
+          'Demo booking updated successfully.',
+        booking: updated,
+      });
     }
 
     // --------------------------------------------------------
@@ -195,7 +216,7 @@ export async function POST(
       action === 'audit'
     ) {
 
-      const audit = {
+      leadStore.addAuditLog({
         id: `AUDIT-${Date.now()}`,
 
         action:
@@ -213,11 +234,11 @@ export async function POST(
 
         timestamp:
           new Date().toISOString(),
-      };
-      if (process.env.DATABASE_URL) await addProductionAuditLog(audit);
-      else { leadStore.addAuditLog(audit); await persistExcelStore(); }
+      });
 
-      return NextResponse.json({ success: true });
+      return NextResponse.json({
+        success: true,
+      });
     }
 
     return NextResponse.json(

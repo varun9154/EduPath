@@ -1,9 +1,3 @@
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
-import { prepareExcelStore, persistExcelStore } from '@/lib/excelPersistence';
-import { validateStudentRequest } from '@/lib/roleGuard';
-
 import {
   NextRequest,
   NextResponse,
@@ -33,9 +27,6 @@ export async function GET(
   request: NextRequest
 ) {
   try {
-    const auth = validateStudentRequest(request);
-    if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();
     const studentId =
       request.nextUrl.searchParams.get(
         'studentId'
@@ -45,10 +36,6 @@ export async function GET(
       request.nextUrl.searchParams.get(
         'courseId'
       );
-
-    if (studentId && studentId !== auth.userId) {
-      return NextResponse.json({ success: false, message: 'You cannot access another student account.' }, { status: 403 });
-    }
 
     if (
       !studentId ||
@@ -104,9 +91,7 @@ export async function POST(
   request: NextRequest
 ) {
   try {
-    const auth = validateStudentRequest(request);
-    if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();   const body =
+    const body =
       await request.json();
 
     const {
@@ -117,10 +102,6 @@ export async function POST(
       currentModule,
       currentLesson,
     } = body;
-
-    if (studentId && studentId !== auth.userId) {
-      return NextResponse.json({ success: false, message: 'You cannot access another student account.' }, { status: 403 });
-    }
 
     if (
       !studentId ||
@@ -266,9 +247,7 @@ export async function PATCH(
   request: NextRequest
 ) {
   try {
-    const auth = validateStudentRequest(request);
-    if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();   const body =
+    const body =
       await request.json();
 
     const {
@@ -281,10 +260,6 @@ export async function PATCH(
       currentLesson,
       status,
     } = body;
-
-    if (studentId && studentId !== auth.userId) {
-      return NextResponse.json({ success: false, message: 'You cannot access another student account.' }, { status: 403 });
-    }
 
     if (
       !studentId ||
@@ -396,8 +371,6 @@ export async function PATCH(
         existing.progressId,
         updates
       );
-
-    await persistExcelStore();
 
     return NextResponse.json({
       success: true,

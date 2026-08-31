@@ -13,7 +13,10 @@
       "Pharm.D → Drug Safety Associate",
       "Pharm.D → Pharmacovigilance"
     ],
-    "topExams": ["NEET", "State Entrance Exams"]
+    "topExams": [
+      "NEET",
+      "State Entrance Exams"
+    ]
   },
   {
     "id": "bpharm",
@@ -29,7 +32,13 @@
       "B.Pharm → Medical Representative",
       "B.Pharm → Clinical Research Associate"
     ],
-    "topExams": ["NEET", "MHT CET", "KCET", "AP EAMCET", "TS EAMCET"]
+    "topExams": [
+      "NEET",
+      "MHT CET",
+      "KCET",
+      "AP EAMCET",
+      "TS EAMCET"
+    ]
   },
   {
     "id": "dpharm",
@@ -44,7 +53,9 @@
       "D.Pharm → Retail Pharmacy",
       "D.Pharm → Medical Store Management"
     ],
-    "topExams": ["State Pharmacy Admissions"]
+    "topExams": [
+      "State Pharmacy Admissions"
+    ]
   },
   {
     "id": "mpharm",
@@ -60,9 +71,11 @@
       "M.Pharm → Quality Assurance Manager",
       "M.Pharm → Academic Faculty"
     ],
-    "topExams": ["GPAT", "State PG Entrance Exams"]
+    "topExams": [
+      "GPAT",
+      "State PG Entrance Exams"
+    ]
   },
-
   {
     "id": "mbbs",
     "category": "Medical",
@@ -77,7 +90,9 @@
       "MBBS → MD/MS Specialist",
       "MBBS → Hospital Administration"
     ],
-    "topExams": ["NEET UG"]
+    "topExams": [
+      "NEET UG"
+    ]
   },
   {
     "id": "bds",
@@ -93,7 +108,9 @@
       "BDS → MDS Specialist",
       "BDS → Dental Clinic Owner"
     ],
-    "topExams": ["NEET UG"]
+    "topExams": [
+      "NEET UG"
+    ]
   },
   {
     "id": "bsc-nursing",
@@ -109,7 +126,11 @@
       "B.Sc Nursing → ICU Nurse",
       "B.Sc Nursing → Nursing Administrator"
     ],
-    "topExams": ["NEET", "AIIMS Nursing", "State Nursing Exams"]
+    "topExams": [
+      "NEET",
+      "AIIMS Nursing",
+      "State Nursing Exams"
+    ]
   },
   {
     "id": "bpt",
@@ -125,7 +146,10 @@
       "BPT → Hospital Physiotherapist",
       "BPT → Private Practice"
     ],
-    "topExams": ["NEET", "State Entrance Exams"]
+    "topExams": [
+      "NEET",
+      "State Entrance Exams"
+    ]
   },
   {
     "id": "bams",
@@ -141,7 +165,9 @@
       "BAMS → Ayurvedic Researcher",
       "BAMS → Private Practice"
     ],
-    "topExams": ["NEET UG"]
+    "topExams": [
+      "NEET UG"
+    ]
   },
   {
     "id": "bhms",
@@ -157,7 +183,9 @@
       "BHMS → Wellness Consultant",
       "BHMS → Private Practice"
     ],
-    "topExams": ["NEET UG"]
+    "topExams": [
+      "NEET UG"
+    ]
   },
   {
     "id": "bsc-mlt",
@@ -172,9 +200,11 @@
       "B.Sc MLT → Pathology Lab Executive",
       "B.Sc MLT → Diagnostic Centre Specialist"
     ],
-    "topExams": ["State Entrance Exams", "University Admissions"]
+    "topExams": [
+      "State Entrance Exams",
+      "University Admissions"
+    ]
   },
-
   {
     "id": "cse",
     "category": "Engineering",
@@ -189,7 +219,14 @@
       "B.Tech CSE → Cloud Engineer",
       "B.Tech CSE → DevOps Engineer"
     ],
-    "topExams": ["JEE Main", "JEE Advanced", "KCET", "MHT CET", "AP EAMCET", "TS EAMCET"]
+    "topExams": [
+      "JEE Main",
+      "JEE Advanced",
+      "KCET",
+      "MHT CET",
+      "AP EAMCET",
+      "TS EAMCET"
+    ]
   },
   {
     "id": "ai-ml",
@@ -205,7 +242,12 @@
       "B.Tech AI/ML → NLP Engineer",
       "B.Tech AI/ML → Computer Vision Engineer"
     ],
-    "topExams": ["JEE Main", "JEE Advanced", "KCET", "MHT CET"]
+    "topExams": [
+      "JEE Main",
+      "JEE Advanced",
+      "KCET",
+      "MHT CET"
+    ]
   },
   {
     "id": "data-science",
@@ -220,7 +262,13 @@
       "B.Tech Data Science → ML Engineer",
       "B.Tech Data Science → Business Intelligence Analyst"
     ],
-    "topExams": ["JEE Main", "KCET", "MHT CET", "AP EAMCET", "TS EAMCET"]
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "MHT CET",
+      "AP EAMCET",
+      "TS EAMCET"
+    ]
   },
   {
     "id": "cyber-security",
@@ -236,7 +284,11 @@
       "B.Tech Cyber Security → Penetration Tester",
       "B.Tech Cyber Security → Security Consultant"
     ],
-    "topExams": ["JEE Main", "KCET", "MHT CET"]
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "MHT CET"
+    ]
   },
   {
     "id": "ece",
@@ -252,7 +304,12 @@
       "B.Tech ECE → Communication Engineer",
       "B.Tech ECE → Hardware Engineer"
     ],
-    "topExams": ["JEE Main", "JEE Advanced", "KCET", "MHT CET"]
+    "topExams": [
+      "JEE Main",
+      "JEE Advanced",
+      "KCET",
+      "MHT CET"
+    ]
   },
   {
     "id": "eee",
@@ -267,7 +324,11 @@
       "B.Tech EEE → Control Engineer",
       "B.Tech EEE → Electrical Design Engineer"
     ],
-    "topExams": ["JEE Main", "KCET", "MHT CET"]
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "MHT CET"
+    ]
   },
   {
     "id": "mechanical",
@@ -283,7 +344,11 @@
       "B.Tech Mechanical → Automotive Engineer",
       "B.Tech Mechanical → Manufacturing Engineer"
     ],
-    "topExams": ["JEE Main", "KCET", "MHT CET"]
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "MHT CET"
+    ]
   },
   {
     "id": "civil",
@@ -299,7 +364,11 @@
       "B.Tech Civil → Project Engineer",
       "B.Tech Civil → Construction Manager"
     ],
-    "topExams": ["JEE Main", "KCET", "MHT CET"]
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "MHT CET"
+    ]
   },
   {
     "id": "aerospace",
@@ -314,9 +383,12 @@
       "Aerospace Engineering → Propulsion Engineer",
       "Aerospace Engineering → Defence Engineer"
     ],
-    "topExams": ["JEE Main", "JEE Advanced", "State Engineering Exams"]
+    "topExams": [
+      "JEE Main",
+      "JEE Advanced",
+      "State Engineering Exams"
+    ]
   },
-
   {
     "id": "llb",
     "category": "Law",
@@ -331,7 +403,10 @@
       "LL.B → Legal Consultant",
       "LL.B → Legal Advisor"
     ],
-    "topExams": ["State Law Entrance Exams", "University Entrance Exams"]
+    "topExams": [
+      "State Law Entrance Exams",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "ballb",
@@ -347,7 +422,12 @@
       "BA LL.B → Civil Services",
       "BA LL.B → Legal Researcher"
     ],
-    "topExams": ["CLAT", "AILET", "SLAT", "State Law Exams"]
+    "topExams": [
+      "CLAT",
+      "AILET",
+      "SLAT",
+      "State Law Exams"
+    ]
   },
   {
     "id": "bballb",
@@ -362,9 +442,12 @@
       "BBA LL.B → Compliance Officer",
       "BBA LL.B → Legal Advisor"
     ],
-    "topExams": ["CLAT", "AILET", "SLAT"]
+    "topExams": [
+      "CLAT",
+      "AILET",
+      "SLAT"
+    ]
   },
-
   {
     "id": "bba",
     "category": "Management",
@@ -379,7 +462,11 @@
       "BBA → Operations Executive",
       "BBA → MBA"
     ],
-    "topExams": ["CUET UG", "IPMAT", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "IPMAT",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "bcom",
@@ -395,7 +482,10 @@
       "B.Com → Banking Professional",
       "B.Com → CA/CS/CMA"
     ],
-    "topExams": ["CUET UG", "University Admissions"]
+    "topExams": [
+      "CUET UG",
+      "University Admissions"
+    ]
   },
   {
     "id": "mba",
@@ -411,7 +501,13 @@
       "MBA → Finance Manager",
       "MBA → HR Manager"
     ],
-    "topExams": ["CAT", "XAT", "CMAT", "MAT", "GMAT"]
+    "topExams": [
+      "CAT",
+      "XAT",
+      "CMAT",
+      "MAT",
+      "GMAT"
+    ]
   },
   {
     "id": "bms",
@@ -426,7 +522,10 @@
       "BMS → Marketing Executive",
       "BMS → Operations Executive"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "bca",
@@ -442,9 +541,11 @@
       "BCA → System Administrator",
       "BCA → MCA"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
-
   {
     "id": "bsc-agriculture",
     "category": "Agriculture",
@@ -459,7 +560,11 @@
       "B.Sc Agriculture → Agricultural Consultant",
       "B.Sc Agriculture → Agri-business Professional"
     ],
-    "topExams": ["CUET UG", "ICAR AIEEA", "State Agriculture Exams"]
+    "topExams": [
+      "CUET UG",
+      "ICAR AIEEA",
+      "State Agriculture Exams"
+    ]
   },
   {
     "id": "bsc-horticulture",
@@ -474,7 +579,11 @@
       "B.Sc Horticulture → Landscape Professional",
       "B.Sc Horticulture → Horticulture Consultant"
     ],
-    "topExams": ["CUET UG", "ICAR AIEEA", "State Exams"]
+    "topExams": [
+      "CUET UG",
+      "ICAR AIEEA",
+      "State Exams"
+    ]
   },
   {
     "id": "btech-agri",
@@ -489,7 +598,11 @@
       "Agricultural Engineering → Farm Machinery Engineer",
       "Agricultural Engineering → Agri-Tech Professional"
     ],
-    "topExams": ["JEE Main", "State Engineering Exams", "ICAR"]
+    "topExams": [
+      "JEE Main",
+      "State Engineering Exams",
+      "ICAR"
+    ]
   },
   {
     "id": "bsc-forestry",
@@ -504,9 +617,12 @@
       "B.Sc Forestry → Conservation Professional",
       "B.Sc Forestry → Environmental Consultant"
     ],
-    "topExams": ["CUET UG", "ICAR", "State Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "ICAR",
+      "State Entrance Exams"
+    ]
   },
-
   {
     "id": "bsc-physics",
     "category": "Science",
@@ -521,7 +637,10 @@
       "B.Sc Physics → M.Sc Physics",
       "B.Sc Physics → Teaching"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "bsc-chemistry",
@@ -537,7 +656,10 @@
       "B.Sc Chemistry → Pharmaceutical Industry",
       "B.Sc Chemistry → M.Sc Chemistry"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "bsc-mathematics",
@@ -553,7 +675,10 @@
       "B.Sc Mathematics → Teacher",
       "B.Sc Mathematics → M.Sc Mathematics"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "bsc-biotechnology",
@@ -569,9 +694,11 @@
       "B.Sc Biotechnology → Clinical Research",
       "B.Sc Biotechnology → M.Sc Biotechnology"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
-
   {
     "id": "bdes",
     "category": "Design",
@@ -586,7 +713,12 @@
       "B.Des → Fashion Designer",
       "B.Des → Design Researcher"
     ],
-    "topExams": ["NID DAT", "NIFT", "UCEED", "CEED"]
+    "topExams": [
+      "NID DAT",
+      "NIFT",
+      "UCEED",
+      "CEED"
+    ]
   },
   {
     "id": "barch",
@@ -602,9 +734,11 @@
       "B.Arch → Interior Design Professional",
       "B.Arch → Project Architect"
     ],
-    "topExams": ["NATA", "JEE Main Paper 2"]
+    "topExams": [
+      "NATA",
+      "JEE Main Paper 2"
+    ]
   },
-
   {
     "id": "bjmc",
     "category": "Arts & Media",
@@ -619,7 +753,10 @@
       "BJMC → News Producer",
       "BJMC → Public Relations Executive"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "ba",
@@ -635,7 +772,10 @@
       "B.A → Public Relations",
       "B.A → Higher Studies"
     ],
-    "topExams": ["CUET UG", "University Entrance Exams"]
+    "topExams": [
+      "CUET UG",
+      "University Entrance Exams"
+    ]
   },
   {
     "id": "bfa",
@@ -651,6 +791,351 @@
       "BFA → Art Director",
       "BFA → Creative Designer"
     ],
-    "topExams": ["University Entrance Exams", "Institutional Aptitude Tests"]
+    "topExams": [
+      "University Entrance Exams",
+      "Institutional Aptitude Tests"
+    ]
+  },
+  {
+    "id": "dsa-mastery",
+    "name": "DSA & Problem Solving Mastery",
+    "category": "Computer Science",
+    "duration": "6 Months",
+    "eligibility": "Students with basic programming knowledge",
+    "overview": "Master algorithms, data structures, problem solving, interview patterns and competitive programming.",
+    "careerPathways": [
+      "DSA → Software Engineer",
+      "DSA → SDE",
+      "DSA → Competitive Programmer"
+    ],
+    "topExams": [
+      "JEE Main",
+      "University Admissions"
+    ]
+  },
+  {
+    "id": "devops-engineering",
+    "name": "DevOps Engineering",
+    "category": "Technology",
+    "duration": "6 Months",
+    "eligibility": "Students, developers and IT professionals",
+    "overview": "Production-focused DevOps path covering Linux, Git, containers, CI/CD, cloud, IaC, Kubernetes and observability.",
+    "careerPathways": [
+      "DevOps → DevOps Engineer",
+      "DevOps → Cloud Engineer",
+      "DevOps → SRE"
+    ],
+    "topExams": [
+      "Industry Skill Path"
+    ]
+  },
+  {
+    "id": "devsecops-engineering",
+    "name": "DevSecOps Engineering",
+    "category": "Cyber Security",
+    "duration": "6 Months",
+    "eligibility": "Developers, DevOps and security learners",
+    "overview": "Secure software delivery from source control through CI/CD, infrastructure, containers, Kubernetes and runtime.",
+    "careerPathways": [
+      "DevSecOps → DevSecOps Engineer",
+      "DevSecOps → Cloud Security Engineer",
+      "DevSecOps → Application Security Engineer"
+    ],
+    "topExams": [
+      "Industry Skill Path"
+    ]
+  },
+  {
+    "id": "full-stack-web",
+    "name": "Full Stack Web Development",
+    "category": "Computer Science",
+    "duration": "8 Months",
+    "eligibility": "Students and aspiring developers",
+    "overview": "Frontend, backend, databases, APIs, testing, deployment and production projects.",
+    "careerPathways": [
+      "Full → Full Stack Developer",
+      "Full → Frontend Developer",
+      "Full → Backend Developer"
+    ],
+    "topExams": [
+      "Industry Skill Path"
+    ]
+  },
+  {
+    "id": "cloud-architecture",
+    "name": "Cloud Computing & Architecture",
+    "category": "Cloud",
+    "duration": "6 Months",
+    "eligibility": "Engineering and IT students",
+    "overview": "Cloud fundamentals, architecture, networking, security, serverless, cost and production design.",
+    "careerPathways": [
+      "Cloud → Cloud Engineer",
+      "Cloud → Cloud Architect",
+      "Cloud → Platform Engineer"
+    ],
+    "topExams": [
+      "Industry Skill Path"
+    ]
+  },
+  {
+    "id": "cybersecurity-foundation",
+    "name": "Cyber Security Foundation to Advanced",
+    "category": "Cyber Security",
+    "duration": "8 Months",
+    "eligibility": "Beginners to intermediate learners",
+    "overview": "Networking, Linux, security operations, application security, cloud security and defensive security.",
+    "careerPathways": [
+      "Cyber → Security Analyst",
+      "Cyber → SOC Analyst",
+      "Cyber → Security Engineer"
+    ],
+    "topExams": [
+      "Industry Skill Path"
+    ]
+  },
+  {
+    "id": "ai-ml-engineering",
+    "name": "AI & Machine Learning Engineering",
+    "category": "AI / ML",
+    "duration": "8 Months",
+    "eligibility": "Science, engineering and programming students",
+    "overview": "Python, statistics, ML algorithms, deep learning, NLP and model deployment foundations.",
+    "careerPathways": [
+      "AI → ML Engineer",
+      "AI → AI Engineer",
+      "AI → Data Scientist"
+    ],
+    "topExams": [
+      "Industry Skill Path"
+    ]
+  },
+  {
+    "id": "btech-cse-roadmap",
+    "name": "B.Tech Computer Science Roadmap",
+    "category": "Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCM/Computer Science students",
+    "overview": "Academic foundations plus employability skills, projects, internships and placement preparation.",
+    "careerPathways": [
+      "B.Tech → Software Engineer",
+      "B.Tech → Cloud Engineer",
+      "B.Tech → Data Engineer"
+    ],
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "COMEDK"
+    ]
+  },
+  {
+    "id": "btech-ai-ml",
+    "name": "B.Tech AI & Machine Learning",
+    "category": "Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCM students",
+    "overview": "AI/ML-focused undergraduate roadmap combining core computer science and applied AI.",
+    "careerPathways": [
+      "B.Tech → AI Engineer",
+      "B.Tech → ML Engineer",
+      "B.Tech → Data Scientist"
+    ],
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "COMEDK"
+    ]
+  },
+  {
+    "id": "btech-cyber-security",
+    "name": "B.Tech Cyber Security",
+    "category": "Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCM students",
+    "overview": "Cyber security-focused undergraduate roadmap with systems, networks, cloud and security engineering.",
+    "careerPathways": [
+      "B.Tech → Security Engineer",
+      "B.Tech → SOC Analyst",
+      "B.Tech → Cyber Security Engineer"
+    ],
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "COMEDK"
+    ]
+  },
+  {
+    "id": "btech-data-science",
+    "name": "B.Tech Data Science",
+    "category": "Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCM students",
+    "overview": "Mathematics, programming, statistics, data engineering and machine learning roadmap.",
+    "careerPathways": [
+      "B.Tech → Data Scientist",
+      "B.Tech → Data Engineer",
+      "B.Tech → Data Analyst"
+    ],
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "COMEDK"
+    ]
+  },
+  {
+    "id": "btech-eee",
+    "name": "B.Tech Electrical & Electronics Engineering",
+    "category": "Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCM students",
+    "overview": "Electrical machines, power systems, electronics, control and modern industry skills.",
+    "careerPathways": [
+      "B.Tech → Electrical Engineer",
+      "B.Tech → Power Systems Engineer",
+      "B.Tech → Automation Engineer"
+    ],
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "COMEDK"
+    ]
+  },
+  {
+    "id": "btech-civil",
+    "name": "B.Tech Civil Engineering",
+    "category": "Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCM students",
+    "overview": "Civil engineering foundations, structural analysis, construction, transportation and employability.",
+    "careerPathways": [
+      "B.Tech → Civil Engineer",
+      "B.Tech → Structural Engineer",
+      "B.Tech → Project Engineer"
+    ],
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "COMEDK"
+    ]
+  },
+  {
+    "id": "btech-mechatronics",
+    "name": "B.Tech Mechatronics & Robotics",
+    "category": "Engineering",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCM students",
+    "overview": "Mechanics, electronics, control, robotics, automation and embedded systems.",
+    "careerPathways": [
+      "B.Tech → Robotics Engineer",
+      "B.Tech → Automation Engineer",
+      "B.Tech → Mechatronics Engineer"
+    ],
+    "topExams": [
+      "JEE Main",
+      "KCET",
+      "COMEDK"
+    ]
+  },
+  {
+    "id": "mbbs-foundation",
+    "name": "MBBS Academic & Career Roadmap",
+    "category": "Medical",
+    "duration": "5.5 Years",
+    "eligibility": "10+2 PCB students",
+    "overview": "Medical education roadmap from NEET preparation through clinical foundations and postgraduate planning.",
+    "careerPathways": [
+      "MBBS → Doctor",
+      "MBBS → Medical Researcher",
+      "MBBS → Public Health Professional"
+    ],
+    "topExams": [
+      "NEET-UG"
+    ]
+  },
+  {
+    "id": "bds-roadmap",
+    "name": "BDS Dental Career Roadmap",
+    "category": "Medical",
+    "duration": "5 Years",
+    "eligibility": "10+2 PCB students",
+    "overview": "Dental education, clinical foundations, internships and higher-study/career pathways.",
+    "careerPathways": [
+      "BDS → Dentist",
+      "BDS → Clinical Researcher",
+      "BDS → Dental Public Health Professional"
+    ],
+    "topExams": [
+      "NEET-UG"
+    ]
+  },
+  {
+    "id": "bpharm-career",
+    "name": "B.Pharm Career & Industry Roadmap",
+    "category": "Pharmacy",
+    "duration": "4 Years",
+    "eligibility": "10+2 PCB/PCM students",
+    "overview": "Pharmacy sciences, industrial functions, quality, regulatory and clinical career pathways.",
+    "careerPathways": [
+      "B.Pharm → Pharmacist",
+      "B.Pharm → QA Analyst",
+      "B.Pharm → Clinical Research Associate"
+    ],
+    "topExams": [
+      "KCET",
+      "MHT-CET",
+      "NEET-UG"
+    ]
+  },
+  {
+    "id": "bca-career",
+    "name": "BCA Computer Applications Roadmap",
+    "category": "Computer Science",
+    "duration": "3 Years",
+    "eligibility": "10+2 students",
+    "overview": "Programming, databases, web development, cloud and employability path for BCA students.",
+    "careerPathways": [
+      "BCA → Software Developer",
+      "BCA → Web Developer",
+      "BCA → Support Engineer"
+    ],
+    "topExams": [
+      "CUET-UG",
+      "University Admissions"
+    ]
+  },
+  {
+    "id": "mba-career",
+    "name": "MBA Management & Business Analytics",
+    "category": "Management",
+    "duration": "2 Years",
+    "eligibility": "Graduates",
+    "overview": "Management foundations, analytics, communication, internships and corporate roles.",
+    "careerPathways": [
+      "MBA → Business Analyst",
+      "MBA → Product Manager",
+      "MBA → Management Associate"
+    ],
+    "topExams": [
+      "CAT",
+      "XAT",
+      "CMAT",
+      "MAT"
+    ]
+  },
+  {
+    "id": "llb-career",
+    "name": "Integrated Law Career Roadmap",
+    "category": "Law",
+    "duration": "5 Years",
+    "eligibility": "10+2 students",
+    "overview": "Legal reasoning, constitutional law, contracts, mooting, internships and career pathways.",
+    "careerPathways": [
+      "Integrated → Advocate",
+      "Integrated → Legal Analyst",
+      "Integrated → Corporate Legal Associate"
+    ],
+    "topExams": [
+      "CLAT",
+      "AILET"
+    ]
   }
 ]

@@ -1,23 +1,10 @@
-import { addNotificationLog as addProductionNotificationLog } from '@/lib/productionDb';
-
 import {
   LeadRecord,
   StudentRecord,
   DemoBookingRecord,
   leadStore,
 } from './storage';
-
-async function persistNotificationLog(log: Parameters<typeof addProductionNotificationLog>[0]) {
-  if (process.env.DATABASE_URL) {
-    try {
-      await addProductionNotificationLog(log);
-      return;
-    } catch (error) {
-      console.error('Production notification log persistence failed:', error);
-    }
-  }
-  leadStore.addNotificationLog(log);
-}
+import { appendRow } from '@/lib/googleSheets';
 
 type NotificationStatus =
   | 'SENT'
@@ -66,14 +53,14 @@ You can now access:
 • Resources
 • AI Counsellor
 
-Welcome to EduPath — From 12th to Your First Job.
+Welcome to EduPath — From 10th to Your First Job.
 
 Thank you for choosing EduPath AI.`;
 
   const studentSmsMessage =
     `Hi ${student.name}, thanks for registering with EduPath! ` +
     `Your student account has been successfully created. ` +
-    `Welcome to EduPath AI - From 12th to Your First Job.`;
+    `Welcome to EduPath AI - From 10th to Your First Job.`;
 
   let whatsappStatus: NotificationStatus = 'DEV_MODE';
   let smsStatus: NotificationStatus = 'DEV_MODE';
@@ -117,8 +104,18 @@ Thank you for choosing EduPath AI.`;
           timestamp,
         };
 
-        await persistNotificationLog(log);
+        leadStore.addNotificationLog(log);
 
+        await appendRow('NotificationLogs', [
+          log.id,
+          log.targetType,
+          log.recipient,
+          log.messageSnippet,
+          log.status,
+          log.provider,
+          log.timestamp,
+          '',
+        ]);
       } else {
         whatsappStatus = 'FAILED';
 
@@ -136,7 +133,7 @@ Thank you for choosing EduPath AI.`;
           errorDetail: errorText,
         };
 
-        await persistNotificationLog(log);
+        leadStore.addNotificationLog(log);
       }
     } catch (error: unknown) {
       whatsappStatus = 'FAILED';
@@ -146,7 +143,7 @@ Thank you for choosing EduPath AI.`;
           ? error.message
           : 'WhatsApp network error';
 
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-WA-REG-ERR-${Date.now()}`,
         targetType: 'STUDENT_WHATSAPP',
         recipient: student.mobile,
@@ -163,7 +160,7 @@ Thank you for choosing EduPath AI.`;
        WHATSAPP DEVELOPMENT MODE
        ======================================================== */
 
-    await persistNotificationLog({
+    leadStore.addNotificationLog({
       id: `NOTIF-DEV-WA-REG-${Date.now()}`,
       targetType: 'STUDENT_WHATSAPP',
       recipient: student.mobile,
@@ -221,14 +218,24 @@ Thank you for choosing EduPath AI.`;
           timestamp,
         };
 
-        await persistNotificationLog(log);
+        leadStore.addNotificationLog(log);
 
+        await appendRow('NotificationLogs', [
+          log.id,
+          log.targetType,
+          log.recipient,
+          log.messageSnippet,
+          log.status,
+          log.provider,
+          log.timestamp,
+          '',
+        ]);
       } else {
         smsStatus = 'FAILED';
 
         const errorText = await response.text();
 
-        await persistNotificationLog({
+        leadStore.addNotificationLog({
           id: `NOTIF-SMS-REG-ERR-${Date.now()}`,
           targetType: 'STUDENT_SMS',
           recipient: student.mobile,
@@ -248,7 +255,7 @@ Thank you for choosing EduPath AI.`;
           ? error.message
           : 'SMS network error';
 
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-SMS-REG-ERR-${Date.now()}`,
         targetType: 'STUDENT_SMS',
         recipient: student.mobile,
@@ -265,7 +272,7 @@ Thank you for choosing EduPath AI.`;
        SMS DEVELOPMENT MODE
        ======================================================== */
 
-    await persistNotificationLog({
+    leadStore.addNotificationLog({
       id: `NOTIF-DEV-SMS-REG-${Date.now()}`,
       targetType: 'STUDENT_SMS',
       recipient: student.mobile,
@@ -353,7 +360,7 @@ Status: REQUEST RECEIVED
 Our counsellor will contact you to confirm the slot.
 
 EduPath AI
-From 12th to Your First Job.`;
+From 10th to Your First Job.`;
 
   if (whatsappToken && whatsappPhoneId) {
     try {
@@ -383,7 +390,7 @@ From 12th to Your First Job.`;
       if (!adminResponse.ok) {
         const errorText = await adminResponse.text();
 
-        await persistNotificationLog({
+        leadStore.addNotificationLog({
           id: `NOTIF-WA-ERR-${Date.now()}`,
           targetType: 'ADMIN_WHATSAPP',
           recipient: adminPhone,
@@ -400,7 +407,7 @@ From 12th to Your First Job.`;
         };
       }
 
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-WA-ADM-${Date.now()}`,
         targetType: 'ADMIN_WHATSAPP',
         recipient: adminPhone,
@@ -437,7 +444,7 @@ From 12th to Your First Job.`;
       if (!studentResponse.ok) {
         const errorText = await studentResponse.text();
 
-        await persistNotificationLog({
+        leadStore.addNotificationLog({
           id: `NOTIF-WA-STU-ERR-${Date.now()}`,
           targetType: 'STUDENT_WHATSAPP',
           recipient: student.mobile,
@@ -454,7 +461,7 @@ From 12th to Your First Job.`;
         };
       }
 
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-WA-STU-${Date.now()}`,
         targetType: 'STUDENT_WHATSAPP',
         recipient: student.mobile,
@@ -475,7 +482,7 @@ From 12th to Your First Job.`;
           ? error.message
           : 'Network error';
 
-      await persistNotificationLog({
+      leadStore.addNotificationLog({
         id: `NOTIF-WA-ERR-${Date.now()}`,
         targetType: 'ADMIN_WHATSAPP',
         recipient: adminPhone,
@@ -497,7 +504,7 @@ From 12th to Your First Job.`;
      DEVELOPMENT MODE
      ========================================================== */
 
-  await persistNotificationLog({
+  leadStore.addNotificationLog({
     id: `NOTIF-DEV-WA-ADM-${Date.now()}`,
     targetType: 'ADMIN_WHATSAPP',
     recipient: adminPhone,
@@ -508,7 +515,7 @@ From 12th to Your First Job.`;
     timestamp,
   });
 
-  await persistNotificationLog({
+  leadStore.addNotificationLog({
     id: `NOTIF-DEV-WA-STU-${Date.now()}`,
     targetType: 'STUDENT_WHATSAPP',
     recipient: student.mobile,

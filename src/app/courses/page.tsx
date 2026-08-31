@@ -1,125 +1,76 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Compass, CheckCircle2, Sparkles } from 'lucide-react';
-import DemoModal from '@/components/DemoModal';
+import React, { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { ArrowRight, BookOpen, Search, Sparkles } from 'lucide-react';
 import coursesData from '@/data/courses.json';
 
+const categories = ['All', ...Array.from(new Set(coursesData.map((course) => course.category))).sort()];
+
 export default function CoursesPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [isDemoOpen, setIsDemoOpen] = useState(false);
-  const [defaultCourse, setDefaultCourse] = useState('');
+  const [category, setCategory] = useState('All');
+  const [search, setSearch] = useState('');
 
-  const categories = ['All', ...Array.from(new Set(coursesData.map((course) => course.category)))];
-
-  const filteredCourses = selectedCategory === 'All'
-    ? coursesData
-    : coursesData.filter(c => c.category === selectedCategory);
-
-  const handleOpenDemo = (courseName: string) => {
-    setDefaultCourse(courseName);
-    setIsDemoOpen(true);
-  };
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return coursesData.filter((course) => {
+      const categoryMatch = category === 'All' || course.category === category;
+      const searchMatch = !q || [course.name, course.category, course.overview, ...course.careerPathways, ...course.topExams].join(' ').toLowerCase().includes(q);
+      return categoryMatch && searchMatch;
+    });
+  }, [category, search]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <section className="rounded-3xl bg-gradient-to-r from-slate-950 via-brand-950 to-slate-950 text-white p-7 sm:p-10 shadow-xl border border-slate-800">
+        <div className="flex items-center gap-2 text-brand-300 text-xs font-bold uppercase tracking-wider"><BookOpen className="w-4 h-4" /> EduPath Learning Hub</div>
+        <h1 className="mt-3 text-3xl sm:text-5xl font-black">Courses, Skills & Career Roadmaps</h1>
+        <p className="mt-3 text-sm text-slate-300 max-w-3xl">Explore degree pathways and skill-based learning from foundation to professional level. Each course has a structured syllabus, topic roadmap, practice, quizzes, mock tests and a capstone path.</p>
+      </section>
 
-      {/* Header */}
-      <div className="space-y-3">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-xs font-bold text-brand-700">
-          <Compass className="w-3.5 h-3.5 text-brand-500" />
-          <span>Degree Pathways & Career Roadmaps</span>
+      <section className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-4">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search DSA, DevOps, MBBS, B.Tech, AI, Law..." className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-brand-500 text-sm" />
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
-          Complete Course & Career Pathway Catalog
-        </h1>
-        <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
-          From 10th grade to your first job: Explore every listed undergraduate and postgraduate pathway with verified career tracks in Pharmacy (D.Pharm, B.Pharm, Pharm.D, M.Pharm), Computer Science, AI/ML, Medical, Law, and Management.
-        </p>
+        <div className="flex flex-wrap gap-2">
+          {categories.map((item) => (
+            <button key={item} type="button" onClick={() => setCategory(item)} className={`px-3 py-2 rounded-xl text-xs font-bold ${category === item ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>{item}</button>
+          ))}
+        </div>
+      </section>
+
+      <div className="flex items-center justify-between text-sm">
+        <p className="font-bold text-slate-800">{filtered.length} learning paths</p>
+        <p className="text-slate-500">Basic → Intermediate → Advanced → Professional</p>
       </div>
 
-      {/* Category Tabs */}
-      <div className="flex flex-wrap gap-2 text-xs font-semibold">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2.5 rounded-xl transition ${
-              selectedCategory === cat
-                ? 'bg-brand-600 text-white font-bold shadow-md shadow-brand-500/20'
-                : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            {cat} {cat === 'Pharmacy' && '💊'}
-          </button>
-        ))}
-      </div>
-
-      {/* Courses Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCourses.map((c) => (
-          <div key={c.id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:border-brand-400 hover:shadow-lg transition flex flex-col justify-between">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-brand-50 text-brand-700 font-bold text-xs rounded-lg">
-                  {c.category}
-                </span>
-                <span className="text-xs text-slate-500 font-semibold">{c.duration}</span>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-slate-900">{c.name}</h3>
-                <p className="text-xs text-slate-500 mt-1">Eligibility: {c.eligibility}</p>
-              </div>
-
-              <p className="text-xs text-slate-600 leading-relaxed">{c.overview}</p>
-
-              {/* Career Pathways (Degree -> First Job) */}
-              <div className="pt-2 space-y-2">
-                <div className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                  Degree to First Job Pathways:
-                </div>
-                <div className="space-y-1.5 bg-slate-50 p-3 rounded-xl">
-                  {c.careerPathways.map((path, idx) => (
-                    <div key={idx} className="flex items-start text-xs text-slate-700">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mr-2 shrink-0 mt-0.5" />
-                      <span>{path}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Entrance Exams */}
-              <div className="pt-1">
-                <div className="text-[11px] font-bold text-slate-500 uppercase mb-1">Applicable Entrance Exams:</div>
-                <div className="flex flex-wrap gap-1">
-                  {c.topExams.map((ex, idx) => (
-                    <span key={idx} className="text-[11px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-semibold">
-                      {ex}
-                    </span>
-                  ))}
-                </div>
-              </div>
+        {filtered.map((course) => (
+          <article key={course.id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-brand-300 transition flex flex-col">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-brand-50 text-brand-700">{course.category}</span>
+              <span className="text-[11px] text-slate-500 font-semibold">{course.duration}</span>
             </div>
-
-            <div className="pt-6">
-              <button
-                onClick={() => handleOpenDemo(c.name)}
-                className="w-full py-3 bg-slate-900 hover:bg-brand-600 text-white text-xs font-bold rounded-xl transition shadow flex items-center justify-center"
-              >
-                <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                Book Free Demo for {c.name.split(' ')[0]}
-              </button>
+            <h2 className="mt-4 text-xl font-black text-slate-900">{course.name}</h2>
+            <p className="mt-2 text-xs leading-relaxed text-slate-600">{course.overview}</p>
+            <div className="mt-4 space-y-1.5">
+              {course.careerPathways.slice(0, 4).map((path) => <div key={path} className="text-xs text-slate-700">• {path}</div>)}
             </div>
-          </div>
+            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+              <span className="text-[10px] font-bold text-slate-500">{course.topExams.slice(0, 3).join(' • ')}</span>
+              <Link href={`/courses/${course.id}`} className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-brand-600 transition">View Course <ArrowRight className="w-3.5 h-3.5" /></Link>
+            </div>
+          </article>
         ))}
       </div>
 
-      <DemoModal
-        isOpen={isDemoOpen}
-        onClose={() => setIsDemoOpen(false)}
-        defaultCourse={defaultCourse}
-      />
+      {filtered.length === 0 && <div className="py-16 text-center text-slate-500 text-sm">No course matched your search.</div>}
+
+      <div className="rounded-2xl bg-brand-50 border border-brand-100 p-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+        <div><div className="font-black text-slate-900">Need help choosing a course?</div><div className="text-xs text-slate-600 mt-1">Use the AI Counsellor to map your state, exam, interests and target job.</div></div>
+        <Link href="/ai-counsellor" className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-bold"><Sparkles className="w-4 h-4" /> Ask AI Counsellor</Link>
+      </div>
     </div>
   );
 }

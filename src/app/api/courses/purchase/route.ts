@@ -1,9 +1,3 @@
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
-import { prepareExcelStore, persistExcelStore } from '@/lib/excelPersistence';
-import { validateStudentRequest } from '@/lib/roleGuard';
-
 import {
   NextRequest,
   NextResponse,
@@ -30,9 +24,6 @@ export async function POST(
   request: NextRequest
 ) {
   try {
-    const auth = validateStudentRequest(request);
-    if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();
     const body =
       await request.json();
 
@@ -46,10 +37,6 @@ export async function POST(
       paymentReference,
       paymentMethod,
     } = body;
-
-    if (studentId && studentId !== auth.userId) {
-      return NextResponse.json({ success: false, message: 'You cannot purchase for another student.' }, { status: 403 });
-    }
 
     if (
       !studentId ||
@@ -198,8 +185,6 @@ export async function POST(
       createCourseProgress(
         progress
       );
-
-    await persistExcelStore();
 
     return NextResponse.json(
       {

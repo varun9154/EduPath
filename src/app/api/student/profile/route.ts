@@ -1,14 +1,9 @@
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
-import { prepareExcelStore, persistExcelStore } from '@/lib/excelPersistence';
-import { getStudentById as getProductionStudentById, getStudentByEmail as getProductionStudentByEmail, updateStudent as updateProductionStudent } from '@/lib/productionDb';
-import { validateStudentRequest } from '@/lib/roleGuard';
-
 import {
   NextRequest,
   NextResponse,
 } from 'next/server';
+
+import { authManager } from '@/lib/auth';
 
 import {
   findStudentById,
@@ -25,23 +20,16 @@ export async function GET(
   request: NextRequest
 ) {
   try {
-    const auth = validateStudentRequest(request);
-    if (!auth.authorized) return auth.response!;
-    await prepareExcelStore();
+    const sessionId = request.cookies.get('edupath_student_sess')?.value || '';
+    const session = authManager.getStudentSession(sessionId);
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Student session required.' }, { status: 401 });
+    }
     const { searchParams } =
       new URL(request.url);
 
     const studentId =
-      searchParams.get('studentId');
-
-    if (studentId && studentId !== auth.userId) {
-      return NextResponse.json({ success: false, message: 'You cannot access another student account.' }, { status: 403 });
-    }
-
-    const requestedEmail = searchParams.get('email');
-    if (!studentId && requestedEmail && requestedEmail.trim().toLowerCase() !== (auth.email || '').toLowerCase()) {
-      return NextResponse.json({ success: false, message: 'You cannot access another student account.' }, { status: 403 });
-    }
+      searchParams.get('studentId') || session.userId;
 
     const email =
       searchParams.get('email');
@@ -56,7 +44,7 @@ export async function GET(
 
     if (studentId) {
       student =
-        process.env.DATABASE_URL ? await getProductionStudentById(studentId) : findStudentById(studentId);
+        findStudentById(studentId);
     }
 
     /* -----------------------------------------------
@@ -65,7 +53,7 @@ export async function GET(
 
     if (!student && email) {
       student =
-        process.env.DATABASE_URL ? await getProductionStudentByEmail(email) : findStudentByEmail(email);
+        findStudentByEmail(email);
     }
 
     /* -----------------------------------------------
@@ -245,11 +233,16 @@ export async function PATCH(
   request: NextRequest
 ) {
   try {
+    const sessionId = request.cookies.get('edupath_student_sess')?.value || '';
+    const session = authManager.getStudentSession(sessionId);
+    if (!session) {
+      return NextResponse.json({ success: false, message: 'Student session required.' }, { status: 401 });
+    }
     const body =
       await request.json();
 
     const studentId =
-      body.studentId;
+      String(body.studentId || session.userId);
 
     const email =
       body.email;
@@ -264,12 +257,16 @@ export async function PATCH(
 
     if (studentId) {
       student =
-        process.env.DATABASE_URL ? await getProductionStudentById(String(studentId)) : findStudentById(String(studentId));
+        findStudentById(
+          String(studentId)
+        );
     }
 
     if (!student && email) {
       student =
-        process.env.DATABASE_URL ? await getProductionStudentByEmail(String(email)) : findStudentByEmail(String(email));
+        findStudentByEmail(
+          String(email)
+        );
     }
 
     /* -----------------------------------------------
@@ -520,14 +517,14 @@ export async function PATCH(
        UPDATE EXCEL
     ----------------------------------------------- */
 
-    const updatedStudent = process.env.DATABASE_URL
-      ? await updateProductionStudent(student.studentId, updates)
-      : updateStudent(student.studentId, updates);
+    const updatedStudent =
+      updateStudent(
+        student.studentId,
+        updates
+      );
 
     if (!updatedStudent) {
-      await persistExcelStore();
-
-    return NextResponse.json(
+      return NextResponse.json(
         {
           success: false,
           message:
