@@ -1,13 +1,128 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
+interface DemoBooking {
+  bookingId: string;
+  studentId: string;
+  name: string;
+  email: string;
+  mobile: string;
+  interestedCourse: string;
+  preferredDate: string;
+  preferredTimeSlot: string;
+  counsellingMode: string;
+  status: string;
+  counsellor?: string;
+  notes?: string;
+}
+
+interface Counsellor {
+  counsellorId: string;
+  name: string;
+  email: string;
+  phone: string;
+  specialization: string;
+  active: boolean;
+}
 
 export default function AdminPage() {
   const router = useRouter();
+  const [demos, setDemos] = useState<DemoBooking[]>([]);
+  const [counsellors, setCounsellors] = useState<Counsellor[]>([]);
+  const [selectedDemo, setSelectedDemo] = useState<DemoBooking | null>(null);
+  const [selectedCounsellor, setSelectedCounsellor] = useState<string>('');
+  const [counsellingDate, setCounsellingDate] = useState<string>('');
+  const [counsellingTime, setCounsellingTime] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+
+  // Load demo bookings and counsellors
+  useEffect(() => {
+    loadData();
+    const interval = setInterval(loadData, 30000); // Refresh every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  async function loadData() {
+    try {
+      const [dashRes, counselRes] = await Promise.all([
+        fetch('/api/admin', { cache: 'no-store' }),
+        fetch('/api/admin?resource=counsellors', { cache: 'no-store' }),
+      ]);
+
+      if (dashRes.ok) {
+        const dashData = await dashRes.json();
+        if (dashData.data?.demoBookings) {
+          setDemos(dashData.data.demoBookings);
+        }
+      }
+
+      if (counselRes.ok) {
+        const counselData = await counselRes.json();
+        if (counselData.data) {
+          setCounsellors(counselData.data);
+        }
+      }
+    } catch (error) {
+      console.error('Load data error:', error);
+    }
+  }
+
+  async function handleAssignCounsellor() {
+    if (!selectedDemo || !selectedCounsellor) {
+      setMessageType('error');
+      setMessage('Please select both a demo booking and a counsellor.');
+      return;
+    }
+
+    setLoading(true);
+    setMessage('');
+    setMessageType('');
+
+    try {
+      const res = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'assign_counsellor',
+          bookingId: selectedDemo.bookingId,
+          counsellorId: selectedCounsellor,
+          counsellingDate,
+          counsellingTime,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        setMessageType('success');
+        setMessage('Counsellor assigned successfully! Student has been notified.');
+        setSelectedDemo(null);
+        setSelectedCounsellor('');
+        setCounsellingDate('');
+        setCounsellingTime('');
+        await loadData();
+      } else {
+        setMessageType('error');
+        setMessage(result.message || 'Failed to assign counsellor.');
+      }
+    } catch (error) {
+      console.error('Assign error:', error);
+      setMessageType('error');
+      setMessage('Error assigning counsellor. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function handleLogout() {
     router.push('/login');
   }
+
+  const pendingDemos = demos.filter(d => d.status === 'REQUEST RECEIVED' || d.status === 'REQUESTED');
 
   return (
     <main
@@ -135,7 +250,7 @@ export default function AdminPage() {
 
           <DashboardCard
             title="Bookings"
-            value="0"
+            value={String(demos.length)}
             description="Demo bookings"
           />
         </div>
@@ -203,6 +318,305 @@ export default function AdminPage() {
               View Reports
             </button>
           </div>
+        </div>
+
+        {/* Counsellor Assignment Panel */}
+        <div
+          style={{
+            marginTop: '30px',
+            background: '#ffffff',
+            borderRadius: '16px',
+            padding: '30px',
+            border: '1px solid #e2e8f0',
+            boxShadow:
+              '0 8px 30px rgba(15,23,42,0.06)',
+          }}
+        >
+          <h2
+            style={{
+              marginTop: 0,
+              color: '#0f172a',
+            }}
+          >
+            Counsellor Assignment
+          </h2>
+
+          {message && (
+            <div
+              style={{
+                padding: '12px 16px',
+                borderRadius: '8px',
+                marginBottom: '20px',
+                backgroundColor:
+                  messageType === 'success'
+                    ? '#d1fae5'
+                    : '#fee2e2',
+                color:
+                  messageType === 'success'
+                    ? '#065f46'
+                    : '#991b1b',
+                border:
+                  messageType === 'success'
+                    ? '1px solid #6ee7b7'
+                    : '1px solid #fecaca',
+              }}
+            >
+              {message}
+            </div>
+          )}
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns:
+                'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '20px',
+              marginBottom: '20px',
+            }}
+          >
+            {/* Demo Selection */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  fontSize: '14px',
+                }}
+              >
+                Select Demo Booking
+              </label>
+              <select
+                value={selectedDemo?.bookingId || ''}
+                onChange={(e) => {
+                  const demo = demos.find(
+                    (d) => d.bookingId === e.target.value
+                  );
+                  setSelectedDemo(demo || null);
+                  setCounsellingDate(
+                    demo?.preferredDate || ''
+                  );
+                  setCounsellingTime(
+                    demo?.preferredTimeSlot || ''
+                  );
+                }}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  backgroundColor: '#ffffff',
+                }}
+              >
+                <option value="">
+                  {pendingDemos.length > 0
+                    ? `Select from ${pendingDemos.length} pending booking(s)`
+                    : 'No pending bookings'}
+                </option>
+                {pendingDemos.map((demo) => (
+                  <option
+                    key={demo.bookingId}
+                    value={demo.bookingId}
+                  >
+                    {demo.name} - {demo.bookingId}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Counsellor Selection */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  fontSize: '14px',
+                }}
+              >
+                Select Counsellor
+              </label>
+              <select
+                value={selectedCounsellor}
+                onChange={(e) =>
+                  setSelectedCounsellor(e.target.value)
+                }
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  backgroundColor: '#ffffff',
+                }}
+              >
+                <option value="">
+                  {counsellors.length > 0
+                    ? `Select from ${counsellors.length} counsellor(s)`
+                    : 'No counsellors available'}
+                </option>
+                {counsellors.map((c) => (
+                  <option key={c.counsellorId} value={c.counsellorId}>
+                    {c.name} - {c.specialization}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Date Selection */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  fontSize: '14px',
+                }}
+              >
+                Counselling Date
+              </label>
+              <input
+                type="date"
+                value={counsellingDate}
+                onChange={(e) =>
+                  setCounsellingDate(e.target.value)
+                }
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Time Selection */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  fontSize: '14px',
+                }}
+              >
+                Counselling Time
+              </label>
+              <input
+                type="time"
+                value={counsellingTime}
+                onChange={(e) =>
+                  setCounsellingTime(e.target.value)
+                }
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Assignment Button */}
+          <button
+            onClick={handleAssignCounsellor}
+            disabled={loading}
+            style={{
+              background: '#087bd1',
+              color: '#ffffff',
+              border: 'none',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              fontWeight: 700,
+              opacity: loading ? 0.6 : 1,
+            }}
+          >
+            {loading
+              ? 'Assigning...'
+              : 'Assign Counsellor & Notify Student'}
+          </button>
+
+          {/* Selected Demo Info */}
+          {selectedDemo && (
+            <div
+              style={{
+                marginTop: '20px',
+                padding: '16px',
+                background: '#f8fafc',
+                borderRadius: '8px',
+                border: '1px solid #e2e8f0',
+              }}
+            >
+              <h3
+                style={{
+                  marginTop: 0,
+                  color: '#0f172a',
+                  fontSize: '16px',
+                }}
+              >
+                Selected Demo Details
+              </h3>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns:
+                    'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '16px',
+                  fontSize: '14px',
+                  color: '#475569',
+                }}
+              >
+                <div>
+                  <strong>Student:</strong>{' '}
+                  {selectedDemo.name}
+                </div>
+                <div>
+                  <strong>Email:</strong>{' '}
+                  {selectedDemo.email}
+                </div>
+                <div>
+                  <strong>Phone:</strong>{' '}
+                  {selectedDemo.mobile}
+                </div>
+                <div>
+                  <strong>Course:</strong>{' '}
+                  {selectedDemo.interestedCourse}
+                </div>
+                <div>
+                  <strong>Mode:</strong>{' '}
+                  {selectedDemo.counsellingMode}
+                </div>
+                <div>
+                  <strong>Current Status:</strong>{' '}
+                  <span
+                    style={{
+                      padding: '4px 8px',
+                      background: '#fef3c7',
+                      color: '#92400e',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {selectedDemo.status}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </main>
@@ -273,4 +687,4 @@ const actionButton = {
   borderRadius: '8px',
   cursor: 'pointer',
   fontWeight: 700,
-};
+} as const;

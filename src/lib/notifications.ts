@@ -2,6 +2,7 @@ import {
   LeadRecord,
   StudentRecord,
   DemoBookingRecord,
+  CounsellorRecord,
   leadStore,
 } from './storage';
 import { appendRow } from '@/lib/googleSheets';
@@ -10,7 +11,8 @@ type NotificationStatus =
   | 'SENT'
   | 'PENDING'
   | 'FAILED'
-  | 'DEV_MODE';
+  | 'DEV_MODE'
+  | 'NOT_CONFIGURED';
 
 type NotificationResult = {
   adminNotifyStatus: NotificationStatus;
@@ -530,4 +532,585 @@ From 10th to Your First Job.`;
     adminNotifyStatus: 'DEV_MODE',
     studentNotifyStatus: 'DEV_MODE',
   };
+}
+
+/**
+ * ============================================================
+ * SEND COUNSELLOR ASSIGNMENT NOTIFICATION
+ * ============================================================
+ *
+ * Send email and SMS to student when counsellor is assigned.
+ */
+export async function sendCounsellorAssignmentNotification(
+  student: StudentRecord,
+  booking: DemoBookingRecord,
+  counsellor: CounsellorRecord
+): Promise<{
+  emailStatus: NotificationStatus;
+  smsStatus: NotificationStatus;
+}> {
+  const timestamp = new Date().toISOString();
+
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpFrom = process.env.SMTP_FROM || 'noreply@edupath.ai';
+
+  const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+  const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+
+  const studentPhone = student.mobile.replace(/[^\d]/g, '');
+
+  let emailStatus: NotificationStatus = 'DEV_MODE';
+  let smsStatus: NotificationStatus = 'DEV_MODE';
+
+  /* ==========================================================
+     EMAIL
+     ========================================================== */
+
+  if (smtpHost && smtpUser && smtpPass && smtpPort) {
+    try {
+      const nodemailer = (await import('nodemailer')).default;
+      const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: Number(smtpPort),
+        secure: Number(smtpPort) === 465,
+        auth: {
+          user: smtpUser,
+          pass: smtpPass,
+        },
+      });
+
+      const emailBody = `
+Dear ${student.name},
+
+Your EduPath counselling session has been assigned!
+
+🎓 Session Details:
+Student ID: ${student.studentId}
+Counsellor: ${counsellor.name}
+Date: ${booking.preferredDate || 'To be confirmed'}
+Time: ${booking.preferredTimeSlot || 'To be confirmed'}
+Mode: ${booking.counsellingMode || 'Online Video Call'}
+Booking ID: ${booking.bookingId}
+
+Status: CONFIRMED ✓
+
+You may contact EduPath support at support@edupath.ai if you need assistance.
+
+Best regards,
+EduPath Team
+From 10th to Your First Job 🚀
+`;
+
+      await transporter.sendMail({
+        from: smtpFrom,
+        to: student.email,
+        subject: `EduPath Counsellor Assigned — ${booking.bookingId}`,
+        text: emailBody,
+      });
+
+      emailStatus = 'SENT';
+
+      // Log notification
+      if (process.env.DATABASE_URL) {
+        const { addNotificationLog } = await import('@/lib/productionDb');
+        await addNotificationLog({
+          id: `NOTIF-EMAIL-ASSIGN-${Date.now()}`,
+          targetType: 'STUDENT_EMAIL',
+          recipient: student.email,
+          messageSnippet: `Counsellor ${counsellor.name} assigned to booking ${booking.bookingId}`,
+          status: 'SENT',
+          provider: 'Nodemailer/SMTP',
+          timestamp,
+        });
+      } else {
+        leadStore.addNotificationLog({
+          id: `NOTIF-EMAIL-ASSIGN-${Date.now()}`,
+          targetType: 'STUDENT_EMAIL',
+          recipient: student.email,
+          messageSnippet: `Counsellor ${counsellor.name} assigned`,
+          status: 'SENT',
+          provider: 'Nodemailer/SMTP',
+          timestamp,
+        });
+      }
+    } catch (error) {
+      console.error('Email error:', error);
+      emailStatus = 'FAILED';
+
+      if (process.env.DATABASE_URL) {
+        const { addNotificationLog } = await import('@/lib/productionDb');
+        await addNotificationLog({
+          id: `NOTIF-EMAIL-FAIL-${Date.now()}`,
+          targetType: 'STUDENT_EMAIL',
+          recipient: student.email,
+          messageSnippet: `Failed to send counsellor assignment`,
+          status: 'FAILED',
+          provider: 'Nodemailer/SMTP',
+          timestamp,
+          errorDetail: String(error),
+        });
+      }
+    }
+  } else {
+    emailStatus = 'NOT_CONFIGURED';
+  }
+
+  /* ==========================================================
+     SMS
+     ========================================================== */
+
+  if (twilioAccountSid && twilioAuthToken && twilioPhoneNumber) {
+    try {
+      const smsBody = `EduPath: Hi ${student.name}, your EduPath demo ${booking.bookingId} is confirmed with ${counsellor.name} on ${booking.preferredDate} at ${booking.preferredTimeSlot}. Mode: ${booking.counsellingMode}.`;
+
+      const response = await fetch('https://api.twilio.com/2010-04-01/Accounts/' + twilioAccountSid + '/Messages.json', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Basic ' + Buffer.from(twilioAccountSid + ':' + twilioAuthToken).toString('base64'),
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          From: twilioPhoneNumber,
+          To: studentPhone,
+          Body: smsBody,
+        }).toString(),
+      });
+
+      if (response.ok) {
+        smsStatus = 'SENT';
+
+        if (process.env.DATABASE_URL) {
+          const { addNotificationLog } = await import('@/lib/productionDb');
+          await addNotificationLog({
+            id: `NOTIF-SMS-ASSIGN-${Date.now()}`,
+            targetType: 'STUDENT_SMS',
+            recipient: student.mobile,
+            messageSnippet: `Counsellor assigned - ${booking.bookingId}`,
+            status: 'SENT',
+            provider: 'Twilio',
+            timestamp,
+          });
+        } else {
+          leadStore.addNotificationLog({
+            id: `NOTIF-SMS-ASSIGN-${Date.now()}`,
+            targetType: 'STUDENT_SMS',
+            recipient: student.mobile,
+            messageSnippet: `Counsellor assigned`,
+            status: 'SENT',
+            provider: 'Twilio',
+            timestamp,
+          });
+        }
+      } else {
+        smsStatus = 'FAILED';
+      }
+    } catch (error) {
+      console.error('SMS error:', error);
+      smsStatus = 'FAILED';
+
+      if (process.env.DATABASE_URL) {
+        const { addNotificationLog } = await import('@/lib/productionDb');
+        await addNotificationLog({
+          id: `NOTIF-SMS-FAIL-${Date.now()}`,
+          targetType: 'STUDENT_SMS',
+          recipient: student.mobile,
+          messageSnippet: `Failed to send SMS`,
+          status: 'FAILED',
+          provider: 'Twilio',
+          timestamp,
+          errorDetail: String(error),
+        });
+      }
+    }
+  } else {
+    smsStatus = 'NOT_CONFIGURED';
+  }
+
+  return {
+    emailStatus,
+    smsStatus,
+  };
+}
+
+/**
+ * ============================================================
+ * SEND DEMO RESCHEDULED NOTIFICATION
+ * ============================================================
+ */
+export async function sendDemoRescheduleNotification(
+  student: StudentRecord,
+  booking: DemoBookingRecord,
+  oldDate: string,
+  oldTime: string
+): Promise<{
+  emailStatus: NotificationStatus;
+  smsStatus: NotificationStatus;
+}> {
+  const timestamp = new Date().toISOString();
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpFrom = process.env.SMTP_FROM || 'noreply@edupath.ai';
+  const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+  const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+  const studentPhone = student.mobile.replace(/[^\d]/g, '');
+
+  let emailStatus: NotificationStatus = 'DEV_MODE';
+  let smsStatus: NotificationStatus = 'DEV_MODE';
+
+  /* EMAIL */
+  if (smtpHost && smtpUser && smtpPass && smtpPort) {
+    try {
+      const nodemailer = (await import('nodemailer')).default;
+      const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: Number(smtpPort),
+        secure: Number(smtpPort) === 465,
+        auth: { user: smtpUser, pass: smtpPass },
+      });
+
+      const emailBody = `Dear ${student.name},
+
+Your EduPath counselling session has been rescheduled.
+
+📅 Previous Schedule:
+Date: ${oldDate}
+Time: ${oldTime}
+
+🔄 New Schedule:
+Date: ${booking.preferredDate}
+Time: ${booking.preferredTimeSlot}
+Mode: ${booking.counsellingMode || 'Online Video Call'}
+
+Booking ID: ${booking.bookingId}
+Counsellor: ${booking.counsellor || 'To be assigned'}
+
+Please confirm your availability for the new time slot.
+
+Best regards,
+EduPath Team`;
+
+      await transporter.sendMail({
+        from: smtpFrom,
+        to: student.email,
+        subject: `EduPath Demo Rescheduled — ${booking.bookingId}`,
+        text: emailBody,
+      });
+
+      emailStatus = 'SENT';
+
+      if (process.env.DATABASE_URL) {
+        const { addNotificationLog } = await import('@/lib/productionDb');
+        await addNotificationLog({
+          id: `NOTIF-EMAIL-RESCHEDULE-${Date.now()}`,
+          targetType: 'STUDENT_EMAIL',
+          recipient: student.email,
+          messageSnippet: `Demo rescheduled from ${oldDate} to ${booking.preferredDate}`,
+          status: 'SENT',
+          provider: 'Nodemailer/SMTP',
+          timestamp,
+        });
+      }
+    } catch (error) {
+      emailStatus = 'FAILED';
+      console.error('Reschedule email error:', error);
+    }
+  }
+
+  /* SMS */
+  if (twilioAccountSid && twilioAuthToken && twilioPhoneNumber) {
+    try {
+      const smsBody = `EduPath: Hi ${student.name}, your demo ${booking.bookingId} has been rescheduled to ${booking.preferredDate} at ${booking.preferredTimeSlot}.`;
+      const response = await fetch(
+        'https://api.twilio.com/2010-04-01/Accounts/' + twilioAccountSid + '/Messages.json',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Basic ' + Buffer.from(twilioAccountSid + ':' + twilioAuthToken).toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({ From: twilioPhoneNumber, To: studentPhone, Body: smsBody }).toString(),
+        }
+      );
+
+      if (response.ok) {
+        smsStatus = 'SENT';
+        if (process.env.DATABASE_URL) {
+          const { addNotificationLog } = await import('@/lib/productionDb');
+          await addNotificationLog({
+            id: `NOTIF-SMS-RESCHEDULE-${Date.now()}`,
+            targetType: 'STUDENT_SMS',
+            recipient: student.mobile,
+            messageSnippet: `Demo rescheduled`,
+            status: 'SENT',
+            provider: 'Twilio',
+            timestamp,
+          });
+        }
+      } else {
+        smsStatus = 'FAILED';
+      }
+    } catch (error) {
+      smsStatus = 'FAILED';
+      console.error('Reschedule SMS error:', error);
+    }
+  }
+
+  return { emailStatus, smsStatus };
+}
+
+/**
+ * ============================================================
+ * SEND DEMO CANCELLED NOTIFICATION
+ * ============================================================
+ */
+export async function sendDemoCancellationNotification(
+  student: StudentRecord,
+  booking: DemoBookingRecord,
+  reason: string
+): Promise<{
+  emailStatus: NotificationStatus;
+  smsStatus: NotificationStatus;
+}> {
+  const timestamp = new Date().toISOString();
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpFrom = process.env.SMTP_FROM || 'noreply@edupath.ai';
+  const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+  const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+  const studentPhone = student.mobile.replace(/[^\d]/g, '');
+
+  let emailStatus: NotificationStatus = 'DEV_MODE';
+  let smsStatus: NotificationStatus = 'DEV_MODE';
+
+  /* EMAIL */
+  if (smtpHost && smtpUser && smtpPass && smtpPort) {
+    try {
+      const nodemailer = (await import('nodemailer')).default;
+      const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: Number(smtpPort),
+        secure: Number(smtpPort) === 465,
+        auth: { user: smtpUser, pass: smtpPass },
+      });
+
+      const emailBody = `Dear ${student.name},
+
+Your EduPath counselling session has been cancelled.
+
+Booking ID: ${booking.bookingId}
+Previous Date: ${booking.preferredDate}
+Previous Time: ${booking.preferredTimeSlot}
+
+Reason: ${reason}
+
+If you would like to reschedule or have any questions, 
+please contact EduPath support at support@edupath.ai.
+
+Best regards,
+EduPath Team`;
+
+      await transporter.sendMail({
+        from: smtpFrom,
+        to: student.email,
+        subject: `EduPath Demo Cancelled — ${booking.bookingId}`,
+        text: emailBody,
+      });
+
+      emailStatus = 'SENT';
+
+      if (process.env.DATABASE_URL) {
+        const { addNotificationLog } = await import('@/lib/productionDb');
+        await addNotificationLog({
+          id: `NOTIF-EMAIL-CANCEL-${Date.now()}`,
+          targetType: 'STUDENT_EMAIL',
+          recipient: student.email,
+          messageSnippet: `Demo ${booking.bookingId} cancelled`,
+          status: 'SENT',
+          provider: 'Nodemailer/SMTP',
+          timestamp,
+        });
+      }
+    } catch (error) {
+      emailStatus = 'FAILED';
+      console.error('Cancellation email error:', error);
+    }
+  }
+
+  /* SMS */
+  if (twilioAccountSid && twilioAuthToken && twilioPhoneNumber) {
+    try {
+      const smsBody = `EduPath: Hi ${student.name}, your demo ${booking.bookingId} has been cancelled. Reason: ${reason}`;
+      const response = await fetch(
+        'https://api.twilio.com/2010-04-01/Accounts/' + twilioAccountSid + '/Messages.json',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Basic ' + Buffer.from(twilioAccountSid + ':' + twilioAuthToken).toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({ From: twilioPhoneNumber, To: studentPhone, Body: smsBody }).toString(),
+        }
+      );
+
+      if (response.ok) {
+        smsStatus = 'SENT';
+        if (process.env.DATABASE_URL) {
+          const { addNotificationLog } = await import('@/lib/productionDb');
+          await addNotificationLog({
+            id: `NOTIF-SMS-CANCEL-${Date.now()}`,
+            targetType: 'STUDENT_SMS',
+            recipient: student.mobile,
+            messageSnippet: `Demo cancelled`,
+            status: 'SENT',
+            provider: 'Twilio',
+            timestamp,
+          });
+        }
+      } else {
+        smsStatus = 'FAILED';
+      }
+    } catch (error) {
+      smsStatus = 'FAILED';
+      console.error('Cancellation SMS error:', error);
+    }
+  }
+
+  return { emailStatus, smsStatus };
+}
+
+/**
+ * ============================================================
+ * SEND DEMO COMPLETED NOTIFICATION
+ * ============================================================
+ */
+export async function sendDemoCompletionNotification(
+  student: StudentRecord,
+  booking: DemoBookingRecord,
+  outcome: string,
+  followUpDate?: string
+): Promise<{
+  emailStatus: NotificationStatus;
+  smsStatus: NotificationStatus;
+}> {
+  const timestamp = new Date().toISOString();
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpFrom = process.env.SMTP_FROM || 'noreply@edupath.ai';
+  const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+  const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+  const studentPhone = student.mobile.replace(/[^\d]/g, '');
+
+  let emailStatus: NotificationStatus = 'DEV_MODE';
+  let smsStatus: NotificationStatus = 'DEV_MODE';
+
+  /* EMAIL */
+  if (smtpHost && smtpUser && smtpPass && smtpPort) {
+    try {
+      const nodemailer = (await import('nodemailer')).default;
+      const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: Number(smtpPort),
+        secure: Number(smtpPort) === 465,
+        auth: { user: smtpUser, pass: smtpPass },
+      });
+
+      const emailBody = `Dear ${student.name},
+
+Thank you for attending your EduPath counselling session!
+
+Session Details:
+Booking ID: ${booking.bookingId}
+Date: ${booking.preferredDate}
+Time: ${booking.preferredTimeSlot}
+Outcome: ${outcome}
+
+${followUpDate ? `Follow-up scheduled for: ${followUpDate}` : ''}
+
+We hope the session was helpful. For any further questions,
+please visit your dashboard or contact us at support@edupath.ai.
+
+Best regards,
+EduPath Team
+From 10th to Your First Job 🚀`;
+
+      await transporter.sendMail({
+        from: smtpFrom,
+        to: student.email,
+        subject: `EduPath Counselling Completed — ${booking.bookingId}`,
+        text: emailBody,
+      });
+
+      emailStatus = 'SENT';
+
+      if (process.env.DATABASE_URL) {
+        const { addNotificationLog } = await import('@/lib/productionDb');
+        await addNotificationLog({
+          id: `NOTIF-EMAIL-COMPLETE-${Date.now()}`,
+          targetType: 'STUDENT_EMAIL',
+          recipient: student.email,
+          messageSnippet: `Demo ${booking.bookingId} completed - ${outcome}`,
+          status: 'SENT',
+          provider: 'Nodemailer/SMTP',
+          timestamp,
+        });
+      }
+    } catch (error) {
+      emailStatus = 'FAILED';
+      console.error('Completion email error:', error);
+    }
+  }
+
+  /* SMS */
+  if (twilioAccountSid && twilioAuthToken && twilioPhoneNumber) {
+    try {
+      const smsBody = `EduPath: Hi ${student.name}, your counselling session ${booking.bookingId} is now complete. Outcome: ${outcome}.`;
+      const response = await fetch(
+        'https://api.twilio.com/2010-04-01/Accounts/' + twilioAccountSid + '/Messages.json',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Basic ' + Buffer.from(twilioAccountSid + ':' + twilioAuthToken).toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({ From: twilioPhoneNumber, To: studentPhone, Body: smsBody }).toString(),
+        }
+      );
+
+      if (response.ok) {
+        smsStatus = 'SENT';
+        if (process.env.DATABASE_URL) {
+          const { addNotificationLog } = await import('@/lib/productionDb');
+          await addNotificationLog({
+            id: `NOTIF-SMS-COMPLETE-${Date.now()}`,
+            targetType: 'STUDENT_SMS',
+            recipient: student.mobile,
+            messageSnippet: `Demo completed`,
+            status: 'SENT',
+            provider: 'Twilio',
+            timestamp,
+          });
+        }
+      } else {
+        smsStatus = 'FAILED';
+      }
+    } catch (error) {
+      smsStatus = 'FAILED';
+      console.error('Completion SMS error:', error);
+    }
+  }
+
+  return { emailStatus, smsStatus };
 }

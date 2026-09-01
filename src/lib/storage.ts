@@ -205,6 +205,24 @@ export interface AuditLogRecord {
   [key: string]: unknown;
 }
 
+export interface CounsellorRecord {
+  counsellorId: string;
+  name: string;
+  email: string;
+  phone: string;
+
+  specialization: string;
+  bio?: string;
+
+  active: boolean;
+  availability?: string;
+
+  createdAt: string;
+  updatedAt?: string;
+
+  [key: string]: unknown;
+}
+
 // ============================================================
 // DATA DIRECTORY
 // ============================================================

@@ -96,7 +96,15 @@ export default function CourseDetailPage() {
   const router = useRouter();
   const courseId = params.courseId as string;
 
-  const [student] = useState<{ studentId?: string; name?: string; email?: string } | null>(() => {
+  const getProgressStorageKey = (
+    id: string,
+    studentId?: string
+  ) =>
+    studentId
+      ? `edupath_progress_${studentId}_${id}`
+      : `edupath_progress_guest_${id}`;
+
+  const [student] = useState<{ id?: string; studentId?: string; name?: string; email?: string } | null>(() => {
     if (typeof window === 'undefined') return null;
     try {
       const raw = localStorage.getItem('edupath_student');
@@ -117,7 +125,7 @@ export default function CourseDetailPage() {
   const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(() => {
     if (typeof window === 'undefined') return new Set();
     try {
-      const savedProg = localStorage.getItem(`edupath_progress_${courseId}`);
+      const savedProg = localStorage.getItem(getProgressStorageKey(courseId, student?.studentId || student?.id));
       if (savedProg) {
         const p = JSON.parse(savedProg);
         if (Array.isArray(p.completedLessons)) return new Set(p.completedLessons);
@@ -128,7 +136,7 @@ export default function CourseDetailPage() {
   const [completedQuizIds, setCompletedQuizIds] = useState<Set<string>>(() => {
     if (typeof window === 'undefined') return new Set();
     try {
-      const savedProg = localStorage.getItem(`edupath_progress_${courseId}`);
+      const savedProg = localStorage.getItem(getProgressStorageKey(courseId, student?.studentId || student?.id));
       if (savedProg) {
         const p = JSON.parse(savedProg);
         if (Array.isArray(p.completedQuizzes)) return new Set(p.completedQuizzes);
@@ -139,7 +147,7 @@ export default function CourseDetailPage() {
   const [isEnrolled, setIsEnrolled] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     try {
-      const savedProg = localStorage.getItem(`edupath_progress_${courseId}`);
+      const savedProg = localStorage.getItem(getProgressStorageKey(courseId, student?.studentId || student?.id));
       return Boolean(savedProg);
     } catch {
       return false;
@@ -149,6 +157,7 @@ export default function CourseDetailPage() {
   // Quiz Player State
   const [currentQuizQ, setCurrentQuizQ] = useState(0);
   const [selectedOpt, setSelectedOpt] = useState<number | null>(null);
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [quizScore, setQuizScore] = useState<number | null>(null);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
 
@@ -948,7 +957,7 @@ export default function CourseDetailPage() {
 
     try {
       localStorage.setItem(
-        `edupath_progress_${courseId}`,
+        getProgressStorageKey(courseId, student?.studentId || student?.id),
         JSON.stringify({
           completedLessons: Array.from(updated),
           completedQuizzes: Array.from(completedQuizIds),
@@ -965,6 +974,7 @@ export default function CourseDetailPage() {
     setSelectedQuizTopic(topic);
     setCurrentQuizQ(0);
     setSelectedOpt(null);
+    setQuizAnswers({});
     setQuizScore(null);
     setQuizSubmitted(false);
     setActiveTab('quiz');
@@ -973,6 +983,10 @@ export default function CourseDetailPage() {
   const handleSelectQuizOption = (idx: number) => {
     if (quizSubmitted) return;
     setSelectedOpt(idx);
+    setQuizAnswers((previous) => ({
+      ...previous,
+      [currentQuizQ]: idx,
+    }));
   };
 
   const handleNextQuizQuestion = () => {
@@ -983,8 +997,29 @@ export default function CourseDetailPage() {
       setCurrentQuizQ((prev) => prev + 1);
       setSelectedOpt(null);
     } else {
-      // Complete quiz
-      const finalScore = 100; // Passed
+      // Complete quiz using the recorded answers.
+      const answers = {
+        ...quizAnswers,
+        [currentQuizQ]: selectedOpt ?? -1,
+      };
+
+      const correctCount = qList.reduce(
+        (total, question, index) =>
+          total +
+          (answers[index] === question.answerIndex
+            ? 1
+            : 0),
+        0
+      );
+
+      const finalScore =
+        qList.length > 0
+          ? Math.round(
+              (correctCount / qList.length) * 100
+            )
+          : 0;
+
+      setQuizAnswers(answers);
       setQuizScore(finalScore);
       setQuizSubmitted(true);
 
@@ -994,7 +1029,7 @@ export default function CourseDetailPage() {
 
       try {
         localStorage.setItem(
-          `edupath_progress_${courseId}`,
+          getProgressStorageKey(courseId, student?.studentId || student?.id),
           JSON.stringify({
             completedLessons: Array.from(completedLessonIds),
             completedQuizzes: Array.from(updated),

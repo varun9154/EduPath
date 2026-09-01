@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import type {
   AuditLogRecord,
   CounsellingRecord,
+  CounsellorRecord,
   DemoBookingRecord,
   LeadRecord,
   NotificationLogRecord,
@@ -656,6 +657,70 @@ export async function registerStudentBundle(
     leadId: bundle.lead.leadId,
     response,
   };
+}
+
+
+export async function getCounsellors(): Promise<CounsellorRecord[]> {
+  await ensureProductionSchema();
+  const rows = await query<{ data: string }>(
+    `SELECT data FROM edupath_records WHERE record_type = 'counsellor' AND (data->>'active')::boolean = true ORDER BY created_at ASC`
+  );
+
+  if (rows.length) return rows.map((row) => parseJson<CounsellorRecord>(row.data));
+  return [];
+}
+
+export async function getCounsellorById(counsellorId: string): Promise<CounsellorRecord | null> {
+  await ensureProductionSchema();
+  const rows = await query<{ data: string }>(
+    `SELECT data FROM edupath_records WHERE record_type = 'counsellor' AND id = $1 LIMIT 1`,
+    [counsellorId]
+  );
+
+  if (!rows[0]) return null;
+  return parseJson<CounsellorRecord>(rows[0].data);
+}
+
+export async function createCounsellor(counsellor: Omit<CounsellorRecord, 'counsellorId' | 'createdAt'>): Promise<CounsellorRecord> {
+  await ensureProductionSchema();
+  const counsellorId = `COUN-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
+  const record: CounsellorRecord = {
+    counsellorId,
+    name: String(counsellor.name),
+    email: String(counsellor.email),
+    phone: String(counsellor.phone),
+    specialization: String(counsellor.specialization),
+    active: Boolean(counsellor.active),
+    availability: counsellor.availability ? String(counsellor.availability) : undefined,
+    createdAt: new Date().toISOString(),
+  };
+
+  await query(
+    `INSERT INTO edupath_records (id, record_type, data, created_at) VALUES ($1, 'counsellor', $2::jsonb, NOW())`,
+    [counsellorId, JSON.stringify(record)]
+  );
+
+  return record;
+}
+
+export async function updateCounsellor(
+  counsellorId: string,
+  updates: Partial<CounsellorRecord>
+): Promise<CounsellorRecord | null> {
+  await ensureProductionSchema();
+  const rows = await query<{ data: string }>(
+    `SELECT id, data FROM edupath_records WHERE record_type = 'counsellor' AND id = $1 LIMIT 1`,
+    [counsellorId]
+  );
+  if (!rows[0]) return null;
+
+  const counsellor = parseJson<CounsellorRecord>(rows[0].data);
+  const updated = { ...counsellor, ...updates, updatedAt: new Date().toISOString() };
+  await query(
+    `UPDATE edupath_records SET data = $1::jsonb, updated_at = NOW() WHERE id = $2`,
+    [JSON.stringify(updated), counsellorId]
+  );
+  return updated;
 }
 
 export async function getDashboardData() {
